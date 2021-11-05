@@ -156,5 +156,6 @@
         <module>protocol-union-model</module>
         <module>protocol-union-subscriber</module>
         <module>protocol-union-subscriber-starter</module>
+        <module>test-coverage</module>
     </modules>
 </project>
