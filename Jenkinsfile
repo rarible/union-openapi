@@ -1,3 +1,3 @@
 @Library('shared-library') _
 
-buildLibrary('nexus-ext-ci')
+buildLibrary('nexus-ci')
