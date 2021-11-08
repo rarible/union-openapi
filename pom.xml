@@ -5,15 +5,10 @@
     <parent>
         <groupId>com.rarible</groupId>
         <artifactId>rarible-parent-pom</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.1.0</version>
     </parent>
 
     <repositories>
-        <repository>
-            <id>nexus-maven-internal</id>
-            <name>nexus-maven-internal</name>
-            <url>http://nexus.rarible.int/repository/maven-public/</url>
-        </repository>
         <repository>
             <id>nexus-maven-public</id>
             <name>nexus-maven-public</name>
@@ -39,16 +34,16 @@
     <version>${revision}</version>
 
     <properties>
-        <revision>1.17.1-SNAPSHOT</revision>
+        <revision>1.17.0</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
-        <rarible.codegen.server.version>1.1.0</rarible.codegen.server.version>
-        <rarible.codegen.client.version>1.2.0</rarible.codegen.client.version>
-        <rarible.codegen.model.version>1.2.5</rarible.codegen.model.version>
+        <rarible.codegen.server.version>1.2.0</rarible.codegen.server.version>
+        <rarible.codegen.client.version>1.3.0</rarible.codegen.client.version>
+        <rarible.codegen.model.version>1.3.2</rarible.codegen.model.version>
 
         <codegen.package>com.rarible.protocol.union.dto</codegen.package>
 
-        <rarible.core.version>1.3.19</rarible.core.version>
+        <rarible.core.version>1.4.0</rarible.core.version>
     </properties>
 
     <dependencyManagement>
