@@ -2605,6 +2605,7 @@ components:
         - $ref: "#/components/schemas/EthErc1155LazyAssetType"
         - $ref: "#/components/schemas/EthCryptoPunksAssetType"
         - $ref: "#/components/schemas/EthGenerativeArtAssetType"
+        - $ref: "#/components/schemas/EthCollectionAssetType"
 
     TezosXTZAssetType:
       type: object
@@ -2831,6 +2832,19 @@ components:
           type: string
           enum:
             - "GEN_ART"
+        contract:
+          $ref: "#/components/schemas/UnionAddress"
+      required:
+        - "@type"
+        - contract
+
+    EthCollectionAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "COLLECTION"
         contract:
           $ref: "#/components/schemas/UnionAddress"
       required:
