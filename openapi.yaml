@@ -2874,16 +2874,6 @@ components:
 
     #################### Referenced Types ####################
 
-    Contract:
-      type: object
-      properties:
-        address:
-          $ref: "#/components/schemas/UnionAddress"
-        blockchain:
-          $ref: "#/components/schemas/Blockchain"
-      required:
-        - address
-        - blockchain
     BigInteger:
       type: string
       example: 123456
