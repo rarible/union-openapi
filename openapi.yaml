@@ -202,25 +202,18 @@ paths:
       description: "Returns items by collection"
       operationId: getItemsByCollection
       parameters:
-        - name: "collection"
-          in: query
-          required: false
-          deprecated: true
-          description: "Address of the collection"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "address"
-          in: query
-          required: false
-          description: "Address of the smart-contract"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
         - name: "blockchain"
           in: query
           required: false
           description: "Blockchain where smart-contract is deployed"
           schema:
             $ref: "#/components/schemas/Blockchain"
+        - name: "address"
+          in: query
+          required: false
+          description: "Address of the smart-contract, without prefix"
+          schema:
+            type: string
         - name: "continuation"
           in: query
           required: false
@@ -343,7 +336,7 @@ paths:
         - name: "itemId"
           in: query
           required: false
-          description: "Itemidentifier"
+          description: "Item identifier"
           schema:
             $ref: "#/components/schemas/ItemId"
         - name: "contract"
@@ -1382,12 +1375,13 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/ItemId"
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
+        contract:
+          type: string
+          example: 0x0000...
         tokenId:
           $ref: "#/components/schemas/BigInteger"
-        contract:
-          $ref: "#/components/schemas/Contract"
-        collection:
-          $ref: "#/components/schemas/UnionAddress"
         creators:
           type: array
           description: "Creators of the target item"
@@ -1475,8 +1469,10 @@ components:
     CollectionEvent:
       type: object
       properties:
-        collectionId:
-          $ref: "#/components/schemas/UnionAddress"
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
+        address:
+          type: string
         eventId:
           type: string
       required:
@@ -1547,13 +1543,15 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/OwnershipId"
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
+        contract:
+          type: string
         value:
           $ref: "#/components/schemas/BigInteger"
         createdAt:
           type: string
           format: "date-time"
-        contract:
-          $ref: "#/components/schemas/Contracts"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         owner:
