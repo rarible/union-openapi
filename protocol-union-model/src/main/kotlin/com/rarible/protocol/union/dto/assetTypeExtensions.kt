@@ -25,7 +25,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
-            itemId = toItemId(this.contract, this.punkId.toBigInteger())
+            itemId = toItemId(this.contract, this.tokenId.toBigInteger())
         )
         is EthErc1155AssetTypeDto -> AssetTypeExtension(
             isNft = true,
