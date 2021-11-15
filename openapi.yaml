@@ -2818,12 +2818,12 @@ components:
             - "CRYPTO_PUNKS"
         contract:
           $ref: "#/components/schemas/UnionAddress"
-        punkId:
+        tokenId:
           type: integer
       required:
         - "@type"
         - contract
-        - punkId
+        - tokenId
 
     EthGenerativeArtAssetType:
       type: object
