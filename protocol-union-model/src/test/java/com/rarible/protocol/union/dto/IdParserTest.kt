@@ -26,11 +26,20 @@ class IdParserTest {
     }
 
     @Test
+    fun `parse collection id`() {
+        val id = "POLYGON:111"
+        val orderId = IdParser.parseContract(id)
+
+        assertEquals(BlockchainDto.POLYGON, orderId.blockchain)
+        assertEquals("111", orderId.value)
+    }
+
+    @Test
     fun `parse address`() {
         val id = "FLOW:gtt"
         val address = IdParser.parseAddress(id)
 
-        assertEquals(BlockchainDto.FLOW, address.blockchain)
+        assertEquals(BlockchainGroupDto.FLOW, address.blockchainGroup)
         assertEquals("gtt", address.value)
     }
 
@@ -51,6 +60,14 @@ class IdParserTest {
     }
 
     @Test
+    fun `parse address - sub-chain specified`() {
+        val id = "POLYGON:abc:123"
+        assertThrows(BlockchainIdFormatException::class.java) {
+            IdParser.parseAddress(id)
+        }
+    }
+
+    @Test
     fun `parse orderId - too many parts`() {
         val id = "ETHEREUM:abc:123"
         assertThrows(BlockchainIdFormatException::class.java) {
@@ -63,6 +80,14 @@ class IdParserTest {
         val id = "ETHEREUM:abc:123"
         assertThrows(BlockchainIdFormatException::class.java) {
             IdParser.parseActivityId(id)
+        }
+    }
+
+    @Test
+    fun `parse collectionId - too many parts`() {
+        val id = "FLOW:abc:123"
+        assertThrows(BlockchainIdFormatException::class.java) {
+            IdParser.parseContract(id)
         }
     }
 

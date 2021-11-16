@@ -4,11 +4,11 @@ import java.math.BigInteger
 
 data class OwnershipIdDto(
     override val blockchain: BlockchainDto,
-    val token: UnionAddress,
+    val contract: String,
     val tokenId: BigInteger,
     val owner: UnionAddress
 ) : UnionBlockchainId {
 
-    override val value = "${token.value}:${tokenId}:${owner.value}"
+    override val value = "${contract}:${tokenId}:${owner.value}"
 
 }

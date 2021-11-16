@@ -2,7 +2,6 @@ package com.rarible.protocol.union.dto.parser
 
 import com.rarible.protocol.union.dto.BlockchainDto
 import com.rarible.protocol.union.dto.ItemIdDto
-import com.rarible.protocol.union.dto.UnionAddress
 import java.math.BigInteger
 
 object ItemIdParser {
@@ -15,7 +14,7 @@ object ItemIdParser {
         val blockchain = IdParser.parseBlockchain(parts[0])
         return ItemIdDto(
             blockchain = blockchain,
-            token = UnionAddress(blockchain, parts[1]),
+            contract = parts[1],
             tokenId = BigInteger(parts[2])
         )
     }
@@ -27,7 +26,7 @@ object ItemIdParser {
         val parts = IdParser.split(value, 2)
         return ItemIdDto(
             blockchain = blockchain,
-            token = UnionAddress(blockchain, parts[0]),
+            contract = parts[0],
             tokenId = BigInteger(parts[1])
         )
     }

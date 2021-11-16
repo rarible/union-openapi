@@ -3,6 +3,7 @@ package com.rarible.protocol.union.dto.parser
 import com.rarible.protocol.union.dto.BlockchainDto
 import com.rarible.protocol.union.dto.OwnershipIdDto
 import com.rarible.protocol.union.dto.UnionAddress
+import com.rarible.protocol.union.dto.group
 import java.math.BigInteger
 
 object OwnershipIdParser {
@@ -15,9 +16,9 @@ object OwnershipIdParser {
         val blockchain = IdParser.parseBlockchain(parts[0])
         return OwnershipIdDto(
             blockchain = blockchain,
-            token = UnionAddress(blockchain, parts[1]),
+            contract = parts[1],
             tokenId = BigInteger(parts[2]),
-            owner = UnionAddress(blockchain, parts[3])
+            owner = UnionAddress(blockchain.group(), parts[3])
         )
     }
 
@@ -26,11 +27,12 @@ object OwnershipIdParser {
      */
     fun parseShort(value: String, blockchain: BlockchainDto): OwnershipIdDto {
         val parts = IdParser.split(value, 3)
+        val group = blockchain.group()
         return OwnershipIdDto(
             blockchain = blockchain,
-            token = UnionAddress(blockchain, parts[0]),
+            contract = parts[0],
             tokenId = BigInteger(parts[1]),
-            owner = UnionAddress(blockchain, parts[2])
+            owner = UnionAddress(group, parts[2])
         )
     }
 }

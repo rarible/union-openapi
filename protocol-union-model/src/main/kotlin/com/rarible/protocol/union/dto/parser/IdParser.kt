@@ -2,7 +2,9 @@ package com.rarible.protocol.union.dto.parser
 
 import com.rarible.protocol.union.dto.ActivityIdDto
 import com.rarible.protocol.union.dto.BlockchainDto
+import com.rarible.protocol.union.dto.BlockchainGroupDto
 import com.rarible.protocol.union.dto.BlockchainIdFormatException
+import com.rarible.protocol.union.dto.ContractAddress
 import com.rarible.protocol.union.dto.OrderIdDto
 import com.rarible.protocol.union.dto.UnionAddress
 
@@ -15,14 +17,24 @@ object IdParser {
             return BlockchainDto.valueOf(value)
         } catch (e: Throwable) {
             throw BlockchainIdFormatException("Unsupported blockchain value: $value, supported are:" +
-                " ${BlockchainDto.values().map { it.name }.joinToString { "|" }}"
+                    " ${BlockchainDto.values().map { it.name }.joinToString { "|" }}"
+            )
+        }
+    }
+
+    fun parseBlockchainGroup(value: String): BlockchainGroupDto {
+        try {
+            return BlockchainGroupDto.valueOf(value)
+        } catch (e: Throwable) {
+            throw BlockchainIdFormatException("Unsupported blockchain group value: $value, supported are:" +
+                    " ${BlockchainGroupDto.values().map { it.name }.joinToString { "|" }}"
             )
         }
     }
 
     fun parseAddress(value: String): UnionAddress {
         val pair = split(value, 2)
-        return UnionAddress(parseBlockchain(pair[0]), pair[1])
+        return UnionAddress(parseBlockchainGroup(pair[0]), pair[1])
     }
 
     fun parseOrderId(value: String): OrderIdDto {
@@ -35,15 +47,9 @@ object IdParser {
         return ActivityIdDto(parseBlockchain(pair[0]), pair[1])
     }
 
-    private fun parse(value: String): Pair<BlockchainDto, String> {
-        val index = value.indexOf(DELIMITER)
-        if (index < 0) {
-            throw BlockchainIdFormatException("Blockchain name not specified in ID: $value")
-        }
-        val blockchain = value.substring(0, index)
-        val id = value.substring(index + 1)
-
-        return Pair(parseBlockchain(blockchain), id)
+    fun parseContract(value: String): ContractAddress {
+        val pair = split(value, 2)
+        return ContractAddress(parseBlockchain(pair[0]), pair[1])
     }
 
     fun split(value: String, expectedSize: Int): List<String> {
