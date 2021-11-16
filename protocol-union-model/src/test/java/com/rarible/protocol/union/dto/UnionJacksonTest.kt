@@ -76,7 +76,7 @@ class UnionJacksonTest {
 
     @Test
     fun `eth address`() {
-        val ethAddress = UnionAddress(BlockchainDto.ETHEREUM, "123")
+        val ethAddress = UnionAddress(BlockchainGroupDto.ETHEREUM, "123")
 
         val serialized = mapper.writeValueAsString(ethAddress)
         assertEquals("\"ETHEREUM:123\"", serialized)
@@ -87,7 +87,7 @@ class UnionJacksonTest {
 
     @Test
     fun `flow address`() {
-        val flowAddress = UnionAddress(BlockchainDto.FLOW, "123")
+        val flowAddress = UnionAddress(BlockchainGroupDto.FLOW, "123")
 
         val serialized = mapper.writeValueAsString(flowAddress)
         assertEquals("\"FLOW:123\"", serialized)
@@ -98,7 +98,7 @@ class UnionJacksonTest {
 
     @Test
     fun `flow contract`() {
-        val flowContract = UnionAddress(BlockchainDto.FLOW, "123abc")
+        val flowContract = UnionAddress(BlockchainGroupDto.FLOW, "123abc")
 
         val serialized = mapper.writeValueAsString(flowContract)
         assertEquals("\"FLOW:123abc\"", serialized)
@@ -111,7 +111,7 @@ class UnionJacksonTest {
     fun `eth itemId`() {
         val itemId = ItemIdDto(
             blockchain = BlockchainDto.POLYGON,
-            token = UnionAddress(BlockchainDto.POLYGON, "abc"),
+            contract = "abc",
             tokenId = BigInteger("123")
         )
 
@@ -129,7 +129,7 @@ class UnionJacksonTest {
     fun `flow itemId`() {
         val itemId = ItemIdDto(
             blockchain = BlockchainDto.FLOW,
-            token = UnionAddress(BlockchainDto.FLOW, "abc"),
+            contract = "abc",
             tokenId = BigInteger("123")
         )
 
@@ -144,9 +144,9 @@ class UnionJacksonTest {
     fun `eth ownershipId`() {
         val itemId = OwnershipIdDto(
             blockchain = BlockchainDto.ETHEREUM,
-            token = UnionAddress(BlockchainDto.ETHEREUM, "abc"),
+            contract = "abc",
             tokenId = BigInteger("123"),
-            owner = UnionAddress(BlockchainDto.ETHEREUM, "xyz")
+            owner = UnionAddress(BlockchainGroupDto.ETHEREUM, "xyz")
         )
 
         val serialized = mapper.writeValueAsString(itemId)
@@ -163,9 +163,9 @@ class UnionJacksonTest {
     fun `flow ownershipId`() {
         val ownershipId = OwnershipIdDto(
             blockchain = BlockchainDto.FLOW,
-            token = UnionAddress(BlockchainDto.FLOW, "abc"),
+            contract = "abc",
             tokenId = BigInteger("123"),
-            owner = UnionAddress(BlockchainDto.FLOW, "xyz")
+            owner = UnionAddress(BlockchainGroupDto.FLOW, "xyz")
         )
 
         val serialized = mapper.writeValueAsString(ownershipId)
@@ -222,4 +222,14 @@ class UnionJacksonTest {
         assertEquals(flowActivityId, deserialized)
     }
 
+    @Test
+    fun `contract address`() {
+        val ethOrderId = ContractAddress(BlockchainDto.POLYGON, "3643")
+
+        val serialized = mapper.writeValueAsString(ethOrderId)
+        assertEquals("\"POLYGON:3643\"", serialized)
+
+        val deserialized = mapper.readValue(serialized, ContractAddress::class.java)
+        assertEquals(ethOrderId, deserialized)
+    }
 }

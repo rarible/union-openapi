@@ -207,7 +207,7 @@ paths:
           required: true
           description: "Address of the collection"
           schema:
-            $ref: "#/components/schemas/CollectionId"
+            $ref: "#/components/schemas/ContractAddress"
         - name: "continuation"
           in: query
           required: false
@@ -339,7 +339,7 @@ paths:
           required: false
           description: "Address of the contract"
           schema:
-            type: string
+            $ref: "#/components/schemas/ContractAddress"
         - name: "tokenId"
           in: query
           deprecated: true
@@ -589,7 +589,7 @@ paths:
           required: false
           description: "Address of the contract"
           schema:
-            type: string
+            $ref: "#/components/schemas/ContractAddress"
         - name: "tokenId"
           in: query
           deprecated: true
@@ -793,7 +793,7 @@ paths:
           required: false
           description: "Address of the contract"
           schema:
-            type: string
+            $ref: "#/components/schemas/ContractAddress"
         - name: "tokenId"
           in: query
           deprecated: true
@@ -882,7 +882,7 @@ paths:
           description: "Addresses of the users"
           schema:
             type: array
-            items: #TODO???
+            items:
               "$ref": "#/components/schemas/UnionAddress"
         - name: "from"
           in: query
@@ -955,7 +955,7 @@ paths:
           required: false
           description: "Address of the contract"
           schema:
-            type: string
+            $ref: "#/components/schemas/ContractAddress"
         - name: "tokenId"
           in: query
           deprecated: true
@@ -1013,7 +1013,7 @@ paths:
           required: true
           description: "Address of the collection"
           schema:
-            $ref: "#/components/schemas/CollectionId"
+            $ref: "#/components/schemas/ContractAddress"
         - name: "continuation"
           in: query
           required: false
@@ -1112,7 +1112,7 @@ paths:
           required: true
           description: "Address of the collection"
           schema:
-            $ref: "#/components/schemas/CollectionId"
+            $ref: "#/components/schemas/ContractAddress"
       responses:
         "200":
           description: "OK"
@@ -1375,7 +1375,7 @@ components:
         blockchain:
           $ref: "#/components/schemas/Blockchain"
         contract:
-          type: string
+          $ref: "#/components/schemas/ContractAddress"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         collection: #Deprecated
@@ -1469,7 +1469,7 @@ components:
       type: object
       properties:
         collectionId:
-          $ref: "#/components/schemas/CollectionId"
+          $ref: "#/components/schemas/ContractAddress"
         eventId:
           type: string
       required:
@@ -1543,7 +1543,7 @@ components:
         blockchain:
           $ref: "#/components/schemas/Blockchain"
         contract:
-          type: string
+          $ref: "#/components/schemas/ContractAddress"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         owner:
@@ -1586,8 +1586,8 @@ components:
       properties:
         owner:
           "$ref": "#/components/schemas/UnionAddress"
-        contract: #TODO ???
-          "$ref": "#/components/schemas/UnionAddress"
+        contract:
+          "$ref": "#/components/schemas/ContractAddress"
         tokenId:
           "$ref": "#/components/schemas/BigInteger"
         value:
@@ -1960,8 +1960,8 @@ components:
             - MINT
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract: #TODO???
-          $ref: "#/components/schemas/UnionAddress"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         value:
@@ -1985,8 +1985,8 @@ components:
             - BURN
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract: #TODO???
-          $ref: "#/components/schemas/UnionAddress"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         value:
@@ -2012,8 +2012,8 @@ components:
           $ref: "#/components/schemas/UnionAddress"
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract: #TODO???
-          $ref: "#/components/schemas/UnionAddress"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         value:
@@ -2233,19 +2233,13 @@ components:
         - total
         - activities
 
-    CollectionId:
-      type: string
-      example: "${blockchain}:${contract}"
-
     Collection:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/CollectionId"
+          $ref: "#/components/schemas/ContractAddress"
         blockchain:
           $ref: "#/components/schemas/Blockchain"
-        contract:
-          type: string
         type:
           type: string
           enum:
@@ -2275,7 +2269,6 @@ components:
       required:
         - id
         - blockchain
-        - contract
         - name
         - type
         - features
@@ -2889,6 +2882,10 @@ components:
       type: string
       example: 123456.789
 
+    ContractAddress:
+      type: string
+      description: "Blockchain contract address in Union format `${blockchain}:${token}`"
+      example: "POLYGON:0x60f80121c31a0d46b5279700f9df739484aa51111"
     UnionAddress:
       type: string
       description: "Blockchain address in Union format `${blockchainGroup}:${token}`"

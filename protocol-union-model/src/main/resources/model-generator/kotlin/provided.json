@@ -2,6 +2,7 @@
   "UnionAddress": "com.rarible.protocol.union.dto.UnionAddress",
   "ActivityId": "com.rarible.protocol.union.dto.ActivityIdDto",
   "ItemId": "com.rarible.protocol.union.dto.ItemIdDto",
+  "ContractAddress": "com.rarible.protocol.union.dto.ContractAddress",
   "OrderId": "com.rarible.protocol.union.dto.OrderIdDto",
   "OwnershipId": "com.rarible.protocol.union.dto.OwnershipIdDto"
 }
