@@ -1895,6 +1895,202 @@ components:
         - INACTIVE
         - CANCELLED
 
+    #################### Auction - Union ####################
+
+    Part:
+      required:
+        - account
+        - value
+      type: object
+      properties:
+        account:
+          $ref: "#/components/schemas/UnionAddress"
+        value:
+          type: integer
+
+    AuctionId:
+      type: string
+      example: "${blockchain}:${id}"
+
+    AuctionHistory:
+      type: object
+      required:
+        - hash
+      properties:
+        hash:
+          type: string
+
+    AuctionStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - CANCELLED
+        - FINISHED
+
+    RaribleAuctionV1BidDataV1:
+      type: object
+      required:
+        - originFees
+        - payouts
+      properties:
+        dataType:
+          type: string
+          description: "Data type of the auction bid data"
+          enum:
+            - RARIBLE_AUCTION_V1_BID_DATA_V1
+        originFees:
+          type: array
+          description: "Value of the origin fees for the auction bid data"
+          items:
+            "$ref": "#/components/schemas/Part"
+        payouts:
+          type: array
+          description: "Value of the payouts for the auction bid data"
+          items:
+            "$ref": "#/components/schemas/Part"
+
+    AuctionBidData:
+      type: object
+      oneOf:
+        - "$ref": "#/components/schemas/RaribleAuctionV1BidDataV1"
+
+    AuctionBid:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          $ref: "#/components/schemas/BigDecimal"
+      oneOf:
+        - "$ref": "#/components/schemas/RaribleAuctionV1BidV1"
+
+    RaribleAuctionV1BidV1:
+      type: object
+      required:
+        - data
+      properties:
+        type:
+          type: string
+          description: "Type of the auction bid"
+          enum:
+            - RARIBLE_AUCTION_V1_BID_V1
+        data:
+          $ref: "#/components/schemas/RaribleAuctionV1BidDataV1"
+
+    AuctionData:
+      type: object
+      oneOf:
+        - "$ref": "#/components/schemas/RaribleAuctionV1DataV1"
+
+    RaribleAuctionV1DataV1:
+      type: object
+      required:
+        - originFees
+        - payouts
+        - duration
+      properties:
+        dataType:
+          type: string
+          description: "Data type of the auction"
+          enum:
+            - RARIBLE_AUCTION_V1_DATA_V1
+        originFees:
+          type: array
+          description: "Value of the origin fees for the auction"
+          items:
+            "$ref": "#/components/schemas/Part"
+        payouts:
+          type: array
+          description: "Value of the payouts for the auction"
+          items:
+            "$ref": "#/components/schemas/Part"
+        startTime:
+          type: string
+          format: date-time
+        duration:
+          $ref: "#/components/schemas/BigInteger"
+        buyOutPrice:
+          $ref: "#/components/schemas/BigDecimal"
+
+    Auction:
+      type: object
+      required:
+        - id
+        - seller
+        - sell
+        - buy
+        - minimalStep
+        - minimalPrice
+        - createdAt
+        - lastUpdateAt
+        - status
+        - hash
+        - auctionId
+        - data
+      properties:
+        id:
+          $ref: "#/components/schemas/AuctionId"
+        type:
+          type: string
+          enum:
+            - RARIBLE_AUCTION_V1
+        seller:
+          $ref: "#/components/schemas/UnionAddress"
+        buyer:
+          $ref: "#/components/schemas/UnionAddress"
+        sell:
+          $ref: "#/components/schemas/Asset"
+        buy:
+          $ref: "#/components/schemas/AssetType"
+        endTime:
+          type: string
+          format: date-time
+        minimalStep:
+          $ref: "#/components/schemas/BigDecimal"
+        minimalPrice:
+          $ref: "#/components/schemas/BigDecimal"
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdateAt:
+          type: string
+          format: date-time
+        buyPrice:
+          $ref: "#/components/schemas/BigDecimal"
+        buyPriceUsd:
+          $ref: "#/components/schemas/BigDecimal"
+        pending:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuctionHistory"
+        status:
+          $ref: "#/components/schemas/AuctionStatus"
+        hash:
+          type: string
+        auctionId:
+          $ref: "#/components/schemas/BigInteger"
+        lastBid:
+          $ref: "#/components/schemas/RaribleAuctionV1BidV1"
+        data:
+          $ref: "#/components/schemas/RaribleAuctionV1DataV1"
+
+    RaribleAuctionV1:
+      type: object
+      required:
+        - auctionId
+        - data
+      properties:
+        type:
+          type: string
+          enum:
+            - RARIBLE_AUCTION_V1
+        auctionId:
+          $ref: "#/components/schemas/BigInteger"
+        lastBid:
+          $ref: "#/components/schemas/RaribleAuctionV1BidV1"
+        data:
+          $ref: "#/components/schemas/RaribleAuctionV1DataV1"
+
     #################### Activity - Union ####################
 
     ActivityId:
