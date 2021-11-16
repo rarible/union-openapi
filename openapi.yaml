@@ -1897,17 +1897,6 @@ components:
 
     #################### Auction - Union ####################
 
-    Part:
-      required:
-        - account
-        - value
-      type: object
-      properties:
-        account:
-          $ref: "#/components/schemas/UnionAddress"
-        value:
-          type: integer
-
     AuctionId:
       type: string
       example: "${blockchain}:${id}"
@@ -1942,12 +1931,12 @@ components:
           type: array
           description: "Value of the origin fees for the auction bid data"
           items:
-            "$ref": "#/components/schemas/Part"
+            "$ref": "#/components/schemas/OrderPayout"
         payouts:
           type: array
           description: "Value of the payouts for the auction bid data"
           items:
-            "$ref": "#/components/schemas/Part"
+            "$ref": "#/components/schemas/OrderPayout"
 
     AuctionBidData:
       type: object
@@ -1998,12 +1987,12 @@ components:
           type: array
           description: "Value of the origin fees for the auction"
           items:
-            "$ref": "#/components/schemas/Part"
+            "$ref": "#/components/schemas/OrderPayout"
         payouts:
           type: array
           description: "Value of the payouts for the auction"
           items:
-            "$ref": "#/components/schemas/Part"
+            "$ref": "#/components/schemas/OrderPayout"
         startTime:
           type: string
           format: date-time
@@ -2147,6 +2136,10 @@ components:
         - $ref: "#/components/schemas/OrderListActivity"
         - $ref: "#/components/schemas/OrderCancelBidActivity"
         - $ref: "#/components/schemas/OrderCancelListActivity"
+        - $ref: "#/components/schemas/AuctionOpenActivity"
+        - $ref: "#/components/schemas/AuctionBidActivity"
+        - $ref: "#/components/schemas/AuctionFinishActivity"
+        - $ref: "#/components/schemas/AuctionCancelActivity"
       required:
         - id
         - date
@@ -2416,6 +2409,113 @@ components:
         - maker
         - make
         - take
+
+    AuctionActivitySource:
+      type: string
+      enum:
+        - RARIBLE
+
+    AuctionOpenActivity:
+      type: object
+      required:
+        - "@type"
+        - hash
+        - seller
+        - sell
+        - buy
+        - minimalStep
+        - minimalPrice
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_open"
+        seller:
+          $ref: "#/components/schemas/UnionAddress"
+        sell:
+          $ref: "#/components/schemas/Asset"
+        buy:
+          $ref: "#/components/schemas/AssetType"
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        duration:
+          $ref: "#/components/schemas/BigInteger"
+        minimalStep:
+          $ref: "#/components/schemas/BigDecimal"
+        minimalPrice:
+          $ref: "#/components/schemas/BigDecimal"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        hash:
+          type: string
+
+    AuctionBidActivity:
+      type: object
+      required:
+        - "@type"
+        - hash
+        - bid
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_bid"
+        bid:
+          $ref: "#/components/schemas/AuctionBid"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        hash:
+          type: string
+
+    AuctionFinishActivity:
+      type: object
+      required:
+        - "@type"
+        - hash
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_finish"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        hash:
+          type: string
+
+    AuctionCancelActivity:
+      type: object
+      required:
+        - "@type"
+        - hash
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_cancel"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        hash:
+          type: string
 
     Activities:
       type: object
