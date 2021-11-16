@@ -1916,6 +1916,8 @@ components:
         - BID
         - LIST
         - SELL
+        - CANCEL_LIST
+        - CANCEL_BID
 
     UserActivityType:
       type: string
@@ -1929,6 +1931,8 @@ components:
         - LIST
         - BUY
         - SELL
+        - CANCEL_LIST
+        - CANCEL_BID
 
     Activity:
       type: object
