@@ -1230,6 +1230,17 @@ components:
         - FLOW
         - TEZOS
 
+    Payout:
+      type: object
+      properties:
+        account:
+          $ref: "#/components/schemas/UnionAddress"
+        value:
+          type: integer
+      required:
+        - account
+        - value
+
     #################### Sign - Union ####################
 
     SignatureValidationForm:
@@ -1875,17 +1886,6 @@ components:
         - "@type"
         - order
 
-    OrderPayout:
-      type: object
-      properties:
-        account:
-          $ref: "#/components/schemas/UnionAddress"
-        value:
-          type: integer
-      required:
-        - account
-        - value
-
     OrderStatus:
       type: string
       enum:
@@ -1894,6 +1894,191 @@ components:
         - HISTORICAL
         - INACTIVE
         - CANCELLED
+
+    #################### Auction - Union ####################
+
+    AuctionId:
+      type: string
+      example: "${blockchain}:${id}"
+
+    AuctionHistory:
+      type: object
+      required:
+        - hash
+      properties:
+        hash:
+          type: string
+
+    AuctionStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - CANCELLED
+        - FINISHED
+
+    RaribleAuctionV1BidDataV1:
+      type: object
+      required:
+        - originFees
+        - payouts
+      properties:
+        dataType:
+          type: string
+          description: "Data type of the auction bid data"
+          enum:
+            - RARIBLE_AUCTION_V1_BID_DATA_V1
+        originFees:
+          type: array
+          description: "Value of the origin fees for the auction bid data"
+          items:
+            "$ref": "#/components/schemas/Payout"
+        payouts:
+          type: array
+          description: "Value of the payouts for the auction bid data"
+          items:
+            "$ref": "#/components/schemas/Payout"
+
+    AuctionBidData:
+      type: object
+      oneOf:
+        - "$ref": "#/components/schemas/RaribleAuctionV1BidDataV1"
+
+    AuctionBid:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          $ref: "#/components/schemas/BigDecimal"
+      oneOf:
+        - "$ref": "#/components/schemas/RaribleAuctionV1BidV1"
+
+    RaribleAuctionV1BidV1:
+      type: object
+      required:
+        - data
+      properties:
+        type:
+          type: string
+          description: "Type of the auction bid"
+          enum:
+            - RARIBLE_AUCTION_V1_BID_V1
+        data:
+          $ref: "#/components/schemas/RaribleAuctionV1BidDataV1"
+
+    AuctionData:
+      type: object
+      oneOf:
+        - "$ref": "#/components/schemas/RaribleAuctionV1DataV1"
+
+    RaribleAuctionV1DataV1:
+      type: object
+      required:
+        - originFees
+        - payouts
+        - duration
+      properties:
+        dataType:
+          type: string
+          description: "Data type of the auction"
+          enum:
+            - RARIBLE_AUCTION_V1_DATA_V1
+        originFees:
+          type: array
+          description: "Value of the origin fees for the auction"
+          items:
+            "$ref": "#/components/schemas/Payout"
+        payouts:
+          type: array
+          description: "Value of the payouts for the auction"
+          items:
+            "$ref": "#/components/schemas/Payout"
+        startTime:
+          type: string
+          format: date-time
+        duration:
+          $ref: "#/components/schemas/BigInteger"
+        buyOutPrice:
+          $ref: "#/components/schemas/BigDecimal"
+
+    Auction:
+      type: object
+      required:
+        - id
+        - seller
+        - sell
+        - buy
+        - minimalStep
+        - minimalPrice
+        - createdAt
+        - lastUpdateAt
+        - status
+        - hash
+        - auctionId
+        - data
+      properties:
+        id:
+          $ref: "#/components/schemas/AuctionId"
+        type:
+          type: string
+          enum:
+            - RARIBLE_AUCTION_V1
+        seller:
+          $ref: "#/components/schemas/UnionAddress"
+        buyer:
+          $ref: "#/components/schemas/UnionAddress"
+        sell:
+          $ref: "#/components/schemas/Asset"
+        buy:
+          $ref: "#/components/schemas/AssetType"
+        endTime:
+          type: string
+          format: date-time
+        minimalStep:
+          $ref: "#/components/schemas/BigDecimal"
+        minimalPrice:
+          $ref: "#/components/schemas/BigDecimal"
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdateAt:
+          type: string
+          format: date-time
+        buyPrice:
+          $ref: "#/components/schemas/BigDecimal"
+        buyPriceUsd:
+          $ref: "#/components/schemas/BigDecimal"
+        pending:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuctionHistory"
+        status:
+          $ref: "#/components/schemas/AuctionStatus"
+        hash:
+          type: string
+        auctionId:
+          $ref: "#/components/schemas/BigInteger"
+        lastBid:
+          $ref: "#/components/schemas/AuctionBid"
+        data:
+          $ref: "#/components/schemas/AuctionData"
+
+    RaribleAuctionV1:
+      type: object
+      required:
+        - auctionId
+        - data
+      properties:
+        type:
+          type: string
+          enum:
+            - RARIBLE_AUCTION_V1
+        auctionId:
+          $ref: "#/components/schemas/BigInteger"
+        lastBid:
+          $ref: "#/components/schemas/RaribleAuctionV1BidV1"
+        data:
+          $ref: "#/components/schemas/RaribleAuctionV1DataV1"
 
     #################### Activity - Union ####################
 
@@ -1951,6 +2136,10 @@ components:
         - $ref: "#/components/schemas/OrderListActivity"
         - $ref: "#/components/schemas/OrderCancelBidActivity"
         - $ref: "#/components/schemas/OrderCancelListActivity"
+        - $ref: "#/components/schemas/AuctionOpenActivity"
+        - $ref: "#/components/schemas/AuctionBidActivity"
+        - $ref: "#/components/schemas/AuctionFinishActivity"
+        - $ref: "#/components/schemas/AuctionCancelActivity"
       required:
         - id
         - date
@@ -2221,6 +2410,113 @@ components:
         - make
         - take
 
+    AuctionActivitySource:
+      type: string
+      enum:
+        - RARIBLE
+
+    AuctionOpenActivity:
+      type: object
+      required:
+        - "@type"
+        - hash
+        - seller
+        - sell
+        - buy
+        - minimalStep
+        - minimalPrice
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_open"
+        seller:
+          $ref: "#/components/schemas/UnionAddress"
+        sell:
+          $ref: "#/components/schemas/Asset"
+        buy:
+          $ref: "#/components/schemas/AssetType"
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        duration:
+          $ref: "#/components/schemas/BigInteger"
+        minimalStep:
+          $ref: "#/components/schemas/BigDecimal"
+        minimalPrice:
+          $ref: "#/components/schemas/BigDecimal"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        hash:
+          type: string
+
+    AuctionBidActivity:
+      type: object
+      required:
+        - "@type"
+        - hash
+        - bid
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_bid"
+        bid:
+          $ref: "#/components/schemas/AuctionBid"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        hash:
+          type: string
+
+    AuctionFinishActivity:
+      type: object
+      required:
+        - "@type"
+        - hash
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_finish"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        hash:
+          type: string
+
+    AuctionCancelActivity:
+      type: object
+      required:
+        - "@type"
+        - hash
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_cancel"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        hash:
+          type: string
+
     Activities:
       type: object
       properties:
@@ -2388,12 +2684,12 @@ components:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
         originFees:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
         makerEdpk:
           type: string
         takerEdpk:
@@ -2414,12 +2710,12 @@ components:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
         originFees:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
       required:
         - "@type"
         - payouts
@@ -2866,12 +3162,12 @@ components:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
         originFees:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
       required:
         - "@type"
         - payouts
