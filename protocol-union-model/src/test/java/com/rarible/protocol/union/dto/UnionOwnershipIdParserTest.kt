@@ -12,7 +12,7 @@ class OwnershipIdParserTest {
         val ownershipId = OwnershipIdParser.parseFull(value)
         assertEquals(BlockchainDto.POLYGON, ownershipId.blockchain)
         assertEquals("123", ownershipId.tokenId.toString())
-        assertEquals("abc", ownershipId.token.value)
+        assertEquals("abc", ownershipId.contract)
         assertEquals("xyz", ownershipId.owner.value)
     }
 
@@ -22,7 +22,7 @@ class OwnershipIdParserTest {
         val ownershipId = OwnershipIdParser.parseShort(value, BlockchainDto.ETHEREUM)
         assertEquals(BlockchainDto.ETHEREUM, ownershipId.blockchain)
         assertEquals("123", ownershipId.tokenId.toString())
-        assertEquals("abc", ownershipId.token.value)
+        assertEquals("abc", ownershipId.contract)
         assertEquals("xyz", ownershipId.owner.value)
     }
 

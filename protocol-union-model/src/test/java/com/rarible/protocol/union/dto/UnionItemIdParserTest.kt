@@ -12,7 +12,7 @@ class ItemIdParserTest {
         val itemId = ItemIdParser.parseFull(value)
         assertEquals(BlockchainDto.ETHEREUM, itemId.blockchain)
         assertEquals("123", itemId.tokenId.toString())
-        assertEquals("abc", itemId.token.value)
+        assertEquals("abc", itemId.contract)
     }
 
     @Test
@@ -21,7 +21,7 @@ class ItemIdParserTest {
         val itemId = ItemIdParser.parseShort(value, BlockchainDto.POLYGON)
         assertEquals(BlockchainDto.POLYGON, itemId.blockchain)
         assertEquals("123", itemId.tokenId.toString())
-        assertEquals("abc", itemId.token.value)
+        assertEquals("abc", itemId.contract)
     }
 
 }
