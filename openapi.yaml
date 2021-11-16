@@ -2059,9 +2059,9 @@ components:
         auctionId:
           $ref: "#/components/schemas/BigInteger"
         lastBid:
-          $ref: "#/components/schemas/RaribleAuctionV1BidV1"
+          $ref: "#/components/schemas/AuctionBid"
         data:
-          $ref: "#/components/schemas/RaribleAuctionV1DataV1"
+          $ref: "#/components/schemas/AuctionData"
 
     RaribleAuctionV1:
       type: object
