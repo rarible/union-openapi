@@ -1,6 +1,7 @@
 package com.rarible.protocol.union.dto.parser
 
 import com.rarible.protocol.union.dto.ActivityIdDto
+import com.rarible.protocol.union.dto.AuctionIdDto
 import com.rarible.protocol.union.dto.BlockchainDto
 import com.rarible.protocol.union.dto.BlockchainGroupDto
 import com.rarible.protocol.union.dto.BlockchainIdFormatException
@@ -40,6 +41,11 @@ object IdParser {
     fun parseOrderId(value: String): OrderIdDto {
         val pair = split(value, 2)
         return OrderIdDto(parseBlockchain(pair[0]), pair[1])
+    }
+
+    fun parseAuctionId(value: String): AuctionIdDto {
+        val pair = split(value, 2)
+        return AuctionIdDto(parseBlockchain(pair[0]), pair[1])
     }
 
     fun parseActivityId(value: String): ActivityIdDto {

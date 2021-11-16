@@ -1230,6 +1230,17 @@ components:
         - FLOW
         - TEZOS
 
+    Payout:
+      type: object
+      properties:
+        account:
+          $ref: "#/components/schemas/UnionAddress"
+        value:
+          type: integer
+      required:
+        - account
+        - value
+
     #################### Sign - Union ####################
 
     SignatureValidationForm:
@@ -1875,17 +1886,6 @@ components:
         - "@type"
         - order
 
-    OrderPayout:
-      type: object
-      properties:
-        account:
-          $ref: "#/components/schemas/UnionAddress"
-        value:
-          type: integer
-      required:
-        - account
-        - value
-
     OrderStatus:
       type: string
       enum:
@@ -1931,12 +1931,12 @@ components:
           type: array
           description: "Value of the origin fees for the auction bid data"
           items:
-            "$ref": "#/components/schemas/OrderPayout"
+            "$ref": "#/components/schemas/Payout"
         payouts:
           type: array
           description: "Value of the payouts for the auction bid data"
           items:
-            "$ref": "#/components/schemas/OrderPayout"
+            "$ref": "#/components/schemas/Payout"
 
     AuctionBidData:
       type: object
@@ -1987,12 +1987,12 @@ components:
           type: array
           description: "Value of the origin fees for the auction"
           items:
-            "$ref": "#/components/schemas/OrderPayout"
+            "$ref": "#/components/schemas/Payout"
         payouts:
           type: array
           description: "Value of the payouts for the auction"
           items:
-            "$ref": "#/components/schemas/OrderPayout"
+            "$ref": "#/components/schemas/Payout"
         startTime:
           type: string
           format: date-time
@@ -2684,12 +2684,12 @@ components:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
         originFees:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
         makerEdpk:
           type: string
         takerEdpk:
@@ -2710,12 +2710,12 @@ components:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
         originFees:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
       required:
         - "@type"
         - payouts
@@ -3162,12 +3162,12 @@ components:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
         originFees:
           type: array
           default: [ ]
           items:
-            $ref: "#/components/schemas/OrderPayout"
+            $ref: "#/components/schemas/Payout"
       required:
         - "@type"
         - payouts
