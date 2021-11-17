@@ -2160,6 +2160,8 @@ components:
           $ref: "#/components/schemas/BigInteger"
         value:
           $ref: "#/components/schemas/BigInteger"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
@@ -2168,7 +2170,7 @@ components:
         - contract
         - tokenId
         - value
-        - blockchainInfo
+        - transactionHash
 
     BurnActivity:
       type: object
@@ -2185,6 +2187,8 @@ components:
           $ref: "#/components/schemas/BigInteger"
         value:
           $ref: "#/components/schemas/BigInteger"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
@@ -2193,7 +2197,7 @@ components:
         - contract
         - tokenId
         - value
-        - blockchainInfo
+        - transactionHash
 
     TransferActivity:
       type: object
@@ -2212,6 +2216,8 @@ components:
           $ref: "#/components/schemas/BigInteger"
         value:
           $ref: "#/components/schemas/BigInteger"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
@@ -2221,7 +2227,7 @@ components:
         - contract
         - tokenId
         - value
-        - blockchainInfo
+        - transactionHash
 
     OrderActivitySource:
       type: string
@@ -2245,7 +2251,6 @@ components:
 
     OrderMatchActivity:
       type: object
-      required: [source, blockchainInfo]
       properties:
         "@type":
           type: string
@@ -2253,8 +2258,13 @@ components:
             - MATCH
         source:
           $ref: "#/components/schemas/OrderActivitySource"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - source
+        - transactionHash
       oneOf:
         - $ref: "#/components/schemas/OrderMatchSwap"
         - $ref: "#/components/schemas/OrderMatchSell"
@@ -2274,7 +2284,6 @@ components:
 
     OrderMatchSell:
       type: object
-      required: [nft, payment, price, type, buyer, seller]
       properties:
         "@type":
           type: string
@@ -2299,6 +2308,13 @@ components:
           enum:
             - SELL
             - ACCEPT_BID
+      required:
+        - nft
+        - payment
+        - price
+        - type
+        - buyer
+        - seller
 
     OrderBidActivity:
       type: object
@@ -2375,6 +2391,8 @@ components:
           $ref: "#/components/schemas/AssetType"
         source:
           $ref: "#/components/schemas/OrderActivitySource"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
@@ -2383,7 +2401,7 @@ components:
         - maker
         - make
         - take
-        - blockchainInfo
+        - transactionHash
 
     OrderCancelListActivity:
       type: object
@@ -2402,6 +2420,8 @@ components:
           $ref: "#/components/schemas/AssetType"
         source:
           $ref: "#/components/schemas/OrderActivitySource"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
@@ -2410,6 +2430,7 @@ components:
         - maker
         - make
         - take
+        - transactionHash
 
     AuctionActivitySource:
       type: string
@@ -2427,9 +2448,6 @@ components:
         - minimalStep
         - minimalPrice
         - transactionHash
-        - blockHash
-        - blockNumber
-        - logIndex
       properties:
         "@type":
           type: string
@@ -2453,6 +2471,8 @@ components:
           $ref: "#/components/schemas/BigDecimal"
         minimalPrice:
           $ref: "#/components/schemas/BigDecimal"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
         hash:
@@ -2465,9 +2485,6 @@ components:
         - hash
         - bid
         - transactionHash
-        - blockHash
-        - blockNumber
-        - logIndex
       properties:
         "@type":
           type: string
@@ -2475,6 +2492,8 @@ components:
             - "auction_bid"
         bid:
           $ref: "#/components/schemas/AuctionBid"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
         hash:
@@ -2486,14 +2505,13 @@ components:
         - "@type"
         - hash
         - transactionHash
-        - blockHash
-        - blockNumber
-        - logIndex
       properties:
         "@type":
           type: string
           enum:
             - "auction_finish"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
         hash:
@@ -2505,14 +2523,13 @@ components:
         - "@type"
         - hash
         - transactionHash
-        - blockHash
-        - blockNumber
-        - logIndex
       properties:
         "@type":
           type: string
           enum:
             - "auction_cancel"
+        transactionHash:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
         hash:
@@ -2595,6 +2612,7 @@ components:
 
     ActivityBlockchainInfo:
       type: object
+      deprecated: true
       properties:
         transactionHash:
           type: string
