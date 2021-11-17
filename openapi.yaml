@@ -1397,8 +1397,9 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/Creator"
-        owners: #Deprecated
+        owners:
           type: array
+          deprecated: true
           description: "Owners of the target item"
           default: [ ]
           items:
@@ -1778,6 +1779,7 @@ components:
         takePriceUsd:
           $ref: "#/components/schemas/BigDecimal"
         priceHistory:
+          deprecated: true
           type: array
           default: [ ]
           items:
@@ -1811,7 +1813,6 @@ components:
         - cancelled
         - createdAt
         - lastUpdatedAt
-        - priceHistory
         - type
         - maker
         - make
