@@ -896,7 +896,7 @@ paths:
         - name: "id"
           in: "path"
           required: true
-          description: "Auction Id, has format '${blockchain}:${id}'"
+          description: "Auction Id, has format `${blockchain}:${id}`"
           schema:
             $ref: "#/components/schemas/AuctionId"
       responses:
@@ -936,7 +936,7 @@ paths:
           schema:
             "$ref": "#/components/schemas/AuctionSort"
         - name: status
-          description: "The auction status"
+          description: "The auction statuses"
           in: query
           required: false
           schema:
@@ -993,9 +993,9 @@ paths:
           in: query
           required: true
           schema:
-            $ref: "#/components/schemas/UnionAddress"
+            $ref: "#/components/schemas/ContractAddress"
         - name: status
-          description: "The auction status"
+          description: "The auction statuses"
           in: query
           required: false
           schema:
@@ -1058,7 +1058,7 @@ paths:
           in: query
           required: true
           schema:
-            $ref: "#/components/schemas/UnionAddress"
+            $ref: "#/components/schemas/ContractAddress"
         - name: tokenId
           description: "Token identifier"
           in: query
@@ -1066,7 +1066,7 @@ paths:
           schema:
             $ref: "#/components/schemas/BigInteger"
         - name: seller
-          description: "The maker of the order"
+          description: "The seller of the auction"
           in: query
           required: false
           schema:
@@ -1078,13 +1078,13 @@ paths:
           schema:
             "$ref": "#/components/schemas/AuctionSort"
         - name: origin
-          description: "Address of the consumer to receive the commission for order"
+          description: "Address of the consumer to receive the commission for auction"
           in: query
           required: false
           schema:
             $ref: "#/components/schemas/UnionAddress"
         - name: status
-          description: "The auction status"
+          description: "The auction statuses"
           in: query
           required: false
           schema:
@@ -1097,7 +1097,7 @@ paths:
           schema:
             $ref: "#/components/schemas/UnionAddress"
         - name: platform
-          description: "The platform where the order was created"
+          description: "The platform where the auction was created"
           in: query
           required: false
           schema:
@@ -1140,9 +1140,9 @@ paths:
           in: query
           required: true
           schema:
-            $ref: "#/components/schemas/UnionAddress"
+            $ref: "#/components/schemas/ContractAddress"
         - name: seller
-          description: "The maker of the order"
+          description: "The seller of the auction"
           in: query
           required: false
           schema:
@@ -1154,7 +1154,7 @@ paths:
           schema:
             $ref: "#/components/schemas/UnionAddress"
         - name: status
-          description: "The order status"
+          description: "The auctions statuses"
           in: query
           required: false
           schema:
@@ -2441,6 +2441,10 @@ components:
     Auctions:
       type: object
       properties:
+        total:
+          type: integer
+          format: int64
+          description: "Number of auctions were found by request"
         continuation:
           type: string
           description: "Continuation token to paginate auctions search result"
