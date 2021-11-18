@@ -1049,22 +1049,10 @@ paths:
       parameters:
         - name: "itemId"
           in: query
-          required: false
+          required: true
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
-        - name: contract
-          description: "Address of the contract"
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: tokenId
-          description: "Token identifier"
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/BigInteger"
         - name: seller
           description: "The seller of the auction"
           in: query
