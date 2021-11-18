@@ -2008,6 +2008,13 @@ components:
         data:
           $ref: "#/components/schemas/RaribleAuctionV1BidDataV1"
 
+    AuctionSort:
+      type: string
+      enum:
+        - LAST_UPDATE_ASC
+        - LAST_UPDATE_DESC
+        - BUY_PRICE_ASC
+
     AuctionData:
       type: object
       oneOf:
