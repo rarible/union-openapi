@@ -1439,6 +1439,7 @@ components:
           $ref: "#/components/schemas/Order"
         auctions:
           type: array
+          default: [ ]
           items:
             $ref: "#/components/schemas/Auction"
         totalStock:
@@ -1585,10 +1586,6 @@ components:
             $ref: "#/components/schemas/ItemHistory"
         bestSellOrder:
           $ref: "#/components/schemas/Order"
-        auctions:
-          type: array
-          items:
-            $ref: "#/components/schemas/Auction"
       required:
         - id
         - blockchain
