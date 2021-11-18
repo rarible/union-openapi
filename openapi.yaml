@@ -1079,11 +1079,6 @@ paths:
             type: array
             items:
               $ref: "#/components/schemas/AuctionStatus"
-        - name: currencyId
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
         - name: platform
           description: "The platform where the auction was created"
           in: query
