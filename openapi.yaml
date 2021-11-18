@@ -1437,6 +1437,11 @@ components:
           $ref: "#/components/schemas/Order"
         bestBidOrder:
           $ref: "#/components/schemas/Order"
+        auctions:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Auction"
         totalStock:
           $ref: "#/components/schemas/BigInteger"
         sellers:
@@ -1456,6 +1461,7 @@ components:
         - supply
         - deleted
         - sellers
+        - auctions
 
     Items:
       type: object
