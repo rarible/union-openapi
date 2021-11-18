@@ -100,6 +100,31 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  "/v0.1/items/{itemId}/royalties":
+    get:
+      tags:
+        - item-controller
+      description: Returns item royalty by identifier
+      operationId: getItemRoyaltiesById
+      parameters:
+        - name: "itemId"
+          in: path
+          required: true
+          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
+          schema:
+            $ref: "#/components/schemas/ItemId"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Royalties"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   "/v0.1/items/{itemId}/resetMeta":
     delete:
       tags:
@@ -1406,6 +1431,7 @@ components:
             $ref: "#/components/schemas/UnionAddress"
         royalties:
           type: array
+          deprecated: true
           description: "List of royalties"
           default: [ ]
           items:
@@ -1453,7 +1479,6 @@ components:
         - contract
         - tokenId
         - creators
-        - royalties
         - lazySupply
         - pending
         - mintedAt
@@ -1655,14 +1680,24 @@ components:
 
     Royalty:
       type: object
-      required:
-        - account
-        - value
       properties:
         account:
           $ref: "#/components/schemas/UnionAddress"
         value:
           type: integer
+      required:
+        - account
+        - value
+
+    Royalties:
+      type: object
+      properties:
+        royalties:
+          type: array
+          items:
+            $ref: "#/components/schemas/Royalty"
+      required:
+        - royalties
 
     Creator:
       type: object
