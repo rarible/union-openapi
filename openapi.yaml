@@ -1437,6 +1437,10 @@ components:
           $ref: "#/components/schemas/Order"
         bestBidOrder:
           $ref: "#/components/schemas/Order"
+        auctions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Auction"
         totalStock:
           $ref: "#/components/schemas/BigInteger"
         sellers:
@@ -1581,6 +1585,10 @@ components:
             $ref: "#/components/schemas/ItemHistory"
         bestSellOrder:
           $ref: "#/components/schemas/Order"
+        auctions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Auction"
       required:
         - id
         - blockchain
