@@ -1431,6 +1431,7 @@ components:
             $ref: "#/components/schemas/UnionAddress"
         royalties:
           type: array
+          deprecated: true
           description: "List of royalties"
           default: [ ]
           items:
@@ -1478,7 +1479,6 @@ components:
         - contract
         - tokenId
         - creators
-        - royalties
         - lazySupply
         - pending
         - mintedAt
