@@ -2726,6 +2726,10 @@ components:
           $ref: "#/components/schemas/UnionAddress"
         seller:
           $ref: "#/components/schemas/UnionAddress"
+        buyerOrderHash:
+          type: string
+        sellerOrderHash:
+          type: string
         price:
           $ref: "#/components/schemas/BigDecimal"
         priceUsd:
