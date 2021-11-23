@@ -2349,8 +2349,11 @@ components:
     AuctionBid:
       type: object
       required:
+        - buyer
         - amount
       properties:
+        buyer:
+          $ref: "#/components/schemas/UnionAddress"
         amount:
           $ref: "#/components/schemas/BigDecimal"
       oneOf:
@@ -2434,8 +2437,6 @@ components:
           enum:
             - RARIBLE_AUCTION_V1
         seller:
-          $ref: "#/components/schemas/UnionAddress"
-        buyer:
           $ref: "#/components/schemas/UnionAddress"
         sell:
           $ref: "#/components/schemas/Asset"
