@@ -3377,6 +3377,8 @@ components:
             - TEZOS_FT
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
       required:
         - "@type"
         - contract
