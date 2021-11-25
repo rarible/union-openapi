@@ -10,6 +10,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = true,
             isCollection = false,
             contract = "0x0000000000000000000000000000000000000000",
+            tokenId = null,
             itemId = null
         )
         is EthErc20AssetTypeDto -> AssetTypeExtension(
@@ -17,6 +18,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = true,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = null,
             itemId = null
         )
         //---- ETHEREUM - NFTs
@@ -25,6 +27,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId.toBigInteger(),
             itemId = toItemId(this.contract, this.tokenId.toBigInteger())
         )
         is EthErc1155AssetTypeDto -> AssetTypeExtension(
@@ -32,6 +35,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
         )
         is EthErc1155LazyAssetTypeDto -> AssetTypeExtension(
@@ -39,6 +43,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
         )
         is EthErc721AssetTypeDto -> AssetTypeExtension(
@@ -46,6 +51,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
         )
         is EthErc721LazyAssetTypeDto -> AssetTypeExtension(
@@ -53,6 +59,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
         )
         //---- ETHEREUM - other
@@ -61,6 +68,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = null,
             itemId = null
         )
         is EthCollectionAssetTypeDto -> AssetTypeExtension(
@@ -68,6 +76,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = true,
             contract = this.contract.value,
+            tokenId = null,
             itemId = null
         )
 
@@ -77,6 +86,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = true,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = null,
             itemId = null
         )
         is FlowAssetTypeNftDto -> AssetTypeExtension(
@@ -84,6 +94,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
         )
 
@@ -93,6 +104,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = true,
             isCollection = false,
             contract = "XTZ",
+            tokenId = null,
             itemId = null
         )
         is TezosFTAssetTypeDto -> AssetTypeExtension(
@@ -100,6 +112,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = true,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId,
             itemId = null
         )
         //---- TEZOS - NFTs
@@ -108,6 +121,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
         )
         is TezosMTAssetTypeDto -> AssetTypeExtension(
@@ -115,6 +129,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             isCollection = false,
             contract = this.contract.value,
+            tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
         )
     }
