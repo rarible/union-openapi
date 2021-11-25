@@ -3382,7 +3382,6 @@ components:
       required:
         - "@type"
         - contract
-        - tokenId
 
     TezosNFTAssetType:
       type: object
