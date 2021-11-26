@@ -177,6 +177,69 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/items/{itemId}/image:
+    get:
+      tags:
+        - item-controller
+      description: Get image by item id
+      operationId: getItemImageById
+      parameters:
+        - name: "itemId"
+          in: path
+          required: true
+          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
+          schema:
+            $ref: "#/components/schemas/ItemId"
+      responses:
+        '200':
+          description: Ok
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+            image/svg+xml:
+              schema:
+                type: string
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/items/{itemId}/animation:
+    get:
+      tags:
+        - item-controller
+      description: Get animation by item id
+      operationId: getItemAnimationById
+      parameters:
+        - name: "itemId"
+          in: path
+          required: true
+          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
+          schema:
+            $ref: "#/components/schemas/ItemId"
+      responses:
+        '200':
+          description: Ok
+          content:
+            image/gif:
+              schema:
+                type: string
+                format: binary
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/items/byOwner:
     get:
       tags:
