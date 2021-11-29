@@ -2999,7 +2999,8 @@ components:
             - ERC721
             - ERC1155
             - FLOW
-            - TEZOS
+            - TEZOS_NFT
+            - TEZOS_MT
         name:
           type: string
         symbol:
