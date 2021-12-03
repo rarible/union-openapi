@@ -72,7 +72,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/currency/rate/usd/{currencyId}":
+  "/v0.1/currencies/{currencyId}/rates/usd":
     get:
       tags:
         - currency-controller
@@ -1652,7 +1652,6 @@ components:
     CurrencyUsdRate:
       type: object
       required:
-        - currencyId
         - symbol
         - rate
         - date
@@ -1661,9 +1660,11 @@ components:
           deprecated: true
           type: string
           description: "Currency Id"
+          example: "usdc"
         symbol:
           type: string
           description: "Currency Symbol"
+          example: "usdc"
         rate:
           $ref: '#/components/schemas/BigDecimal'
         date:
