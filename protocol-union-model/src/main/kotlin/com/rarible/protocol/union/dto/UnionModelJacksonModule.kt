@@ -7,6 +7,7 @@ import com.rarible.protocol.union.dto.deserializer.ContractAddressDeserializer
 import com.rarible.protocol.union.dto.deserializer.ItemIdDeserializer
 import com.rarible.protocol.union.dto.deserializer.OrderIdDeserializer
 import com.rarible.protocol.union.dto.deserializer.OwnershipIdDeserializer
+import com.rarible.protocol.union.dto.deserializer.CurrencyIdDeserializer
 import com.rarible.protocol.union.dto.serializer.ActivityIdSerializer
 import com.rarible.protocol.union.dto.serializer.AuctionIdSerializer
 import com.rarible.protocol.union.dto.serializer.ContractAddressSerializer
@@ -34,6 +35,8 @@ object UnionModelJacksonModule : SimpleModule() {
 
         addSerializer(ActivityIdSerializer)
         addDeserializer(ActivityIdDto::class.java, ActivityIdDeserializer)
+
+        addDeserializer(CurrencyIdDto::class.java, CurrencyIdDeserializer)
     }
 
 }

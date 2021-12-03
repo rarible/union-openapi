@@ -59,22 +59,31 @@ object IdParser {
     }
 
     fun split(value: String, expectedSize: Int): List<String> {
+        return split(value, IntRange(expectedSize, expectedSize))
+    }
+
+    fun split(value: String, expectedRange: IntRange): List<String> {
         val parts = value.split(DELIMITER)
-        assertSize(value, parts, expectedSize)
+        assertSize(value, parts, expectedRange)
         return parts
     }
+
 
     private fun assertSize(
         value: String,
         parts: List<String>,
-        expectedSize: Int
+        expectedRange: IntRange
     ) {
-        if (parts.size != expectedSize) {
+        if (expectedRange.contains(parts.size).not()) {
+            val expectedRangeToMessage: () -> String = {
+                if (expectedRange.isSingle()) "${expectedRange.first}" else "${expectedRange.first} or ${expectedRange.last}"
+            }
             throw BlockchainIdFormatException(
                 "Illegal format for ID: '$value', " +
-                    "expected $expectedSize parts in ID, concatenated by '$DELIMITER'"
+                    "expected ${expectedRangeToMessage()} parts in ID, concatenated by '$DELIMITER'"
             )
         }
     }
 
+    private fun IntRange.isSingle(): Boolean = first == last
 }

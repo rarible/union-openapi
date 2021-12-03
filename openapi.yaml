@@ -35,6 +35,7 @@ paths:
 
   "/v0.1/currency/rate/usd":
     get:
+      deprecated: true
       tags:
         - currency-controller
       description: "Get currency USD rate"
@@ -52,6 +53,38 @@ paths:
           description: "Address of the currency"
           schema:
             type: string
+        - name: at
+          in: query
+          required: true
+          description: "Date and time for getting currency USD rate"
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrencyUsdRate"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/currencies/{currencyId}/rates/usd":
+    get:
+      tags:
+        - currency-controller
+      description: "Get currency USD rate by currency id"
+      operationId: getCurrencyUsdRateByCurrencyId
+      parameters:
+        - name: "currencyId"
+          in: path
+          required: true
+          description: "Currency Id, has format `${blockchain}:${token}` or `${blockchain}:${token}:${tokenId}`"
+          schema:
+            $ref: "#/components/schemas/CurrencyId"
         - name: at
           in: query
           required: true
@@ -1611,16 +1644,27 @@ components:
 
     ################## Currency - Union ##################
 
+    CurrencyId:
+      type: string
+      description: "Currency Id, has format `${blockchain}:${token}` or `${blockchain}:${token}:${tokenId}`"
+      example: "TEZOS:KT1JBNFcB5tiycHNdYGYCtR3kk6JaJysUCi8:0"
+
     CurrencyUsdRate:
       type: object
       required:
-        - currencyId
+        - symbol
         - rate
         - date
       properties:
         currencyId:
+          deprecated: true
           type: string
           description: "Currency Id"
+          example: "usdc"
+        symbol:
+          type: string
+          description: "Currency Symbol"
+          example: "usdc"
         rate:
           $ref: '#/components/schemas/BigDecimal'
         date:
