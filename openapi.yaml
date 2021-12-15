@@ -567,18 +567,6 @@ paths:
             type: array
             items:
               $ref: "#/components/schemas/Blockchain"
-        - name: "platform"
-          in: query
-          required: false
-          description: "The platform where the order was created"
-          schema:
-            "$ref": "#/components/schemas/Platform"
-        - name: "origin"
-          in: query
-          required: false
-          description: "Address of the consumer to receive the commission for the order"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
         - name: "continuation"
           in: query
           required: false
@@ -591,6 +579,20 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Order sort"
+          schema:
+            $ref: "#/components/schemas/OrderSort"
+        - name: "status"
+          in: query
+          required: false
+          description: "Order status"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderStatus"
       responses:
         "200":
           description: "OK"
@@ -2353,6 +2355,12 @@ components:
         - HISTORICAL
         - INACTIVE
         - CANCELLED
+
+    OrderSort:
+      type: string
+      enum:
+        - LAST_UPDATE_ASC
+        - LAST_UPDATE_DESC
 
     #################### Auction - Union ####################
 
