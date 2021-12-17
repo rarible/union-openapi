@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.rarible</groupId>
         <artifactId>rarible-parent-pom</artifactId>
-        <version>1.1.1</version>
+        <version>2.0.3</version>
     </parent>
 
     <repositories>
@@ -34,7 +34,7 @@
     <version>${revision}</version>
 
     <properties>
-        <revision>1.21.2</revision>
+        <revision>1.21.3</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
         <rarible.codegen.server.version>1.2.0</rarible.codegen.server.version>
@@ -43,7 +43,7 @@
 
         <codegen.package>com.rarible.protocol.union.dto</codegen.package>
 
-        <rarible.core.version>1.4.6</rarible.core.version>
+        <rarible.core.version>2.0.11</rarible.core.version>
     </properties>
 
     <dependencyManagement>
