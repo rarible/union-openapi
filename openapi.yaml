@@ -1833,8 +1833,6 @@ components:
           $ref: "#/components/schemas/ContractAddress"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
-        collection: #Deprecated
-          $ref: "#/components/schemas/UnionAddress"
         creators:
           type: array
           description: "Creators of the target item"
