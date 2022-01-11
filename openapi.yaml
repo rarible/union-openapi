@@ -1605,7 +1605,6 @@ components:
     Platform:
       type: string
       enum:
-        - ALL
         - RARIBLE
         - OPEN_SEA
         - CRYPTO_PUNKS
