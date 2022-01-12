@@ -1,7 +1,17 @@
 package com.rarible.protocol.union.dto.continuation
 
+import com.rarible.protocol.union.dto.ActivityDto
+import com.rarible.protocol.union.dto.ActivityIdDto
+import com.rarible.protocol.union.dto.BlockchainDto
+import com.rarible.protocol.union.dto.BlockchainGroupDto
+import com.rarible.protocol.union.dto.ContractAddress
+import com.rarible.protocol.union.dto.MintActivityDto
+import com.rarible.protocol.union.dto.UnionAddress
+import com.rarible.protocol.union.dto.continuation.page.ArgSlice
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
+import java.time.Instant
 
 class CombinedContinuationTest {
 
@@ -44,5 +54,34 @@ class CombinedContinuationTest {
 
         val parsed = CombinedContinuation.parse(expected)
         assertThat(parsed).isEqualTo(continuation)
+    }
+
+    @Test
+    fun `next page`() {
+        val create: (id: String) -> MintActivityDto = { id ->
+            MintActivityDto(
+                id = ActivityIdDto(BlockchainDto.ETHEREUM, id),
+                date = Instant.now(),
+                owner = UnionAddress(BlockchainGroupDto.ETHEREUM, "test"),
+                contract = ContractAddress(BlockchainDto.ETHEREUM, "test"),
+                tokenId = BigInteger.ONE,
+                value = BigInteger.ONE,
+                transactionHash = "test"
+            )
+        }
+        val dto = create("1")
+        val blockchains: List<BlockchainDto> = listOf(BlockchainDto.ETHEREUM, BlockchainDto.FLOW, BlockchainDto.TEZOS)
+        val activities: List<ActivityDto> = listOf(dto)
+        val prevContinuation = CombinedContinuation(mapOf(
+            BlockchainDto.FLOW.name to ArgSlice.COMPLETED,
+            BlockchainDto.TEZOS.name to "tezos"
+        )).toString()
+
+        val nextContinuation = CombinedContinuation.next(blockchains, activities, prevContinuation)
+        assertThat(CombinedContinuation.parse(nextContinuation).continuations).isEqualTo(mapOf(
+            BlockchainDto.ETHEREUM.name to "${dto.date.toEpochMilli()}_${dto.id.value}",
+            BlockchainDto.FLOW.name to ArgSlice.COMPLETED,
+            BlockchainDto.TEZOS.name to "tezos",
+        ))
     }
 }
