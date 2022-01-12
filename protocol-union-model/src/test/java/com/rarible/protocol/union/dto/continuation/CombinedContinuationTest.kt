@@ -77,7 +77,7 @@ class CombinedContinuationTest {
             BlockchainDto.TEZOS.name to "tezos"
         )).toString()
 
-        val nextContinuation = CombinedContinuation.next(blockchains, activities, prevContinuation)
+        val nextContinuation = ActivityContinuation.next(blockchains, activities, prevContinuation)
         assertThat(CombinedContinuation.parse(nextContinuation).continuations).isEqualTo(mapOf(
             BlockchainDto.ETHEREUM.name to "${dto.date.toEpochMilli()}_${dto.id.value}",
             BlockchainDto.FLOW.name to ArgSlice.COMPLETED,
