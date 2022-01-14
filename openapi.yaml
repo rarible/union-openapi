@@ -2026,6 +2026,8 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/ItemHistory"
+        auction:
+          $ref: "#/components/schemas/Auction"
         bestSellOrder:
           $ref: "#/components/schemas/Order"
       required:
@@ -2479,6 +2481,7 @@ components:
       type: object
       required:
         - id
+        - contract
         - seller
         - sell
         - buy
@@ -2493,6 +2496,8 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/AuctionId"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
         type:
           type: string
           enum:
