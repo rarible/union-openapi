@@ -1321,6 +1321,12 @@ paths:
           description: "Continuation token from the previous response"
           schema:
             type: string
+        - name: "cursor"
+          in: query
+          required: false
+          description: "Combined continuation token from the previous response"
+          schema:
+            type: string
         - name: "size"
           in: query
           required: false
@@ -1370,6 +1376,12 @@ paths:
           in: query
           required: false
           description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "cursor"
+          in: query
+          required: false
+          description: "Combined continuation token from the previous response"
           schema:
             type: string
         - name: "size"
