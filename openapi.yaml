@@ -2575,6 +2575,11 @@ components:
         - SELL
         - CANCEL_LIST
         - CANCEL_BID
+        - CREATED_AUCTION
+        - CANCEL_AUCTION
+        - FINISHED_AUCTION
+        - STARTED_AUCTION
+        - ENDED_AUCTION
 
     UserActivityType:
       type: string
@@ -2590,6 +2595,8 @@ components:
         - SELL
         - CANCEL_LIST
         - CANCEL_BID
+        - CREATED_AUCTION
+        - CANCEL_AUCTION
 
     Activity:
       type: object
