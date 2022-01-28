@@ -5,12 +5,17 @@ import com.rarible.protocol.union.dto.ext
 
 object OrderContinuation {
 
-    object ByLastUpdatedAndId : ContinuationFactory<OrderDto, DateIdContinuation> {
+    object ByLastUpdatedAndIdAsc : ContinuationFactory<OrderDto, DateIdContinuation> {
         override fun getContinuation(entity: OrderDto): DateIdContinuation {
-            return DateIdContinuation(entity.lastUpdatedAt, entity.id.value)
+            return DateIdContinuation(entity.lastUpdatedAt, entity.id.value, true)
         }
     }
 
+    object ByLastUpdatedAndIdDesc : ContinuationFactory<OrderDto, DateIdContinuation> {
+        override fun getContinuation(entity: OrderDto): DateIdContinuation {
+            return DateIdContinuation(entity.lastUpdatedAt, entity.id.value, false)
+        }
+    }
 
     object BySellPriceUsdAndIdAsc : ContinuationFactory<OrderDto, UsdPriceIdContinuation> {
         override fun getContinuation(entity: OrderDto): UsdPriceIdContinuation {
