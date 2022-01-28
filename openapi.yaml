@@ -3534,6 +3534,8 @@ components:
           type: string
           enum:
             - ETH
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
       required:
         - "@type"
 
