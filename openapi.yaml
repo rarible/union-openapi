@@ -1497,6 +1497,27 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  "/v0.1/collections/{collection}/refreshMeta":
+    delete:
+      tags:
+        - collection-controller
+      description: "Refreshes metadata for all items in the NFT collection"
+      operationId: refreshCollectionMeta
+      parameters:
+        - name: "collection"
+          in: path
+          required: true
+          description: "Address of the collection"
+          schema:
+            $ref: "#/components/schemas/ContractAddress"
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/collections/byOwner:
     get:
       tags:
