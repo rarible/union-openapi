@@ -2486,6 +2486,7 @@ components:
         - createdAt
         - lastUpdateAt
         - status
+        - ongoing
         - hash
         - auctionId
         - data
@@ -2527,6 +2528,8 @@ components:
             $ref: "#/components/schemas/AuctionHistory"
         status:
           $ref: "#/components/schemas/AuctionStatus"
+        ongoing:
+          type: boolean
         hash:
           type: string
         auctionId:
