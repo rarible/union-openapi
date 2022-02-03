@@ -1205,6 +1205,45 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  "/v0.1/auctions/{id}/bids":
+    get:
+      tags:
+        - auction-controller
+      operationId: getAuctionBidsById
+      description: Returns all auction bids by auction id
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "Auction Id, has format `${blockchain}:${id}`"
+          schema:
+            $ref: "#/components/schemas/AuctionId"
+        - name: continuation
+          description: "Continuation token from the previous response"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: size
+          description: "The number of bids to return"
+          in: query
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuctionBids"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################## Activity API ########################
 
   /v0.1/activities/byUser:
@@ -2576,6 +2615,26 @@ components:
         - total
         - auctions
 
+    AuctionBids:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+          description: "Number of auction bids were found by request"
+        continuation:
+          type: string
+          description: "Continuation token to paginate auction bids search result"
+        bids:
+          type: array
+          description: "List of found auction bids"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/AuctionBid"
+      required:
+        - total
+        - bids
+
     #################### Activity - Union ####################
 
     ActivityId:
@@ -2599,11 +2658,12 @@ components:
         - SELL
         - CANCEL_LIST
         - CANCEL_BID
-        - CREATED_AUCTION
-        - CANCEL_AUCTION
-        - FINISHED_AUCTION
-        - STARTED_AUCTION
-        - ENDED_AUCTION
+        - AUCTION_BID
+        - AUCTION_CREATED
+        - AUCTION_CANCEL
+        - AUCTION_FINISHED
+        - AUCTION_STARTED
+        - AUCTION_ENDED
 
     UserActivityType:
       type: string
@@ -2619,8 +2679,12 @@ components:
         - SELL
         - CANCEL_LIST
         - CANCEL_BID
-        - CREATED_AUCTION
-        - CANCEL_AUCTION
+        - AUCTION_BID
+        - AUCTION_CREATED
+        - AUCTION_CANCEL
+        - AUCTION_FINISHED
+        - AUCTION_STARTED
+        - AUCTION_ENDED
 
     Activity:
       type: object
