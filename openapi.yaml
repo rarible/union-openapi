@@ -1651,6 +1651,7 @@ components:
         - POLYGON
         - FLOW
         - TEZOS
+        - SOLANA
 
     BlockchainGroup:
       type: string
@@ -1658,6 +1659,7 @@ components:
         - ETHEREUM
         - FLOW
         - TEZOS
+        - SOLANA
 
     Payout:
       type: object
