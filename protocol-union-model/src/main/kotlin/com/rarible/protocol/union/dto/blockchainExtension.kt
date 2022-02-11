@@ -6,7 +6,8 @@ private val subchains = mapOf(
     // We using first blockchain of the group to validate user's signature
     BlockchainGroupDto.ETHEREUM to listOf(BlockchainDto.ETHEREUM, BlockchainDto.POLYGON),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
-    BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS)
+    BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
+    BlockchainGroupDto.SOLANA to listOf(BlockchainDto.SOLANA)
 )
 
 private val groups = subchains.entries

@@ -1,6 +1,7 @@
 {
   "UnionAddress": "com.rarible.protocol.union.dto.UnionAddress",
   "ActivityId": "com.rarible.protocol.union.dto.ActivityIdDto",
+  "CollectionId": "com.rarible.protocol.union.dto.CollectionIdDto",
   "ItemId": "com.rarible.protocol.union.dto.ItemIdDto",
   "CurrencyId": "com.rarible.protocol.union.dto.CurrencyIdDto",
   "ContractAddress": "com.rarible.protocol.union.dto.ContractAddress",

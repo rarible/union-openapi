@@ -8,24 +8,17 @@ val AssetTypeDto.ext: AssetTypeExtension
         is EthEthereumAssetTypeDto -> AssetTypeExtension(
             isNft = false,
             isCurrency = true,
-            isCollection = false,
-            contract = "0x0000000000000000000000000000000000000000",
-            tokenId = null,
-            itemId = null
+            contract = "0x0000000000000000000000000000000000000000"
         )
         is EthErc20AssetTypeDto -> AssetTypeExtension(
             isNft = false,
             isCurrency = true,
-            isCollection = false,
-            contract = this.contract.value,
-            tokenId = null,
-            itemId = null
+            contract = this.contract.value
         )
         //---- ETHEREUM - NFTs
         is EthCryptoPunksAssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = false,
             contract = this.contract.value,
             tokenId = this.tokenId.toBigInteger(),
             itemId = toItemId(this.contract, this.tokenId.toBigInteger())
@@ -33,7 +26,6 @@ val AssetTypeDto.ext: AssetTypeExtension
         is EthErc1155AssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = false,
             contract = this.contract.value,
             tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
@@ -41,7 +33,6 @@ val AssetTypeDto.ext: AssetTypeExtension
         is EthErc1155LazyAssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = false,
             contract = this.contract.value,
             tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
@@ -49,7 +40,6 @@ val AssetTypeDto.ext: AssetTypeExtension
         is EthErc721AssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = false,
             contract = this.contract.value,
             tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
@@ -57,7 +47,6 @@ val AssetTypeDto.ext: AssetTypeExtension
         is EthErc721LazyAssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = false,
             contract = this.contract.value,
             tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
@@ -66,33 +55,24 @@ val AssetTypeDto.ext: AssetTypeExtension
         is EthGenerativeArtAssetTypeDto -> AssetTypeExtension(
             isNft = false,
             isCurrency = false,
-            isCollection = false,
-            contract = this.contract.value,
-            tokenId = null,
-            itemId = null
+            contract = this.contract.value
         )
         is EthCollectionAssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = true,
             contract = this.contract.value,
-            tokenId = null,
-            itemId = null
+            collectionId = toCollectionId(contract, contract.value)
         )
 
         //---- FLOW
         is FlowAssetTypeFtDto -> AssetTypeExtension(
             isNft = false,
             isCurrency = true,
-            isCollection = false,
-            contract = this.contract.value,
-            tokenId = null,
-            itemId = null
+            contract = this.contract.value
         )
         is FlowAssetTypeNftDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = false,
             contract = this.contract.value,
             tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
@@ -102,24 +82,19 @@ val AssetTypeDto.ext: AssetTypeExtension
         is TezosXTZAssetTypeDto -> AssetTypeExtension(
             isNft = false,
             isCurrency = true,
-            isCollection = false,
-            contract = "XTZ",
-            tokenId = null,
-            itemId = null
+            contract = "XTZ"
         )
+        // TEZOS-specific currency with tokenId
         is TezosFTAssetTypeDto -> AssetTypeExtension(
             isNft = false,
             isCurrency = true,
-            isCollection = false,
             contract = this.contract.value,
-            tokenId = this.tokenId,
-            itemId = null
+            tokenId = this.tokenId
         )
         //---- TEZOS - NFTs
         is TezosNFTAssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = false,
             contract = this.contract.value,
             tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
@@ -127,7 +102,6 @@ val AssetTypeDto.ext: AssetTypeExtension
         is TezosMTAssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            isCollection = false,
             contract = this.contract.value,
             tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
@@ -137,7 +111,13 @@ val AssetTypeDto.ext: AssetTypeExtension
 private fun toItemId(contract: ContractAddress, tokenId: BigInteger): ItemIdDto {
     return ItemIdDto(
         blockchain = contract.blockchain,
-        contract = contract.value,
-        tokenId = tokenId
+        value = "${contract.value}:$tokenId"
+    )
+}
+
+private fun toCollectionId(contract: ContractAddress, collectionId: String): CollectionIdDto {
+    return CollectionIdDto(
+        blockchain = contract.blockchain,
+        value = collectionId
     )
 }
