@@ -8,33 +8,6 @@ import org.junit.jupiter.api.Test
 class IdParserTest {
 
     @Test
-    fun `parse activity id`() {
-        val id = "ETHEREUM:abc"
-        val activityId = IdParser.parseActivityId(id)
-
-        assertEquals(BlockchainDto.ETHEREUM, activityId.blockchain)
-        assertEquals("abc", activityId.value)
-    }
-
-    @Test
-    fun `parse order id`() {
-        val id = "TEZOS:231"
-        val orderId = IdParser.parseOrderId(id)
-
-        assertEquals(BlockchainDto.TEZOS, orderId.blockchain)
-        assertEquals("231", orderId.value)
-    }
-
-    @Test
-    fun `parse collection id`() {
-        val id = "POLYGON:111"
-        val orderId = IdParser.parseContract(id)
-
-        assertEquals(BlockchainDto.POLYGON, orderId.blockchain)
-        assertEquals("111", orderId.value)
-    }
-
-    @Test
     fun `parse address`() {
         val id = "FLOW:gtt"
         val address = IdParser.parseAddress(id)
@@ -68,11 +41,29 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse orderId - too many parts`() {
+    fun `parse order id`() {
+        val id = "TEZOS:231"
+        val orderId = IdParser.parseOrderId(id)
+
+        assertEquals(BlockchainDto.TEZOS, orderId.blockchain)
+        assertEquals("231", orderId.value)
+    }
+
+    @Test
+    fun `parse order id - too many parts`() {
         val id = "ETHEREUM:abc:123"
         assertThrows(BlockchainIdFormatException::class.java) {
             IdParser.parseOrderId(id)
         }
+    }
+
+    @Test
+    fun `parse activity id`() {
+        val id = "ETHEREUM:abc"
+        val activityId = IdParser.parseActivityId(id)
+
+        assertEquals(BlockchainDto.ETHEREUM, activityId.blockchain)
+        assertEquals("abc", activityId.value)
     }
 
     @Test
@@ -84,10 +75,19 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse collectionId - too many parts`() {
+    fun `parse collection id`() {
+        val id = "POLYGON:111"
+        val orderId = IdParser.parseCollectionId(id)
+
+        assertEquals(BlockchainDto.POLYGON, orderId.blockchain)
+        assertEquals("111", orderId.value)
+    }
+
+    @Test
+    fun `parse collection id - too many parts`() {
         val id = "FLOW:abc:123"
         assertThrows(BlockchainIdFormatException::class.java) {
-            IdParser.parseContract(id)
+            IdParser.parseCollectionId(id)
         }
     }
 

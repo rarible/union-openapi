@@ -4,10 +4,21 @@ import java.math.BigInteger
 
 data class ItemIdDto(
     override val blockchain: BlockchainDto,
-    val contract: String,
-    val tokenId: BigInteger
+    override val value: String
 ) : UnionBlockchainId {
 
-    override val value = "${contract}:${tokenId}"
+    constructor(
+        blockchain: BlockchainDto,
+        contract: String,
+        tokenId: BigInteger
+    ) : this(blockchain = blockchain, value = "$contract:$tokenId")
+
+    fun toOwnership(owner: String): OwnershipIdDto {
+        return OwnershipIdDto(
+            blockchain = blockchain,
+            itemIdValue = value,
+            owner = UnionAddress(blockchain.group(), owner)
+        )
+    }
 
 }

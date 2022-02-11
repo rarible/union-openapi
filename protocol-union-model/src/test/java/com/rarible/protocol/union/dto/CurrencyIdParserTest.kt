@@ -4,7 +4,7 @@ import com.rarible.protocol.union.dto.parser.CurrencyIdParser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class UnionCurrencyIdParserTest {
+class CurrencyIdParserTest {
 
     @Test
     fun `parse full`() {

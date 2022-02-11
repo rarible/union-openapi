@@ -2,7 +2,7 @@ package com.rarible.protocol.union.dto.continuation.page
 
 import com.rarible.protocol.union.dto.ItemDto
 import com.rarible.protocol.union.dto.continuation.ItemContinuation
-import com.rarible.protocol.union.dto.parser.ItemIdParser
+import com.rarible.protocol.union.dto.parser.IdParser
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -52,7 +52,7 @@ class PagingTest {
     private fun createItem(lastUpdated: Instant): ItemDto {
 
         val item: ItemDto = mockk()
-        val id = ItemIdParser.parseFull("ETHEREUM:lkjfdh:123")
+        val id = IdParser.parseItemId("ETHEREUM:lkjfdh:123")
         every { item.lastUpdatedAt } returns lastUpdated
         every { item.id } returns id
 

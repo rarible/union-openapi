@@ -111,8 +111,7 @@ class UnionJacksonTest {
     fun `eth itemId`() {
         val itemId = ItemIdDto(
             blockchain = BlockchainDto.POLYGON,
-            contract = "abc",
-            tokenId = BigInteger("123")
+            value = "abc:123"
         )
 
         val serialized = mapper.writeValueAsString(itemId)
@@ -129,8 +128,7 @@ class UnionJacksonTest {
     fun `flow itemId`() {
         val itemId = ItemIdDto(
             blockchain = BlockchainDto.FLOW,
-            contract = "abc",
-            tokenId = BigInteger("123")
+            value = "abc:123"
         )
 
         val serialized = mapper.writeValueAsString(itemId)
@@ -144,8 +142,7 @@ class UnionJacksonTest {
     fun `eth ownershipId`() {
         val itemId = OwnershipIdDto(
             blockchain = BlockchainDto.ETHEREUM,
-            contract = "abc",
-            tokenId = BigInteger("123"),
+            itemIdValue = "abc:123",
             owner = UnionAddress(BlockchainGroupDto.ETHEREUM, "xyz")
         )
 
@@ -163,8 +160,7 @@ class UnionJacksonTest {
     fun `flow ownershipId`() {
         val ownershipId = OwnershipIdDto(
             blockchain = BlockchainDto.FLOW,
-            contract = "abc",
-            tokenId = BigInteger("123"),
+            itemIdValue = "abc:123",
             owner = UnionAddress(BlockchainGroupDto.FLOW, "xyz")
         )
 

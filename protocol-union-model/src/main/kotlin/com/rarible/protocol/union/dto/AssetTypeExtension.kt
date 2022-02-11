@@ -5,11 +5,14 @@ import java.math.BigInteger
 data class AssetTypeExtension(
     val isCurrency: Boolean,
     val isNft: Boolean,
-    val isCollection: Boolean,
     val contract: String,
-    val tokenId: BigInteger?,
-    val itemId: ItemIdDto?
+    val tokenId: BigInteger? = null,
+    val itemId: ItemIdDto? = null,
+    val collectionId: CollectionIdDto? = null
 ) {
+
+    val isCollection = collectionId != null
+
     fun currencyAddress(): String {
         if (!isCurrency) {
             throw IllegalArgumentException("Not a currency AssetType: $this")

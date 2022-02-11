@@ -418,24 +418,10 @@ paths:
       parameters:
         - name: "itemId"
           in: query
-          required: false
+          required: true
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
-        - name: "contract"
-          in: query
-          deprecated: true
-          required: false
-          description: "Address of the contract"
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: "tokenId"
-          in: query
-          deprecated: true
-          required: false
-          description: "Token Id"
-          schema:
-            $ref: "#/components/schemas/BigInteger"
         - name: "continuation"
           in: query
           required: false
@@ -631,24 +617,10 @@ paths:
             "$ref": "#/components/schemas/Platform"
         - name: "itemId"
           in: query
-          required: false
+          required: true
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
-        - name: "contract"
-          in: query
-          deprecated: true
-          required: false
-          description: "Address of the contract"
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: "tokenId"
-          in: query
-          deprecated: true
-          required: false
-          description: "Token Id"
-          schema:
-            $ref: "#/components/schemas/BigInteger"
         - name: "maker"
           in: query
           required: false
@@ -835,24 +807,10 @@ paths:
             "$ref": "#/components/schemas/Platform"
         - name: "itemId"
           in: query
-          required: false
+          required: true
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
-        - name: "contract"
-          in: query
-          deprecated: true
-          required: false
-          description: "Address of the contract"
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: "tokenId"
-          in: query
-          deprecated: true
-          required: false
-          description: "Token Id"
-          schema:
-            $ref: "#/components/schemas/BigInteger"
         - name: "maker"
           in: query
           required: false
@@ -1336,24 +1294,10 @@ paths:
               $ref: "#/components/schemas/ActivityType"
         - name: "itemId"
           in: query
-          required: false
+          required: true
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
-        - name: "contract"
-          in: query
-          deprecated: true
-          required: false
-          description: "Address of the contract"
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: "tokenId"
-          in: query
-          deprecated: true
-          required: false
-          description: "Token Id"
-          schema:
-            $ref: "#/components/schemas/BigInteger"
         - name: "continuation"
           in: query
           required: false
@@ -1651,6 +1595,7 @@ components:
         - POLYGON
         - FLOW
         - TEZOS
+        - SOLANA
 
     BlockchainGroup:
       type: string
@@ -1658,6 +1603,7 @@ components:
         - ETHEREUM
         - FLOW
         - TEZOS
+        - SOLANA
 
     Payout:
       type: object
@@ -1863,6 +1809,8 @@ components:
           $ref: "#/components/schemas/ItemId"
         blockchain:
           $ref: "#/components/schemas/Blockchain"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         contract:
           $ref: "#/components/schemas/ContractAddress"
         tokenId:
@@ -1927,8 +1875,6 @@ components:
       required:
         - id
         - blockchain
-        - contract
-        - tokenId
         - creators
         - lazySupply
         - pending
@@ -1963,7 +1909,7 @@ components:
       type: object
       properties:
         collectionId:
-          $ref: "#/components/schemas/ContractAddress"
+          $ref: "#/components/schemas/CollectionId"
         eventId:
           type: string
       required:
@@ -2036,6 +1982,8 @@ components:
           $ref: "#/components/schemas/OwnershipId"
         blockchain:
           $ref: "#/components/schemas/Blockchain"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
         contract:
           $ref: "#/components/schemas/ContractAddress"
         tokenId:
@@ -2068,8 +2016,6 @@ components:
       required:
         - id
         - blockchain
-        - contract
-        - tokenId
         - owner
         - value
         - createdAt
@@ -3131,11 +3077,18 @@ components:
         - total
         - activities
 
+    CollectionId:
+      type: string
+      description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
+      example: "ETHEREUM:0x60f80121936a0d46b5279700f9df786054aa5ee5"
+
     Collection:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/ContractAddress"
+          $ref: "#/components/schemas/CollectionId"
+        parent:
+          $ref: "#/components/schemas/CollectionId"
         blockchain:
           $ref: "#/components/schemas/Blockchain"
         type:
