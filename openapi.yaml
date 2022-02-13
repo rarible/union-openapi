@@ -335,6 +335,43 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/items/byOwnerWithOwnership:
+    get:
+      tags:
+        - item-controller
+      description: "Returns items by owner with ownership"
+      operationId: getItemsByOwnerWithOwnership
+      parameters:
+        - name: "owner"
+          in: query
+          required: true
+          description: "Address of the owner"
+          schema:
+            $ref: "#/components/schemas/UnionAddress"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemsWithOwnership"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/items/all:
     get:
       tags:
@@ -1927,6 +1964,17 @@ components:
         - sellers
         - auctions
 
+    ItemWithOwnership:
+      type: object
+      properties:
+        item:
+          $ref: "#/components/schemas/Item"
+        ownership:
+          $ref: "#/components/schemas/ItemOwnership"
+      required:
+        - item
+        - ownership
+
     Items:
       type: object
       properties:
@@ -1943,6 +1991,26 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/Item"
+      required:
+        - total
+        - items
+
+    ItemsWithOwnership:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+          description: "Number of items were found by request"
+        continuation:
+          type: string
+          description: "Continuation token to paginate items search result"
+        items:
+          type: array
+          description: "List of found items"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/ItemWithOwnership"
       required:
         - total
         - items
@@ -2058,6 +2126,44 @@ components:
       required:
         - id
         - blockchain
+        - owner
+        - value
+        - createdAt
+        - creators
+        - lazyValue
+        - pending
+
+    ItemOwnership:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/OwnershipId"
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+        owner:
+          $ref: "#/components/schemas/UnionAddress"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        createdAt:
+          type: string
+          format: "date-time"
+        creators:
+          type: array
+          description: "Creators of the target item"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Creator"
+        lazyValue:
+          $ref: "#/components/schemas/BigInteger"
+      required:
+        - id
+        - blockchain
+        - contract
+        - tokenId
         - owner
         - value
         - createdAt
