@@ -217,6 +217,13 @@ paths:
       description: "Returns Item by owner"
       operationId: getItemsByOwner
       parameters:
+        - name: "blockchains"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
         - name: "owner"
           in: query
           required: true
@@ -254,6 +261,13 @@ paths:
       description: "Returns Item by creator"
       operationId: getItemsByCreator
       parameters:
+        - name: "blockchains"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
         - name: "creator"
           in: query
           required: true
@@ -573,6 +587,13 @@ paths:
       description: "Returns sell orders by maker"
       operationId: getSellOrdersByMaker
       parameters:
+        - name: "blockchains"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
         - name: platform
           in: query
           required: false
@@ -1017,6 +1038,13 @@ paths:
       operationId: getAuctionsBySeller
       description: Returns all auctions by seller
       parameters:
+        - name: "blockchains"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
         - name: seller
           description: "The seller of the auction"
           in: query
@@ -1261,6 +1289,13 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/UserActivityType"
+        - name: "blockchains"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
         - name: "user"
           in: query
           required: true
@@ -1543,6 +1578,13 @@ paths:
       description: "Returns collection by owner"
       operationId: getCollectionsByOwner
       parameters:
+        - name: "blockchains"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
         - name: "owner"
           in: query
           description: "Owner of searching collections"
