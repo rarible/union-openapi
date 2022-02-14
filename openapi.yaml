@@ -1862,7 +1862,7 @@ components:
         royalties:
           type: array
           deprecated: true
-          description: "List of royalties"
+          description: Use a special endpoint '/v0.1/items/{itemId}/royalty'
           default: [ ]
           items:
             $ref: "#/components/schemas/Royalty"
@@ -2028,7 +2028,6 @@ components:
           format: "date-time"
         creators:
           type: array
-          deprecated: true
           description: "Creators of the target item"
           default: [ ]
           items:
@@ -2053,6 +2052,7 @@ components:
         - owner
         - value
         - createdAt
+        - creators
         - lazyValue
         - pending
 
