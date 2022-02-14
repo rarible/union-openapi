@@ -2070,6 +2070,7 @@ components:
           format: "date-time"
         creators:
           type: array
+          deprecated: true
           description: "Creators of the target item"
           default: [ ]
           items:
@@ -2094,7 +2095,6 @@ components:
         - owner
         - value
         - createdAt
-        - creators
         - lazyValue
         - pending
 
