@@ -3,13 +3,15 @@ package com.rarible.protocol.union.dto
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.rarible.protocol.union.dto.deserializer.ActivityIdDeserializer
 import com.rarible.protocol.union.dto.deserializer.AuctionIdDeserializer
+import com.rarible.protocol.union.dto.deserializer.CollectionIdDeserializer
 import com.rarible.protocol.union.dto.deserializer.ContractAddressDeserializer
+import com.rarible.protocol.union.dto.deserializer.CurrencyIdDeserializer
 import com.rarible.protocol.union.dto.deserializer.ItemIdDeserializer
 import com.rarible.protocol.union.dto.deserializer.OrderIdDeserializer
 import com.rarible.protocol.union.dto.deserializer.OwnershipIdDeserializer
-import com.rarible.protocol.union.dto.deserializer.CurrencyIdDeserializer
 import com.rarible.protocol.union.dto.serializer.ActivityIdSerializer
 import com.rarible.protocol.union.dto.serializer.AuctionIdSerializer
+import com.rarible.protocol.union.dto.serializer.CollectionIdSerializer
 import com.rarible.protocol.union.dto.serializer.ContractAddressSerializer
 import com.rarible.protocol.union.dto.serializer.ItemIdSerializer
 import com.rarible.protocol.union.dto.serializer.OrderIdSerializer
@@ -26,6 +28,9 @@ object UnionModelJacksonModule : SimpleModule() {
 
         addSerializer(OwnershipIdSerializer)
         addDeserializer(OwnershipIdDto::class.java, OwnershipIdDeserializer)
+
+        addSerializer(CollectionIdSerializer)
+        addDeserializer(CollectionIdDto::class.java, CollectionIdDeserializer)
 
         addSerializer(OrderIdSerializer)
         addDeserializer(OrderIdDto::class.java, OrderIdDeserializer)
