@@ -1904,7 +1904,7 @@ components:
         royalties:
           type: array
           deprecated: true
-          description: "List of royalties"
+          description: Use a special endpoint '/v0.1/items/{itemId}/royalty'
           default: [ ]
           items:
             $ref: "#/components/schemas/Royalty"
