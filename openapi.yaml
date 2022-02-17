@@ -648,6 +648,14 @@ paths:
           schema:
             minimum: 1
             type: integer
+        - name: "status"
+          in: query
+          required: false
+          description: "Order status"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderStatus"
       responses:
         "200":
           description: "OK"
@@ -777,78 +785,86 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  #  /v0.1/orders/bids/byMaker:
-  #    get:
-  #      tags:
-  #        - order-controller
-  #      description: "Returns order bids by maker"
-  #      operationId: getOrderBidsByMaker
-  #      parameters:
-  #        - name: platform
-  #          in: query
-  #          required: false
-  #          description: "The platform where the order was created"
-  #          schema:
-  #            "$ref": "#/components/schemas/Platform"
-  #        - name: "maker"
-  #          in: query
-  #          required: true
-  #          description: "The maker of the order"
-  #          schema:
-  #            $ref: "#/components/schemas/UnionAddress"
-  #        - name: "origin"
-  #          in: query
-  #          required: false
-  #          description: "Address of the consumer to receive the commission for the order"
-  #          schema:
-  #            $ref: "#/components/schemas/UnionAddress"
-  #        - name: "status"
-  #          in: query
-  #          required: false
-  #          description: "Order status"
-  #          schema:
-  #            type: "array"
-  #            items:
-  #              $ref: "#/components/schemas/OrderStatus"
-  #        - name: "start"
-  #          in: query
-  #          required: false
-  #          description: "Lower time border of data (timestamp)"
-  #          schema:
-  #            type: integer
-  #            format: int64
-  #        - name: "end"
-  #          in: query
-  #          required: false
-  #          description: "Upper time border of data (timestamp)"
-  #          schema:
-  #            type: integer
-  #            format: int64
-  #        - name: "continuation"
-  #          in: query
-  #          required: false
-  #          description: "Continuation token from the previous response"
-  #          schema:
-  #            type: string
-  #        - name: "size"
-  #          in: query
-  #          required: false
-  #          description: "The number of items to return"
-  #          schema:
-  #            minimum: 1
-  #            type: integer
-  #            format: int32
-  #      responses:
-  #        "200":
-  #          description: "OK"
-  #          content:
-  #            application/json:
-  #              schema:
-  #                $ref: "#/components/schemas/Orders"
-  #        '400':
-  #          $ref: "#/components/responses/BadRequest"
-  #        '500':
-  #          $ref: "#/components/responses/ServerError"
+  /v0.1/orders/bids/byMaker:
+    get:
+      tags:
+        - order-controller
+      description: "Returns order bids by maker"
+      operationId: getOrderBidsByMaker
+      parameters:
+        - name: "maker"
+          in: query
+          required: true
+          description: "The maker of the order"
+          schema:
+            $ref: "#/components/schemas/UnionAddress"
+        - name: "blockchains"
+          in: query
+          required: false
+          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
+        - name: platform
+          in: query
+          required: false
+          description: "The platform where the order was created"
+          schema:
+            "$ref": "#/components/schemas/Platform"
+        - name: "origin"
+          in: query
+          required: false
+          description: "Address of the consumer to receive the commission for the order"
+          schema:
+            $ref: "#/components/schemas/UnionAddress"
+        - name: "status"
+          in: query
+          required: false
+          description: "Order status"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderStatus"
+        - name: "start"
+          in: query
+          required: false
+          description: "Lower time border of data (timestamp)"
+          schema:
+            type: integer
+            format: int64
+        - name: "end"
+          in: query
+          required: false
+          description: "Upper time border of data (timestamp)"
+          schema:
+            type: integer
+            format: int64
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
 
   /v0.1/orders/bids/byItem:
     get:
