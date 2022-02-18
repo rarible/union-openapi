@@ -2149,6 +2149,8 @@ components:
           $ref: "#/components/schemas/ItemId"
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         owner:
@@ -2193,10 +2195,8 @@ components:
           $ref: "#/components/schemas/OwnershipId"
         blockchain:
           $ref: "#/components/schemas/Blockchain"
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId:
-          $ref: "#/components/schemas/BigInteger"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         owner:
           $ref: "#/components/schemas/UnionAddress"
         value:
@@ -2215,8 +2215,7 @@ components:
       required:
         - id
         - blockchain
-        - contract
-        - tokenId
+        - collection
         - owner
         - value
         - createdAt
