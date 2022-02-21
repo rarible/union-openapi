@@ -1859,6 +1859,8 @@ components:
       oneOf:
         - $ref: "#/components/schemas/ImageContent"
         - $ref: "#/components/schemas/VideoContent"
+        - $ref: "#/components/schemas/AudioContent"
+        - $ref: "#/components/schemas/Model3dContent"
 
     ImageContent:
       type: object
@@ -1883,6 +1885,22 @@ components:
           type: integer
         height:
           type: integer
+
+    AudioContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - AUDIO
+
+    Model3dContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - MODEL_3D
 
     RestrictionType:
       type: string
