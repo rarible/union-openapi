@@ -2233,11 +2233,9 @@ components:
       required:
         - id
         - blockchain
-        - collection
         - owner
         - value
         - createdAt
-        - creators
         - lazyValue
         - pending
 
