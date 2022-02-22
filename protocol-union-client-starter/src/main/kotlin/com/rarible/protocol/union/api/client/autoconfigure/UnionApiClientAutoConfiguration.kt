@@ -1,14 +1,10 @@
 package com.rarible.protocol.union.api.client.autoconfigure
 
 import com.rarible.core.application.ApplicationEnvironmentInfo
-import com.rarible.protocol.union.api.client.CompositeWebClientCustomizer
-import com.rarible.protocol.union.api.client.DefaultUnionWebClientCustomizer
-import com.rarible.protocol.union.api.client.NoopWebClientCustomizer
-import com.rarible.protocol.union.api.client.SwarmUnionApiServiceUriProvider
-import com.rarible.protocol.union.api.client.UnionApiClientFactory
-import com.rarible.protocol.union.api.client.UnionApiServiceUriProvider
+import com.rarible.protocol.union.api.client.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.context.annotation.Bean
@@ -25,8 +21,13 @@ class UnionApiClientAutoConfiguration(
 
     @Bean
     @ConditionalOnMissingBean(UnionApiServiceUriProvider::class)
-    fun unionApiServiceUriProvider(): UnionApiServiceUriProvider {
-        return SwarmUnionApiServiceUriProvider(applicationEnvironmentInfo.name)
+    fun unionApiServiceUriProvider(
+        @Value("\${rarible.core.client.k8s:false}") k8s: Boolean
+    ): UnionApiServiceUriProvider {
+        return if (k8s)
+            K8sUnionApiServiceUriProvider()
+        else
+            SwarmUnionApiServiceUriProvider(applicationEnvironmentInfo.name)
     }
 
     @Bean
