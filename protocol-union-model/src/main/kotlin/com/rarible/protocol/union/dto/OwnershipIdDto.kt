@@ -37,4 +37,6 @@ data class OwnershipIdDto(
         return ItemIdDto(blockchain, itemIdValue)
     }
 
+    override fun toString(): String = "$blockchain:$value"
+
 }

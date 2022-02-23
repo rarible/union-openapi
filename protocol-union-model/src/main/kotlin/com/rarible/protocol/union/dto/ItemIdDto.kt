@@ -21,4 +21,5 @@ data class ItemIdDto(
         )
     }
 
+    override fun toString(): String = "$blockchain:$value"
 }

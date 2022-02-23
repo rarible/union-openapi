@@ -9,4 +9,6 @@ data class CurrencyIdDto(
 ) : UnionBlockchainId {
 
     override val value = if (tokenId != null) "${contract}:${tokenId}" else contract
+
+    override fun toString(): String = "$blockchain:$value"
 }
