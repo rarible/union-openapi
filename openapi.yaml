@@ -2868,6 +2868,8 @@ components:
         date:
           type: string
           format: "date-time"
+        reverted:
+          type: boolean
       oneOf:
         - $ref: "#/components/schemas/MintActivity"
         - $ref: "#/components/schemas/BurnActivity"
