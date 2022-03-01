@@ -66,7 +66,8 @@ class CombinedContinuationTest {
                 contract = ContractAddress(BlockchainDto.ETHEREUM, "test"),
                 tokenId = BigInteger.ONE,
                 value = BigInteger.ONE,
-                transactionHash = "test"
+                transactionHash = "test",
+                reverted = false
             )
         }
         val dto = create("1")
