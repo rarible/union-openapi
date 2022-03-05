@@ -2175,6 +2175,8 @@ components:
           $ref: "#/components/schemas/UnionAddress"
         value:
           $ref: "#/components/schemas/BigInteger"
+        source:
+          $ref: "#/components/schemas/OwnershipSource"
         createdAt:
           type: string
           format: "date-time"
@@ -2205,6 +2207,13 @@ components:
         - createdAt
         - lazyValue
         - pending
+
+    OwnershipSource:
+      type: string
+      enum:
+        - MINT
+        - PURCHASE
+        - TRANSFER
 
     ItemOwnership:
       type: object
@@ -2898,10 +2907,12 @@ components:
             - MINT
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract:
+        contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
-        tokenId:
+        tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
         transactionHash:
@@ -2911,8 +2922,6 @@ components:
       required:
         - "@type"
         - owner
-        - contract
-        - tokenId
         - value
         - transactionHash
 
@@ -2925,10 +2934,12 @@ components:
             - BURN
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract:
+        contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
-        tokenId:
+        tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
         transactionHash:
@@ -2938,8 +2949,6 @@ components:
       required:
         - "@type"
         - owner
-        - contract
-        - tokenId
         - value
         - transactionHash
 
@@ -2954,12 +2963,16 @@ components:
           $ref: "#/components/schemas/UnionAddress"
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract:
+        contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
-        tokenId:
+        tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
+        purchase:
+          type: boolean
         transactionHash:
           type: string
         blockchainInfo:
@@ -2968,8 +2981,6 @@ components:
         - "@type"
         - from
         - owner
-        - contract
-        - tokenId
         - value
         - transactionHash
 
