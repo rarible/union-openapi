@@ -1708,6 +1708,7 @@ components:
         - RARIBLE
         - OPEN_SEA
         - CRYPTO_PUNKS
+        - IMMUTABLEX
 
     Blockchain:
       type: string
@@ -1725,6 +1726,7 @@ components:
         - FLOW
         - TEZOS
         - SOLANA
+        - IMMUTABLEX
 
     Payout:
       type: object
@@ -2487,6 +2489,7 @@ components:
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
+        - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
 
     OrderPriceHistoryRecord:
       type: object
@@ -3955,6 +3958,30 @@ components:
           type: string
           enum:
             - FLOW_RARIBLE_V1
+        payouts:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        originFees:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+      required:
+        - "@type"
+        - payouts
+        - originFees
+
+    #################### Order - Immutablex ####################
+
+    ImmutablexOrderDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - IMMUTABLEX_RARIBLE_V1
         payouts:
           type: array
           default: [ ]
