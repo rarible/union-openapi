@@ -2021,7 +2021,9 @@ components:
           $ref: "#/components/schemas/BigInteger"
         sellers:
           type: integer
-          description: "Was item locked"
+          description: "Total count of users selling this item ATM"
+        lastSale:
+          $ref: "#/components/schemas/ItemLastSale"
       required:
         - id
         - blockchain
@@ -2034,6 +2036,30 @@ components:
         - deleted
         - sellers
         - auctions
+
+    ItemLastSale:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        seller:
+          $ref: "#/components/schemas/UnionAddress"
+        buyer:
+          $ref: "#/components/schemas/UnionAddress"
+        value:
+          $ref: "#/components/schemas/BigDecimal"
+        currency:
+          $ref: "#/components/schemas/AssetType"
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+      required:
+        - date
+        - from
+        - to
+        - value
+        - currency
+        - price
 
     ItemWithOwnership:
       type: object
