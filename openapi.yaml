@@ -3322,6 +3322,7 @@ components:
             - FLOW
             - TEZOS_NFT
             - TEZOS_MT
+            - IMMUTABLEX
         name:
           type: string
         symbol:
