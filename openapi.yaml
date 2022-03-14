@@ -1718,6 +1718,7 @@ components:
         - FLOW
         - TEZOS
         - SOLANA
+        - IMMUTABLEX
 
     BlockchainGroup:
       type: string
