@@ -3419,52 +3419,21 @@ components:
         description:
           type: string
           description: "Description of the collection"
-        image:
-          "$ref": "#/components/schemas/Media"
-        external_link:
+        content:
+          default: [ ]
+          type: array
+          items:
+            "$ref": "#/components/schemas/MetaContent"
+        externalLink:
           type: string
           description: "External link to the original website for the collection"
-        seller_fee_basis_points:
+        sellerFeeBasisPoints:
           type: integer
           format: int32
           description: "Indicates a 1% seller fee"
-        fee_recipient:
+        feeRecipient:
           description: "Where seller fees will be paid to"
           "$ref": "#/components/schemas/UnionAddress"
-
-    Media:
-      required:
-        - meta
-        - url
-      type: object
-      properties:
-        url:
-          type: object
-          description: "URL address of the media"
-          additionalProperties:
-            type: string
-        meta:
-          type: object
-          description: "Meta of the media"
-          additionalProperties:
-            "$ref": "#/components/schemas/MediaMeta"
-
-    MediaMeta:
-      required:
-        - type
-      type: object
-      properties:
-        type:
-          type: string
-          description: "Media type"
-        width:
-          type: integer
-          format: int32
-          description: "Width of the image/video"
-        height:
-          type: integer
-          format: int32
-          description: "Height of the image/video"
 
     ActivityBlockchainInfo:
       type: object
