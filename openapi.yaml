@@ -3380,6 +3380,8 @@ components:
           description: "List of addresses that can mint items in this collection"
           items:
             "$ref": "#/components/schemas/UnionAddress"
+        meta:
+          "$ref": "#/components/schemas/CollectionMeta"
       required:
         - id
         - blockchain
@@ -3405,6 +3407,34 @@ components:
       required:
         - total
         - collections
+
+    CollectionMeta:
+      required:
+        - name
+        - content
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the collection"
+        description:
+          type: string
+          description: "Description of the collection"
+        content:
+          default: [ ]
+          type: array
+          items:
+            "$ref": "#/components/schemas/MetaContent"
+        externalLink:
+          type: string
+          description: "External link to the original website for the collection"
+        sellerFeeBasisPoints:
+          type: integer
+          format: int32
+          description: "Indicates a 1% seller fee"
+        feeRecipient:
+          description: "Where seller fees will be paid to"
+          "$ref": "#/components/schemas/UnionAddress"
 
     ActivityBlockchainInfo:
       type: object
