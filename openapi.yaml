@@ -3411,6 +3411,7 @@ components:
     CollectionMeta:
       required:
         - name
+        - content
       type: object
       properties:
         name:
