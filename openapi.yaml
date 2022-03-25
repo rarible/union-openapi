@@ -3357,6 +3357,7 @@ components:
             - FLOW
             - TEZOS_NFT
             - TEZOS_MT
+            - SOLANA
         name:
           type: string
         symbol:
