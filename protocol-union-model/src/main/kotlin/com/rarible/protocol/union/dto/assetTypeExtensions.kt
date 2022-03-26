@@ -106,6 +106,18 @@ val AssetTypeDto.ext: AssetTypeExtension
             tokenId = this.tokenId,
             itemId = toItemId(this.contract, this.tokenId)
         )
+        is SolanaNftAssetTypeDto -> AssetTypeExtension(
+            isNft = true,
+            isCurrency = false,
+            itemId = ItemIdDto(BlockchainDto.SOLANA, mint),
+            contract = mint
+        )
+        is SolanaFtAssetTypeDto -> AssetTypeExtension(
+            isNft = false,
+            isCurrency = true,
+            itemId = ItemIdDto(BlockchainDto.SOLANA, mint),
+            contract = mint
+        )
     }
 
 private fun toItemId(contract: ContractAddress, tokenId: BigInteger): ItemIdDto {

@@ -2522,6 +2522,7 @@ components:
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
+        - "$ref": "#/components/schemas/SolanaOrderData"
 
     OrderPriceHistoryRecord:
       type: object
@@ -3751,6 +3752,8 @@ components:
         - $ref: "#/components/schemas/EthCryptoPunksAssetType"
         - $ref: "#/components/schemas/EthGenerativeArtAssetType"
         - $ref: "#/components/schemas/EthCollectionAssetType"
+        - $ref: "#/components/schemas/SolanaNftAssetType"
+        - $ref: "#/components/schemas/SolanaFtAssetType"
 
     TezosXTZAssetType:
       type: object
@@ -4016,6 +4019,32 @@ components:
         - "@type"
         - contract
 
+    SolanaFtAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_FT
+        mint:
+          type: string
+      required:
+        - "@type"
+        - mint
+
+    SolanaNftAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_NFT
+        mint:
+          type: string
+      required:
+        - "@type"
+        - mint
+
     #################### Order - Flow ####################
 
     FlowOrderDataV1:
@@ -4039,6 +4068,18 @@ components:
         - "@type"
         - payouts
         - originFees
+
+    #################### Order - Solana ####################
+
+    SolanaOrderData:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_RARIBLE
+      required:
+        - "@type"
 
     #################### Referenced Types ####################
 
