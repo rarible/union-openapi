@@ -109,14 +109,14 @@ val AssetTypeDto.ext: AssetTypeExtension
         is SolanaNftAssetTypeDto -> AssetTypeExtension(
             isNft = true,
             isCurrency = false,
-            itemId = ItemIdDto(BlockchainDto.SOLANA, mint),
-            contract = mint
+            itemId = itemId,
+            contract = itemId.value // Not used.
         )
-        is SolanaFtAssetTypeDto -> AssetTypeExtension(
+        is SolanaSolAssetTypeDto -> AssetTypeExtension(
             isNft = false,
             isCurrency = true,
-            itemId = ItemIdDto(BlockchainDto.SOLANA, mint),
-            contract = mint
+            itemId = ItemIdDto(BlockchainDto.SOLANA, "So11111111111111111111111111111111111111112"),
+            contract = "So11111111111111111111111111111111111111112" // Not used.
         )
     }
 
