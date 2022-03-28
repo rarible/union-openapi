@@ -2522,7 +2522,7 @@ components:
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
-        - "$ref": "#/components/schemas/SolanaOrderData"
+        - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
 
     OrderPriceHistoryRecord:
       type: object
@@ -4071,13 +4071,15 @@ components:
 
     #################### Order - Solana ####################
 
-    SolanaOrderData:
+    SolanaAuctionHouseDataV1:
       type: object
       properties:
         "@type":
           type: string
           enum:
-            - SOLANA_RARIBLE
+            - SOLANA_AUCTION_HOUSE_V1
+        auctionHouse:
+          $ref: "#/components/schemas/ContractAddress"
       required:
         - "@type"
 
