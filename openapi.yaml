@@ -3384,6 +3384,8 @@ components:
             "$ref": "#/components/schemas/UnionAddress"
         meta:
           "$ref": "#/components/schemas/CollectionMeta"
+        bestBidOrder:
+          $ref: "#/components/schemas/Order"
       required:
         - id
         - blockchain
