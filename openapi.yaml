@@ -3753,6 +3753,7 @@ components:
         - $ref: "#/components/schemas/EthGenerativeArtAssetType"
         - $ref: "#/components/schemas/EthCollectionAssetType"
         - $ref: "#/components/schemas/SolanaNftAssetType"
+        - $ref: "#/components/schemas/SolanaFtAssetType"
         - $ref: "#/components/schemas/SolanaSolAssetType"
 
     TezosXTZAssetType:
@@ -4031,6 +4032,19 @@ components:
       required:
         - "@type"
         - itemId
+
+    SolanaFtAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_FT
+        address:
+          $ref: "#/components/schemas/ContractAddress"
+      required:
+        - "@type"
+        - address
 
     SolanaSolAssetType:
       type: object

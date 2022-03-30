@@ -1,14 +1,11 @@
 package com.rarible.protocol.union.dto
 
-import java.math.BigInteger
-
 data class AssetTypeExtension(
     val isCurrency: Boolean,
     val isNft: Boolean,
-    val contract: String,
-    val tokenId: BigInteger? = null,
     val itemId: ItemIdDto? = null,
-    val collectionId: CollectionIdDto? = null
+    val collectionId: CollectionIdDto? = null,
+    private val currencyId: String? = null
 ) {
 
     val isCollection = collectionId != null
@@ -17,6 +14,6 @@ data class AssetTypeExtension(
         if (!isCurrency) {
             throw IllegalArgumentException("Not a currency AssetType: $this")
         }
-        return tokenId?.let { "$contract:$it" } ?: contract
+        return currencyId!!
     }
 }
