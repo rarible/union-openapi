@@ -67,6 +67,15 @@ class IdParserTest {
     }
 
     @Test
+    fun `parse activity id in upper case`() {
+        val id = "ETHEREUM:ABC"
+        val activityId = IdParser.parseActivityId(id)
+
+        assertEquals(BlockchainDto.ETHEREUM, activityId.blockchain)
+        assertEquals("abc", activityId.value)
+    }
+
+    @Test
     fun `parse activityId - too many parts`() {
         val id = "ETHEREUM:abc:123"
         assertThrows(BlockchainIdFormatException::class.java) {

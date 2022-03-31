@@ -44,7 +44,11 @@ object IdParser {
 
     fun parseAddress(value: String): UnionAddress {
         val pair = split(value, 2)
-        return UnionAddress(parseBlockchainGroup(pair[0]), pair[1])
+        if (value.startsWith("ETHEREUM")) {
+            return UnionAddress(parseBlockchainGroup(pair[0]), pair[1].lowercase())
+        } else {
+            return UnionAddress(parseBlockchainGroup(pair[0]), pair[1])
+        }
     }
 
     fun parseItemId(value: String): ItemIdDto {
