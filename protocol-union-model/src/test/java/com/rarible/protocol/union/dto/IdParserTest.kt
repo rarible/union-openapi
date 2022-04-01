@@ -26,11 +26,17 @@ class IdParserTest {
 
     @Test
     fun `parse address ETHEREUM in upper case`() {
-        val id = "ETHEREUM:ABC"
-        val address = IdParser.parseAddress(id)
+        val idEth = "ETHEREUM:ABC"
+        val addressEth = IdParser.parseAddress(idEth)
 
-        assertEquals(BlockchainGroupDto.ETHEREUM, address.blockchainGroup)
-        assertEquals("abc", address.value)
+        assertEquals(BlockchainGroupDto.ETHEREUM, addressEth.blockchainGroup)
+        assertEquals("abc", addressEth.value)
+
+        val idFlow = "FLOW:ABC"
+        val addressFlow = IdParser.parseAddress(idFlow)
+
+        assertEquals(BlockchainGroupDto.FLOW, addressFlow.blockchainGroup)
+        assertEquals("ABC", addressFlow.value)
     }
 
     @Test
