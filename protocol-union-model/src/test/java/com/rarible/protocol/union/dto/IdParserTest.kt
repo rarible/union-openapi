@@ -101,6 +101,21 @@ class IdParserTest {
     }
 
     @Test
+    fun `parse collection id - upper case`() {
+        val idPoly = "POLYGON:ABC"
+        val orderIdPoly = IdParser.parseCollectionId(idPoly)
+
+        assertEquals(BlockchainDto.POLYGON, orderIdPoly.blockchain)
+        assertEquals("abc", orderIdPoly.value)
+
+        val idFlow = "FLOW:ABC"
+        val orderIdFlow = IdParser.parseCollectionId(idFlow)
+
+        assertEquals(BlockchainDto.FLOW, orderIdFlow.blockchain)
+        assertEquals("ABC", orderIdFlow.value)
+    }
+
+    @Test
     fun `split - ok`() {
         val id = "ETHEREUM:abc:123"
         val parts = IdParser.split(id, 3)

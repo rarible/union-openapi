@@ -10,6 +10,7 @@ import com.rarible.protocol.union.dto.ContractAddress
 import com.rarible.protocol.union.dto.ItemIdDto
 import com.rarible.protocol.union.dto.OrderIdDto
 import com.rarible.protocol.union.dto.UnionAddress
+import com.rarible.protocol.union.dto.group
 
 object IdParser {
 
@@ -45,19 +46,22 @@ object IdParser {
     fun parseAddress(value: String): UnionAddress {
         val pair = split(value, 2)
         val blockchainGroup = parseBlockchainGroup(pair[0])
-        val address = if (value.startsWith("ETHEREUM")) pair[1].lowercase() else pair[1]
+        val address = if (blockchainGroup == BlockchainGroupDto.ETHEREUM) pair[1].lowercase() else pair[1]
         return UnionAddress(blockchainGroup, address)
     }
 
     fun parseItemId(value: String): ItemIdDto {
         // For ItemId there can be ':' in value (token:tokenId for most of the blockchains)
         val (blockchain, id) = extractBlockchain(value)
-        return ItemIdDto(blockchain, id)
+        val itemId = if (blockchain.group() == BlockchainGroupDto.ETHEREUM) id.lowercase() else id
+        return ItemIdDto(blockchain, itemId)
     }
 
     fun parseCollectionId(value: String): CollectionIdDto {
         val pair = split(value, 2)
-        return CollectionIdDto(parseBlockchain(pair[0]), pair[1])
+        val blockchain = parseBlockchain(pair[0])
+        val collectionId = if (blockchain.group() == BlockchainGroupDto.ETHEREUM) pair[1].lowercase() else pair[1]
+        return CollectionIdDto(blockchain, collectionId)
     }
 
     fun parseOrderId(value: String): OrderIdDto {
