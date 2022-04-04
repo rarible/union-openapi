@@ -82,11 +82,12 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse activityId - too many parts`() {
+    fun `parse activityId - with semicolon`() {
         val id = "ETHEREUM:abc:123"
-        assertThrows(BlockchainIdFormatException::class.java) {
-            IdParser.parseActivityId(id)
-        }
+        val activityId = IdParser.parseActivityId(id)
+
+        assertEquals(BlockchainDto.ETHEREUM, activityId.blockchain)
+        assertEquals("abc:123", activityId.value)
     }
 
     @Test

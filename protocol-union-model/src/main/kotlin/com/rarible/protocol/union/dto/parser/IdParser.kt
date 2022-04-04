@@ -75,8 +75,8 @@ object IdParser {
     }
 
     fun parseActivityId(value: String): ActivityIdDto {
-        val pair = split(value, 2)
-        return ActivityIdDto(parseBlockchain(pair[0]), pair[1])
+        val (blockchain, id) = extractBlockchain(value)
+        return ActivityIdDto(blockchain, id)
     }
 
     fun split(value: String, expectedSize: Int): List<String> {
