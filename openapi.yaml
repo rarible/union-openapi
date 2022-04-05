@@ -1708,6 +1708,7 @@ components:
         - RARIBLE
         - OPEN_SEA
         - CRYPTO_PUNKS
+        - IMMUTABLEX
 
     Blockchain:
       type: string
@@ -1717,6 +1718,7 @@ components:
         - FLOW
         - TEZOS
         - SOLANA
+        - IMMUTABLEX
 
     BlockchainGroup:
       type: string
@@ -1725,6 +1727,7 @@ components:
         - FLOW
         - TEZOS
         - SOLANA
+        - IMMUTABLEX
 
     Payout:
       type: object
@@ -2523,6 +2526,7 @@ components:
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
+        - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
 
     OrderPriceHistoryRecord:
       type: object
@@ -2921,6 +2925,8 @@ components:
         - $ref: "#/components/schemas/AuctionCancelActivity"
         - $ref: "#/components/schemas/AuctionStartActivity"
         - $ref: "#/components/schemas/AuctionEndActivity"
+        - $ref: "#/components/schemas/L2DepositActivity"
+        - $ref: "#/components/schemas/L2WithdrawalActivity"
       required:
         - id
         - date
@@ -3017,6 +3023,7 @@ components:
         - RARIBLE
         - OPEN_SEA
         - CRYPTO_PUNKS
+        - IMMUTABLEX
 
     OrderActivityMatchSide:
       type: object
@@ -3316,6 +3323,54 @@ components:
         auction:
           $ref: "#/components/schemas/Auction"
 
+    L2DepositActivity:
+      type: object
+      required:
+        - "@type"
+        - user
+        - status
+        - contractAddres
+        - tokenId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - L2_DEPOSIT
+        user:
+          $ref: "#/components/schemas/UnionAddress"
+        status:
+          type: string
+        contractAddres:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+
+    L2WithdrawalActivity:
+      type: object
+      required:
+        - "@type"
+        - user
+        - status
+        - contractAddres
+        - tokenId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - L2_WITHDRAWAL
+        user:
+          $ref: "#/components/schemas/UnionAddress"
+        status:
+          type: string
+        contractAddres:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+
     Activities:
       type: object
       properties:
@@ -3359,6 +3414,7 @@ components:
             - TEZOS_NFT
             - TEZOS_MT
             - SOLANA
+            - IMMUTABLEX
         name:
           type: string
         symbol:
@@ -4069,6 +4125,30 @@ components:
           type: string
           enum:
             - FLOW_RARIBLE_V1
+        payouts:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        originFees:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+      required:
+        - "@type"
+        - payouts
+        - originFees
+
+    #################### Order - Immutablex ####################
+
+    ImmutablexOrderDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - IMMUTABLEX_RARIBLE_V1
         payouts:
           type: array
           default: [ ]
