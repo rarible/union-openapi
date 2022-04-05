@@ -2887,6 +2887,8 @@ components:
         - $ref: "#/components/schemas/AuctionCancelActivity"
         - $ref: "#/components/schemas/AuctionStartActivity"
         - $ref: "#/components/schemas/AuctionEndActivity"
+        - $ref: "#/components/schemas/L2DepositActivity"
+        - $ref: "#/components/schemas/L2WithdrawalActivity"
       required:
         - id
         - date
@@ -2981,6 +2983,7 @@ components:
         - RARIBLE
         - OPEN_SEA
         - CRYPTO_PUNKS
+        - IMMUTABLEX
 
     OrderActivityMatchSide:
       type: object
@@ -3279,6 +3282,54 @@ components:
             - "auction_end"
         auction:
           $ref: "#/components/schemas/Auction"
+
+    L2DepositActivity:
+      type: object
+      required:
+        - "@type"
+        - user
+        - status
+        - contractAddres
+        - tokenId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - L2_DEPOSIT
+        user:
+          $ref: "#/components/schemas/UnionAddress"
+        status:
+          type: string
+        contractAddres:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+
+    L2WithdrawalActivity:
+      type: object
+      required:
+        - "@type"
+        - user
+        - status
+        - contractAddres
+        - tokenId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - L2_WITHDRAWAL
+        user:
+          $ref: "#/components/schemas/UnionAddress"
+        status:
+          type: string
+        contractAddres:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+        value:
+          $ref: "#/components/schemas/BigInteger"
 
     Activities:
       type: object
