@@ -5,6 +5,7 @@ import com.rarible.protocol.union.dto.ActivityIdDto
 import com.rarible.protocol.union.dto.BlockchainDto
 import com.rarible.protocol.union.dto.BlockchainGroupDto
 import com.rarible.protocol.union.dto.ContractAddress
+import com.rarible.protocol.union.dto.ItemIdDto
 import com.rarible.protocol.union.dto.MintActivityDto
 import com.rarible.protocol.union.dto.UnionAddress
 import com.rarible.protocol.union.dto.continuation.page.ArgSlice
@@ -66,7 +67,9 @@ class CombinedContinuationTest {
                 contract = ContractAddress(BlockchainDto.ETHEREUM, "test"),
                 tokenId = BigInteger.ONE,
                 value = BigInteger.ONE,
-                transactionHash = "test"
+                transactionHash = "test",
+                reverted = false,
+                itemId = ItemIdDto(BlockchainDto.ETHEREUM, "test", BigInteger.ONE)
             )
         }
         val dto = create("1")

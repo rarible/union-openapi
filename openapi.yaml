@@ -2024,7 +2024,9 @@ components:
           $ref: "#/components/schemas/BigInteger"
         sellers:
           type: integer
-          description: "Was item locked"
+          description: "Total count of users selling this item ATM"
+        lastSale:
+          $ref: "#/components/schemas/ItemLastSale"
       required:
         - id
         - blockchain
@@ -2037,6 +2039,30 @@ components:
         - deleted
         - sellers
         - auctions
+
+    ItemLastSale:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        seller:
+          $ref: "#/components/schemas/UnionAddress"
+        buyer:
+          $ref: "#/components/schemas/UnionAddress"
+        value:
+          $ref: "#/components/schemas/BigDecimal"
+        currency:
+          $ref: "#/components/schemas/AssetType"
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+      required:
+        - date
+        - from
+        - to
+        - value
+        - currency
+        - price
 
     ItemWithOwnership:
       type: object
@@ -2178,6 +2204,8 @@ components:
           $ref: "#/components/schemas/UnionAddress"
         value:
           $ref: "#/components/schemas/BigInteger"
+        source:
+          $ref: "#/components/schemas/OwnershipSource"
         createdAt:
           type: string
           format: "date-time"
@@ -2208,6 +2236,13 @@ components:
         - createdAt
         - lazyValue
         - pending
+
+    OwnershipSource:
+      type: string
+      enum:
+        - MINT
+        - PURCHASE
+        - TRANSFER
 
     ItemOwnership:
       type: object
@@ -2490,6 +2525,7 @@ components:
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
+        - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
         - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
 
     OrderPriceHistoryRecord:
@@ -2872,6 +2908,8 @@ components:
         date:
           type: string
           format: "date-time"
+        reverted:
+          type: boolean
       oneOf:
         - $ref: "#/components/schemas/MintActivity"
         - $ref: "#/components/schemas/BurnActivity"
@@ -2902,10 +2940,12 @@ components:
             - MINT
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract:
+        contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
-        tokenId:
+        tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
         transactionHash:
@@ -2915,8 +2955,6 @@ components:
       required:
         - "@type"
         - owner
-        - contract
-        - tokenId
         - value
         - transactionHash
 
@@ -2929,10 +2967,12 @@ components:
             - BURN
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract:
+        contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
-        tokenId:
+        tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
         transactionHash:
@@ -2942,8 +2982,6 @@ components:
       required:
         - "@type"
         - owner
-        - contract
-        - tokenId
         - value
         - transactionHash
 
@@ -2958,12 +2996,16 @@ components:
           $ref: "#/components/schemas/UnionAddress"
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract:
+        contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
-        tokenId:
+        tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
+        purchase:
+          type: boolean
         transactionHash:
           type: string
         blockchainInfo:
@@ -2972,8 +3014,6 @@ components:
         - "@type"
         - from
         - owner
-        - contract
-        - tokenId
         - value
         - transactionHash
 
@@ -3373,6 +3413,7 @@ components:
             - FLOW
             - TEZOS_NFT
             - TEZOS_MT
+            - SOLANA
             - IMMUTABLEX
         name:
           type: string
@@ -3397,6 +3438,12 @@ components:
           description: "List of addresses that can mint items in this collection"
           items:
             "$ref": "#/components/schemas/UnionAddress"
+        meta:
+          "$ref": "#/components/schemas/CollectionMeta"
+        bestBidOrder:
+          $ref: "#/components/schemas/Order"
+        bestSellOrder:
+          $ref: "#/components/schemas/Order"
       required:
         - id
         - blockchain
@@ -3422,6 +3469,34 @@ components:
       required:
         - total
         - collections
+
+    CollectionMeta:
+      required:
+        - name
+        - content
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the collection"
+        description:
+          type: string
+          description: "Description of the collection"
+        content:
+          default: [ ]
+          type: array
+          items:
+            "$ref": "#/components/schemas/MetaContent"
+        externalLink:
+          type: string
+          description: "External link to the original website for the collection"
+        sellerFeeBasisPoints:
+          type: integer
+          format: int32
+          description: "Indicates a 1% seller fee"
+        feeRecipient:
+          description: "Where seller fees will be paid to"
+          "$ref": "#/components/schemas/UnionAddress"
 
     ActivityBlockchainInfo:
       type: object
@@ -3737,6 +3812,9 @@ components:
         - $ref: "#/components/schemas/EthCryptoPunksAssetType"
         - $ref: "#/components/schemas/EthGenerativeArtAssetType"
         - $ref: "#/components/schemas/EthCollectionAssetType"
+        - $ref: "#/components/schemas/SolanaNftAssetType"
+        - $ref: "#/components/schemas/SolanaFtAssetType"
+        - $ref: "#/components/schemas/SolanaSolAssetType"
 
     TezosXTZAssetType:
       type: object
@@ -4002,6 +4080,42 @@ components:
         - "@type"
         - contract
 
+    SolanaNftAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_NFT
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+      required:
+        - "@type"
+        - itemId
+
+    SolanaFtAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_FT
+        address:
+          $ref: "#/components/schemas/ContractAddress"
+      required:
+        - "@type"
+        - address
+
+    SolanaSolAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_SOL
+      required:
+        - "@type"
+
     #################### Order - Flow ####################
 
     FlowOrderDataV1:
@@ -4049,6 +4163,20 @@ components:
         - "@type"
         - payouts
         - originFees
+
+    #################### Order - Solana ####################
+
+    SolanaAuctionHouseDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_AUCTION_HOUSE_V1
+        auctionHouse:
+          $ref: "#/components/schemas/ContractAddress"
+      required:
+        - "@type"
 
     #################### Referenced Types ####################
 

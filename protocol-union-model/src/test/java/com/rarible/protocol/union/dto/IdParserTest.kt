@@ -25,6 +25,21 @@ class IdParserTest {
     }
 
     @Test
+    fun `parse address ETHEREUM in upper case`() {
+        val idEth = "ETHEREUM:ABC"
+        val addressEth = IdParser.parseAddress(idEth)
+
+        assertEquals(BlockchainGroupDto.ETHEREUM, addressEth.blockchainGroup)
+        assertEquals("abc", addressEth.value)
+
+        val idFlow = "FLOW:ABC"
+        val addressFlow = IdParser.parseAddress(idFlow)
+
+        assertEquals(BlockchainGroupDto.FLOW, addressFlow.blockchainGroup)
+        assertEquals("ABC", addressFlow.value)
+    }
+
+    @Test
     fun `parse address - too many parts`() {
         val id = "ETHEREUM:abc:123"
         assertThrows(BlockchainIdFormatException::class.java) {
@@ -67,11 +82,12 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse activityId - too many parts`() {
+    fun `parse activityId - with semicolon`() {
         val id = "ETHEREUM:abc:123"
-        assertThrows(BlockchainIdFormatException::class.java) {
-            IdParser.parseActivityId(id)
-        }
+        val activityId = IdParser.parseActivityId(id)
+
+        assertEquals(BlockchainDto.ETHEREUM, activityId.blockchain)
+        assertEquals("abc:123", activityId.value)
     }
 
     @Test
@@ -89,6 +105,21 @@ class IdParserTest {
         assertThrows(BlockchainIdFormatException::class.java) {
             IdParser.parseCollectionId(id)
         }
+    }
+
+    @Test
+    fun `parse collection id - upper case`() {
+        val idPoly = "POLYGON:ABC"
+        val orderIdPoly = IdParser.parseCollectionId(idPoly)
+
+        assertEquals(BlockchainDto.POLYGON, orderIdPoly.blockchain)
+        assertEquals("abc", orderIdPoly.value)
+
+        val idFlow = "FLOW:ABC"
+        val orderIdFlow = IdParser.parseCollectionId(idFlow)
+
+        assertEquals(BlockchainDto.FLOW, orderIdFlow.blockchain)
+        assertEquals("ABC", orderIdFlow.value)
     }
 
     @Test
