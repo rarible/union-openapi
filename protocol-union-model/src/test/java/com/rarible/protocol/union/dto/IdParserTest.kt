@@ -100,11 +100,12 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse collection id - too many parts`() {
+    fun `parse collection id - with semicolon`() {
         val id = "FLOW:abc:123"
-        assertThrows(BlockchainIdFormatException::class.java) {
-            IdParser.parseCollectionId(id)
-        }
+        val collectionId = IdParser.parseCollectionId(id)
+
+        assertEquals(BlockchainDto.FLOW, collectionId.blockchain)
+        assertEquals("abc:123", collectionId.value)
     }
 
     @Test

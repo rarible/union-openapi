@@ -58,9 +58,8 @@ object IdParser {
     }
 
     fun parseCollectionId(value: String): CollectionIdDto {
-        val pair = split(value, 2)
-        val blockchain = parseBlockchain(pair[0])
-        val collectionId = if (blockchain.group() == BlockchainGroupDto.ETHEREUM) pair[1].lowercase() else pair[1]
+        val (blockchain, id) = extractBlockchain(value)
+        val collectionId = if (blockchain.group() == BlockchainGroupDto.ETHEREUM) id.lowercase() else id
         return CollectionIdDto(blockchain, collectionId)
     }
 
