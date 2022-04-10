@@ -4171,6 +4171,7 @@ components:
           $ref: "#/components/schemas/ItemEvent"
       required:
         - "@type"
+        - value
 
     OwnershipSubscriptionEvent:
       type: object
@@ -4183,6 +4184,7 @@ components:
           $ref: "#/components/schemas/OwnershipEvent"
       required:
         - "@type"
+        - value
 
     #################### Referenced Types ####################
 
