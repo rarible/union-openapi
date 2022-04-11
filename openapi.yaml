@@ -4172,6 +4172,94 @@ components:
       required:
         - "@type"
 
+    #################### Subscription-related ####################
+
+    SubscriptionAction:
+      type: string
+      enum:
+        - SUBSCRIBE
+        - UNSUBSCRIBE
+
+    SubscriptionRequest:
+      type: object
+      properties:
+        action:
+          $ref: "#/components/schemas/SubscriptionAction"
+      required:
+        - action
+      oneOf:
+        - $ref: "#/components/schemas/ItemSubscriptionRequest"
+        - $ref: "#/components/schemas/OwnershipSubscriptionRequest"
+
+    ItemSubscriptionRequest:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ITEM
+        id:
+            $ref: "#/components/schemas/ItemId"
+      required:
+        - "@type"
+        - id
+
+    OwnershipSubscriptionRequest:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - OWNERSHIP
+        id:
+            $ref: "#/components/schemas/OwnershipId"
+      required:
+        - "@type"
+        - id
+
+    SubscriptionEvent:
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/FakeSubscriptionEvent"
+        - $ref: "#/components/schemas/ItemSubscriptionEvent"
+        - $ref: "#/components/schemas/OwnershipSubscriptionEvent"
+
+    FakeSubscriptionEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - FAKE
+      required:
+        - "@type"
+
+    ItemSubscriptionEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ITEM
+        value:
+          $ref: "#/components/schemas/ItemEvent"
+      required:
+        - "@type"
+        - value
+
+    OwnershipSubscriptionEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - OWNERSHIP
+        value:
+          $ref: "#/components/schemas/OwnershipEvent"
+      required:
+        - "@type"
+        - value
+
     #################### Referenced Types ####################
 
     BigInteger:
