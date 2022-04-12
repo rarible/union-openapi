@@ -1708,6 +1708,7 @@ components:
         - RARIBLE
         - OPEN_SEA
         - CRYPTO_PUNKS
+        - OTHER
 
     Blockchain:
       type: string
