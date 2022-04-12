@@ -1864,6 +1864,7 @@ components:
         - $ref: "#/components/schemas/VideoContent"
         - $ref: "#/components/schemas/AudioContent"
         - $ref: "#/components/schemas/Model3dContent"
+        - $ref: "#/components/schemas/HtmlContent"
 
     ImageContent:
       type: object
@@ -1904,6 +1905,14 @@ components:
           type: string
           enum:
             - MODEL_3D
+
+    HtmlContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - HTML
 
     RestrictionType:
       type: string
