@@ -343,7 +343,7 @@ paths:
     get:
       tags:
         - order-controller
-      operationId: getSellCurrenciesOfItem
+      operationId: getBidCurrenciesOfItem
       description: "Returns currencies taken as payment in all bid Orders of the Item"
       parameters:
         - $ref: "#/components/parameters/itemId"
@@ -361,7 +361,7 @@ paths:
         - order-controller
       description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item. 
                     Response should contains only Orders created with specified currency."
-      operationId: getOrderBidsByItem
+      operationId: getBidOrdersByItem
       parameters:
         - $ref: "#/components/parameters/itemId"
         - $ref: "#/components/parameters/currencyId"
@@ -387,7 +387,7 @@ paths:
     get:
       tags:
         - order-controller
-      operationId: getSellCurrenciesOfItem
+      operationId: getSellCurrenciesOfCollection
       description: "Returns currencies taken as payment in all sell orders of the Collection"
       parameters:
         - $ref: "#/components/parameters/collectionId"
@@ -405,7 +405,7 @@ paths:
         - order-controller
       description: "Returns sell orders by Collection sorted ASC (cheapest first) by sell price of the single Item. 
                     Response should contains only Orders created with specified currency."
-      operationId: getSellOrdersByItem
+      operationId: getSellOrdersByCollection
       parameters:
         - $ref: "#/components/parameters/collectionId"
         - $ref: "#/components/parameters/currencyId"
@@ -427,7 +427,7 @@ paths:
     get:
       tags:
         - order-controller
-      operationId: getSellCurrenciesOfItem
+      operationId: getBidCurrenciesOfCollection
       description: "Returns currencies taken as payment in all bid Orders of the Collection"
       parameters:
         - $ref: "#/components/parameters/collectionId"
@@ -445,7 +445,7 @@ paths:
         - order-controller
       description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item. 
                     Response should contains only Orders created with specified currency."
-      operationId: getOrderBidsByItem
+      operationId: getBidOrdersByCollection
       parameters:
         - $ref: "#/components/parameters/collectionId"
         - $ref: "#/components/parameters/currencyId"
@@ -2178,8 +2178,6 @@ components:
           type: string
           enum:
             - ETH
-        blockchain:
-          $ref: "#/components/schemas/Blockchain"
       required:
         - "@type"
 
