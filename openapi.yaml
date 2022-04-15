@@ -2476,6 +2476,9 @@ components:
         lastUpdatedAt:
           type: string
           format: "date-time"
+        dbUpdatedAt:
+          type: string
+          format: "date-time"
         makePrice:
           $ref: "#/components/schemas/BigDecimal"
         takePrice:
@@ -2609,6 +2612,8 @@ components:
       enum:
         - LAST_UPDATE_ASC
         - LAST_UPDATE_DESC
+        - LAST_DB_UPDATE_ASC
+        - LAST_DB_UPDATE_DESC
 
     #################### Auction - Union ####################
 
