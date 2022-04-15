@@ -1709,6 +1709,7 @@ components:
         - OPEN_SEA
         - CRYPTO_PUNKS
         - IMMUTABLEX
+        - OTHER
 
     Blockchain:
       type: string
