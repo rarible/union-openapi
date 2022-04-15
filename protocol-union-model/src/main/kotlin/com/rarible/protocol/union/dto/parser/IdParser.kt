@@ -100,6 +100,12 @@ object IdParser {
         return Pair(blockchain, id)
     }
 
+    fun extractContract(value: ItemIdDto): String {
+        // For ItemId there can be ':' in value (token:tokenId for most of the blockchains)
+        val id = value.value
+        return id.split(DELIMITER).first()
+    }
+
     private fun assertSize(
         value: String,
         parts: List<String>,

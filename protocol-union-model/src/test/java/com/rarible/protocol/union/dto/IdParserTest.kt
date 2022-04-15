@@ -1,9 +1,11 @@
 package com.rarible.protocol.union.dto
 
 import com.rarible.protocol.union.dto.parser.IdParser
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
 
 class IdParserTest {
 
@@ -141,4 +143,19 @@ class IdParserTest {
         }
     }
 
+    @Test
+    fun `extract contract from itemId from eth`() {
+        val contract = "abc"
+        val id = ItemIdDto(BlockchainDto.ETHEREUM, contract, BigInteger.TEN)
+        val extractedContract = IdParser.extractContract(id)
+        assertThat(extractedContract).isEqualTo(contract)
+    }
+
+    @Test
+    fun `extract token from itemId from eth`() {
+        val token = "abc"
+        val id = ItemIdDto(BlockchainDto.ETHEREUM, token)
+        val extractedToken = IdParser.extractContract(id)
+        assertThat(extractedToken).isEqualTo(token)
+    }
 }
