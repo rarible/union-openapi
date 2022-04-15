@@ -1,0 +1,2498 @@
+openapi: 3.0.3
+info:
+  title: Integration Blockchain OpenAPI
+  version: v1.0
+
+paths:
+
+  ######################### Sign API #########################
+
+  "/v0.1/signature/validate":
+    post:
+      tags:
+        - signature-controller
+      description: "Validation of the order signature"
+      operationId: validate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignatureValidationForm"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ######################### Item API #########################
+
+  # TODO maybe we can keep only byIds?
+  "/v0.1/items":
+    get:
+      tags:
+        - item-controller
+      description: "Returns Item by unique identifier"
+      operationId: getItemById
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/items/byIds":
+    post:
+      tags:
+        - item-controller
+      description: "Returns Items by set of unique identifiers. If no items found, empty list should be returned.
+                    Since this method could accept large batch of IDs, it should be POST"
+      operationId: getItemByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ItemIds"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemSlice"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/items/{itemId}/royalties":
+    get:
+      tags:
+        - item-controller
+      description: "Returns item royalty by item's unique identifier. If item doesn't exist, empty list should be returned"
+      operationId: getItemRoyaltiesById
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Royalties"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/items/{itemId}/resetMeta":
+    delete:
+      tags:
+        - item-controller
+      description: "Deletes the NFT item meta. 
+                    If Blockchain indexer doesn't support meta caching, this API is not required.
+                    Should return 200 empty response evem if item doesn't exists"
+      operationId: resetItemMeta
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/items/all":
+    get:
+      tags:
+        - item-controller
+      description: "Returns all items sorted by lastUpdatedAt and id fields"
+      operationId: getAllItems
+      parameters:
+        - name: "showDeleted"
+          in: query
+          required: false
+          description: "Include deleted items"
+          schema:
+            type: boolean
+        - name: "lastUpdatedFrom"
+          in: query
+          required: false
+          description: "Filter condition to return only items that have been updated after this date (timestamp)"
+          schema:
+            type: integer
+            format: date-time
+        - name: "lastUpdatedTo"
+          in: query
+          required: false
+          description: "Filter condition to return only items that have been updated before this date (timestamp)"
+          schema:
+            type: integer
+            format: date-time
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_item"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemSlice"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ####################### Ownership API #######################
+
+  # TODO maybe we can keep only byIds?
+  "/v0.1/ownerships":
+    get:
+      tags:
+        - ownership-controller
+      description: "Returns ownership by Id"
+      operationId: getOwnershipById
+      parameters:
+        - $ref: "#/components/parameters/ownershipId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ownership"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/ownerships/byIds":
+    post:
+      tags:
+        - item-controller
+      description: "Returns Ownerships by set of unique identifiers. If no ownerships found, empty list should be returned.
+                    Since this method could accept large batch of IDs, it should be POST"
+      operationId: getOwnerhipsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OwnershipIds"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OwnershipSlice"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  # TODO required for reconciliation only. Maybe we can use Elastic?
+  "/v0.1/ownerships/byItem":
+    get:
+      tags:
+        - ownership-controller
+      description: "Returns ownerships by item"
+      operationId: getOwnershipsByItem
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_ownership"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OwnershipSlice"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ######################## Order API ########################
+
+  # TODO maybe we can keep only byIds?
+  "/v0.1/orders":
+    get:
+      tags:
+        - order-controller
+      description: "Returns Order by Id"
+      operationId: getOrderById
+      parameters:
+        - $ref: "#/components/parameters/orderId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/byIds":
+    post:
+      tags:
+        - order-controller
+      description: "Returns Orders by set of unique identifiers. If no Orders found, empty list should be returned.
+                    Since this method could accept large batch of IDs, it should be POST"
+      operationId: getOrdersByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderIds"
+        required: true
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/all":
+    get:
+      tags:
+        - order-controller
+      description: "Returns all orders"
+      operationId: getOrdersAll
+      parameters:
+        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_order"
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/sell/byItem/currencies":
+    get:
+      tags:
+        - order-controller
+      operationId: getSellCurrenciesOfItem
+      description: "Returns currencies taken as payment in all sell orders of the item"
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+      responses:
+        '200':
+          $ref: "#/components/responses/OrderCurrenciesResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/sell/byItem":
+    get:
+      tags:
+        - order-controller
+      description: "Returns sell orders by item sorted ASC (cheapest first) by sell price of the single Item. 
+                    Response should contains only Orders created with specified currency."
+      operationId: getSellOrdersByItem
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/currencyId"
+        - $ref: "#/components/parameters/platform"
+        - $ref: "#/components/parameters/makers"
+        - $ref: "#/components/parameters/origin"
+        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_orderByPrice"
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/bids/byItem/currencies":
+    get:
+      tags:
+        - order-controller
+      operationId: getSellCurrenciesOfItem
+      description: "Returns currencies taken as payment in all bid Orders of the Item"
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+      responses:
+        '200':
+          $ref: "#/components/responses/OrderCurrenciesResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/orders/bids/byItem:
+    get:
+      tags:
+        - order-controller
+      description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item. 
+                    Response should contains only Orders created with specified currency."
+      operationId: getOrderBidsByItem
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/currencyId"
+        - $ref: "#/components/parameters/platform"
+        - $ref: "#/components/parameters/makers"
+        - $ref: "#/components/parameters/origin"
+        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/createdAtFrom" # TODO we don't need this filter for Enrichment
+        - $ref: "#/components/parameters/createdAtTo" # TODO we don't need this filter for Enrichment
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_orderByPrice"
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  #----------------- Order API for floor bids ----------------#
+
+  "/v0.1/orders/sell/byCollection/currencies":
+    get:
+      tags:
+        - order-controller
+      operationId: getSellCurrenciesOfItem
+      description: "Returns currencies taken as payment in all sell orders of the Collection"
+      parameters:
+        - $ref: "#/components/parameters/collectionId"
+      responses:
+        '200':
+          $ref: "#/components/responses/OrderCurrenciesResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/orders/sell/byCollection:
+    get:
+      tags:
+        - order-controller
+      description: "Returns sell orders by Collection sorted ASC (cheapest first) by sell price of the single Item. 
+                    Response should contains only Orders created with specified currency."
+      operationId: getSellOrdersByItem
+      parameters:
+        - $ref: "#/components/parameters/collectionId"
+        - $ref: "#/components/parameters/currencyId"
+        - $ref: "#/components/parameters/platform"
+        - $ref: "#/components/parameters/makers"
+        - $ref: "#/components/parameters/origin"
+        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_orderByPrice"
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/bids/byCollection/currencies":
+    get:
+      tags:
+        - order-controller
+      operationId: getSellCurrenciesOfItem
+      description: "Returns currencies taken as payment in all bid Orders of the Collection"
+      parameters:
+        - $ref: "#/components/parameters/collectionId"
+      responses:
+        '200':
+          $ref: "#/components/responses/OrderCurrenciesResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/orders/bids/byCollection:
+    get:
+      tags:
+        - order-controller
+      description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item. 
+                    Response should contains only Orders created with specified currency."
+      operationId: getOrderBidsByItem
+      parameters:
+        - $ref: "#/components/parameters/collectionId"
+        - $ref: "#/components/parameters/currencyId"
+        - $ref: "#/components/parameters/platform"
+        - $ref: "#/components/parameters/makers"
+        - $ref: "#/components/parameters/origin"
+        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/createdAtFrom" # TODO we don't need this filter for Enrichment
+        - $ref: "#/components/parameters/createdAtTo" # TODO we don't need this filter for Enrichment
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_orderByPrice"
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  #################### Auction API (alpha) ####################
+
+  # TODO maybe we can keep only byIds?
+  "/v0.1/auctions":
+    get:
+      tags:
+        - auction-controller
+      description: Returns the auction by id
+      operationId: getAuctionById
+      parameters:
+        - $ref: "#/components/parameters/auctionId"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Auction"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/auctions/byIds":
+    post:
+      tags:
+        - auction-controller
+      description: "Returns Auctions by set of unique identifiers. If no Auctions found, empty list should be returned.
+                    Since this method could accept large batch of IDs, it should be POST"
+      operationId: getAuctionsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuctionSlice"
+        required: true
+      responses:
+        "200":
+          $ref: "#/components/responses/AuctionSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/auctions/byItem":
+    get:
+      tags:
+        - auction-controller
+      operationId: getAuctionsByItem
+      description: Returns all auctions by item
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/auctionStatus"
+        - $ref: "#/components/parameters/origin"
+        - $ref: "#/components/parameters/platform"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_auction"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuctionSlice"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/auctions/all":
+    get:
+      deprecated: true
+      tags:
+        - auction-controller
+      description: "Returns all auctions by specified parameters"
+      operationId: getAuctionsAll
+      parameters:
+        - $ref: "#/components/parameters/auctionStatus"
+        - $ref: "#/components/parameters/origin"
+        - $ref: "#/components/parameters/platform"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_auction"
+      responses:
+        "200":
+          $ref: "#/components/responses/AuctionSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ######################## Activity API ########################
+
+  "/v0.1/activity/byIds":
+    post:
+      tags:
+        - activity-controller
+      description: "Returns Activities by set of unique identifiers. If no Activities found, empty list should be returned.
+                      Since this method could accept large batch of IDs, it should be POST"
+      operationId: getAuctionsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivitySlice"
+        required: true
+      responses:
+        "200":
+          $ref: "#/components/responses/ActivitySliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/activities/byItem:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns activities by Item"
+      operationId: getActivitiesByItem
+      parameters:
+        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/activityType"
+        - name: "user"
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserAddress"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_activity"
+      responses:
+        "200":
+          $ref: "#/components/responses/ActivitySliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/activities/all:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns all activities"
+      operationId: getAllActivities
+      parameters:
+        - $ref: "#/components/parameters/activityType"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_activity"
+      responses:
+        "200":
+          $ref: "#/components/responses/ActivitySliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ####################### Collection API #######################
+
+  # TODO maybe we can keep only byIds?
+  /v0.1/collections:
+    get:
+      tags:
+        - collection-controller
+      description: "Returns collection by unique identifier"
+      operationId: getCollectionById
+      parameters:
+        - $ref: "#/components/parameters/collectionId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collection"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/collections/byIds":
+    post:
+      tags:
+        - collection-controller
+      description: "Returns Collections by set of unique identifiers. If no Collections found, empty list should be returned.
+                      Since this method could accept large batch of IDs, it should be POST"
+      operationId: getAuctionsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionId"
+        required: true
+      responses:
+        "200":
+          $ref: "#/components/responses/ActivitySliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/collections/all:
+    get:
+      tags:
+        - collection-controller
+      description: "Returns all collections"
+      operationId: getAllCollections
+      parameters:
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_activity"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionSlice"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+components:
+  schemas:
+
+    Platform:
+      type: string
+      enum:
+        - RARIBLE
+        - OPEN_SEA
+        # Add more if your indexer supports other platforms
+
+    Payout:
+      type: object
+      properties:
+        account:
+          $ref: "#/components/schemas/UserAddress"
+        value:
+          type: integer
+      required:
+        - account
+        - value
+
+    #################### Sign - Union ####################
+
+    SignatureValidationForm:
+      required:
+        - signer
+        - message
+        - signature
+      type: object
+      properties:
+        signer:
+          $ref: "#/components/schemas/UserAddress"
+        publicKey:
+          type: string
+          description: "The creator's public key"
+        message:
+          type: string
+        signature:
+          type: string
+          description: "Digital signature of the signer"
+
+    ########################## Meta ###########################
+
+    Meta:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the NFT item"
+        description:
+          type: string
+          description: "Description of the NFT item"
+        attributes:
+          type: array
+          description: "Attributes of the NFT item"
+          items:
+            "$ref": "#/components/schemas/MetaAttribute"
+        content:
+          type: array
+          description: "NFT content information"
+          items:
+            $ref: "#/components/schemas/MetaContent"
+        raw:
+          type: string
+      required:
+        - name
+        - attributes
+        - content
+
+    MetaAttribute:
+      required:
+        - key
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        type:
+          type: string
+        format:
+          type: string
+
+    MetaContent:
+      type: object
+      properties:
+        url:
+          type: string
+        representation:
+          type: string
+          enum:
+            - PREVIEW
+            - BIG
+            - ORIGINAL
+        mimeType:
+          type: string
+          example: "image/png"
+        size:
+          type: integer
+          format: int64
+      required:
+        - url
+        - representation
+
+      oneOf:
+        - $ref: "#/components/schemas/ImageContent"
+        - $ref: "#/components/schemas/VideoContent"
+        - $ref: "#/components/schemas/AudioContent"
+        - $ref: "#/components/schemas/Model3dContent"
+        - $ref: "#/components/schemas/HtmlContent"
+
+    ImageContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - IMAGE
+        width:
+          type: integer
+        height:
+          type: integer
+
+    VideoContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - VIDEO
+        width:
+          type: integer
+        height:
+          type: integer
+
+    AudioContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - AUDIO
+
+    Model3dContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - MODEL_3D
+
+    HtmlContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - HTML
+
+    ########################## Item ###########################
+
+    ItemId:
+      type: string
+
+    Item:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/ItemId"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
+        creators:
+          type: array
+          description: "Creators of the Item"
+          items:
+            $ref: "#/components/schemas/Creator"
+        lazySupply:
+          $ref: "#/components/schemas/BigInteger"
+        pending:
+          type: array
+          description: "Pending information about the item"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/ItemTransfer"
+        mintedAt:
+          type: string
+          format: date-time
+          description: "Date and time of the item minting"
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          description: "Filter condition to return only items that have been updated at this date"
+        supply:
+          $ref: "#/components/schemas/BigInteger"
+        meta:
+          $ref: "#/components/schemas/Meta"
+        deleted:
+          type: boolean
+          description: "Item was deleted or not"
+        totalStock:
+          $ref: "#/components/schemas/BigInteger"
+      required:
+        - id
+        - creators
+        - lazySupply
+        - pending
+        - mintedAt
+        - lastUpdatedAt
+        - supply
+        - deleted
+
+    ItemHistory:
+      type: object
+      properties:
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        owner:
+          $ref: "#/components/schemas/UserAddress"
+        value:
+          "$ref": "#/components/schemas/BigInteger"
+        date:
+          type: string
+          format: date-time
+      description: History of item
+      required:
+        - itemId
+        - date
+      oneOf:
+        - "$ref": "#/components/schemas/ItemRoyalty"
+        - "$ref": "#/components/schemas/ItemTransfer"
+
+    ItemRoyalty:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ROYALTY
+        royalties:
+          type: array
+          default: [ ]
+          items:
+            "$ref": "#/components/schemas/Royalty"
+      required:
+        - "@type"
+        - royalties
+
+    ItemTransfer:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TRANSFER
+        from:
+          type: string
+      required:
+        - "@type"
+        - owner
+        - value
+        - from
+
+    Royalty:
+      type: object
+      properties:
+        account:
+          type: string
+        value:
+          "$ref": "#/components/schemas/UserAddress"
+      required:
+        - account
+        - value
+
+    Royalties:
+      type: object
+      properties:
+        royalties:
+          type: array
+          items:
+            $ref: "#/components/schemas/Royalty"
+      required:
+        - royalties
+
+    Creator:
+      type: object
+      properties:
+        account:
+          "$ref": "#/components/schemas/UserAddress"
+        value:
+          type: integer
+      required:
+        - account
+        - value
+
+    ItemIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          description: "List of the Item unique identifiers"
+          items:
+            "$ref": "#/components/schemas/ItemId"
+
+    ItemSlice:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate Items search result.
+                        Should be null if there is no more records left."
+        records:
+          type: array
+          description: "List of found Items"
+          items:
+            $ref: "#/components/schemas/Item"
+      required:
+        - records
+
+    ################ Item Events
+
+    ItemEvent:
+      type: object
+      properties:
+        eventId:
+          type: string
+        item:
+          $ref: "#/components/schemas/Item"
+      required:
+        - eventId
+        - item
+      oneOf:
+        - $ref: "#/components/schemas/ItemUpdateEvent"
+        - $ref: "#/components/schemas/ItemDeleteEvent"
+
+    ItemUpdateEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - UPDATE
+      required:
+        - "@type"
+
+    ItemDeleteEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - DELETE
+      required:
+        - "@type"
+
+    #################### Ownership - Union ####################
+
+    OwnershipId:
+      type: string
+
+    Ownership:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/OwnershipId"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
+        owner:
+          $ref: "#/components/schemas/UserAddress"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        createdAt:
+          type: string
+          format: "date-time"
+        creators:
+          type: array
+          deprecated: true
+          description: "Creators of the target item"
+          items:
+            $ref: "#/components/schemas/Creator"
+        lazyValue:
+          $ref: "#/components/schemas/BigInteger"
+        pending:
+          type: array
+          description: "Pending information about the item"
+          items:
+            $ref: "#/components/schemas/ItemHistory"
+      required:
+        - id
+        - itemId
+        - collection
+        - owner
+        - value
+        - createdAt
+        - lazyValue
+        - pending
+
+    OwnershipIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          description: "List of the Ownership unique identifiers"
+          items:
+            $ref: "#/components/schemas/OwnershipId"
+
+    OwnershipSlice:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate Ownerships search result.
+                        Should be null if there is no more records left"
+        records:
+          type: array
+          description: "List of found ownerships"
+          items:
+            $ref: "#/components/schemas/Ownership"
+      required:
+        - records
+
+    ################ Ownership Events
+
+    OwnershipEvent:
+      type: object
+      properties:
+        ownership:
+          $ref: "#/components/schemas/Ownership"
+        eventId:
+          type: string
+      required:
+        - eventId
+        - ownership
+      oneOf:
+        - $ref: "#/components/schemas/OwnershipUpdateEvent"
+        - $ref: "#/components/schemas/OwnershipDeleteEvent"
+
+    OwnershipUpdateEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - UPDATE
+      required:
+        - "@type"
+
+    OwnershipDeleteEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - DELETE
+      required:
+        - "@type"
+
+    ######################## Order ############################
+
+    OrderId:
+      type: string
+
+    OrderStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - FILLED
+        - HISTORICAL
+        - INACTIVE
+        - CANCELLED
+
+    OrderIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+
+    Order:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/OrderId"
+        fill:
+          $ref: "#/components/schemas/BigDecimal"
+        platform:
+          $ref: "#/components/schemas/Platform"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        startedAt:
+          type: string
+          format: "date-time"
+        endedAt:
+          type: string
+          format: "date-time"
+        makeStock:
+          $ref: "#/components/schemas/BigDecimal"
+        createdAt:
+          type: string
+          format: "date-time"
+        lastUpdatedAt:
+          type: string
+          format: "date-time"
+        makePrice:
+          $ref: "#/components/schemas/BigDecimal"
+        takePrice:
+          $ref: "#/components/schemas/BigDecimal"
+        maker:
+          $ref: "#/components/schemas/UserAddress"
+        taker:
+          $ref: "#/components/schemas/UserAddress"
+        make:
+          $ref: "#/components/schemas/Asset"
+        take:
+          $ref: "#/components/schemas/Asset"
+        salt:
+          type: string
+        signature:
+          type: string
+        pending:
+          type: array
+          description: "Pending information about the order"
+          items:
+            $ref: "#/components/schemas/PendingOrder"
+        data:
+          $ref: "#/components/schemas/OrderData"
+      required:
+        - id
+        - platform
+        - status
+        - fill
+        - makeStock
+        - createdAt
+        - lastUpdatedAt
+        - type
+        - maker
+        - make
+        - take
+        - salt
+        - data
+
+    OrderData:
+      type: object
+      description: "Here you can put any custom data for Order"
+
+    PendingOrder:
+      type: object
+      required:
+        - id
+        - date
+      properties:
+        id:
+          $ref: "#/components/schemas/OrderId"
+        make:
+          $ref: "#/components/schemas/Asset"
+        take:
+          $ref: "#/components/schemas/Asset"
+        date:
+          type: string
+          format: date-time
+        maker:
+          $ref: "#/components/schemas/UserAddress"
+      oneOf:
+        - $ref: "#/components/schemas/PendingOrderCancel"
+        - $ref: "#/components/schemas/PendingOrderMatch"
+        - $ref: "#/components/schemas/OnChainOrder"
+
+    PendingOrderMatch:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ORDER_SIDE_MATCH
+        side:
+          type: string
+          enum:
+            - LEFT
+            - RIGHT
+        fill:
+          $ref: "#/components/schemas/BigDecimal"
+        taker:
+          $ref: "#/components/schemas/UserAddress"
+        counterHash:
+          type: string
+        makeUsd:
+          $ref: "#/components/schemas/BigDecimal"
+        takeUsd:
+          $ref: "#/components/schemas/BigDecimal"
+        makePriceUsd:
+          $ref: "#/components/schemas/BigDecimal"
+        takePriceUsd:
+          $ref: "#/components/schemas/BigDecimal"
+      required:
+        - "@type"
+        - fill
+
+    PendingOrderCancel:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - CANCEL
+        owner:
+          $ref: "#/components/schemas/UserAddress"
+      required:
+        - "@type"
+
+    OnChainOrder:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ON_CHAIN_ORDER
+      required:
+        - "@type"
+
+    OrderSlice:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate orders search result.
+                        Should be null if there is no more records left"
+        records:
+          type: array
+          description: "List of found Orders"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Order"
+      required:
+        - records
+
+    OrderCurrencies:
+      type: object
+      description: "List of distinct currencies in which payments for sell or bid orders were suggested"
+      required:
+        - currencies
+      properties:
+        currencies:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetType"
+
+    ################ Order Events
+
+    OrderEvent:
+      type: object
+      properties:
+        order:
+          "$ref": "#/components/schemas/Order"
+        eventId:
+          type: string
+      required:
+        - order
+        - eventId
+      oneOf:
+        - "$ref": "#/components/schemas/OrderUpdateEvent"
+
+    OrderUpdateEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - UPDATE
+      required:
+        - "@type"
+
+    #################### Auction - Union ####################
+
+    AuctionId:
+      type: string
+
+    AuctionIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuctionId"
+
+    Auction:
+      type: object
+      required:
+        - id
+        - contract
+        - seller
+        - sell
+        - buy
+        - minimalStep
+        - minimalPrice
+        - createdAt
+        - lastUpdateAt
+        - status
+        - ongoing
+        - hash
+        - auctionId
+        - data
+      properties:
+        id:
+          $ref: "#/components/schemas/AuctionId"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        seller:
+          $ref: "#/components/schemas/UserAddress"
+        sell:
+          $ref: "#/components/schemas/Asset"
+        buy:
+          $ref: "#/components/schemas/AssetType"
+        endTime:
+          type: string
+          format: date-time
+        minimalStep:
+          $ref: "#/components/schemas/BigDecimal"
+        minimalPrice:
+          $ref: "#/components/schemas/BigDecimal"
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdateAt:
+          type: string
+          format: date-time
+        buyPrice:
+          $ref: "#/components/schemas/BigDecimal"
+        pending:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuctionHistory"
+        status:
+          $ref: "#/components/schemas/AuctionStatus"
+        ongoing:
+          type: boolean
+        hash:
+          type: string
+        auctionId:
+          $ref: "#/components/schemas/BigInteger"
+        lastBid:
+          $ref: "#/components/schemas/AuctionBid"
+        data:
+          $ref: "#/components/schemas/AuctionData"
+
+    AuctionHistory:
+      type: object
+      required:
+        - hash
+      properties:
+        hash:
+          type: string
+
+    AuctionStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - CANCELLED
+        - FINISHED
+
+    # TODO model under consideration
+    AuctionBid:
+      type: object
+      required:
+        - buyer
+        - amount
+        - date
+        - status
+      properties:
+        buyer:
+          $ref: "#/components/schemas/UserAddress"
+        amount:
+          $ref: "#/components/schemas/BigDecimal"
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - HISTORICAL
+
+    AuctionSort:
+      type: string
+      enum:
+        - LAST_UPDATE_ASC
+        - LAST_UPDATE_DESC
+        - BUY_PRICE_ASC
+
+    AuctionData:
+      type: object
+      description: "Here you can put some custom data for the Auction"
+
+    AuctionSlice:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate auctions search result"
+        records:
+          type: array
+          description: "List of found auctions"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Auction"
+      required:
+        - total
+        - records
+
+    #################### Activity - Model #####################
+
+    ActivityId:
+      type: string
+
+    ActivityType:
+      type: string
+      enum:
+        - TRANSFER
+        - MINT
+        - BURN
+        - BID
+        - LIST
+        - SELL
+        - CANCEL_LIST
+        - CANCEL_BID
+        - AUCTION_BID
+        - AUCTION_CREATED
+        - AUCTION_CANCEL
+        - AUCTION_FINISHED
+        - AUCTION_STARTED
+        - AUCTION_ENDED
+
+    Activity:
+      type: object
+      description: "Auction and L2 activities are optional and can be ommited"
+      properties:
+        id:
+          $ref: "#/components/schemas/ActivityId"
+        date:
+          type: string
+          format: "date-time"
+        reverted:
+          type: boolean
+      oneOf:
+        - $ref: "#/components/schemas/MintActivity"
+        - $ref: "#/components/schemas/BurnActivity"
+        - $ref: "#/components/schemas/TransferActivity"
+        - $ref: "#/components/schemas/OrderSellActivity"
+        - $ref: "#/components/schemas/OrderBidActivity"
+        - $ref: "#/components/schemas/OrderListActivity"
+        - $ref: "#/components/schemas/OrderCancelBidActivity"
+        - $ref: "#/components/schemas/OrderCancelListActivity"
+        - $ref: "#/components/schemas/AuctionOpenActivity"
+        - $ref: "#/components/schemas/AuctionBidActivity"
+        - $ref: "#/components/schemas/AuctionFinishActivity"
+        - $ref: "#/components/schemas/AuctionCancelActivity"
+        - $ref: "#/components/schemas/AuctionStartActivity"
+        - $ref: "#/components/schemas/AuctionEndActivity"
+        - $ref: "#/components/schemas/L2DepositActivity"
+        - $ref: "#/components/schemas/L2WithdrawalActivity"
+      required:
+        - id
+        - date
+
+    ActivityBlockchainInfo:
+      type: object
+      deprecated: true
+      properties:
+        transactionHash:
+          type: string
+        blockHash:
+          type: string
+        blockNumber:
+          type: integer
+          format: int64
+        logIndex:
+          type: integer
+      required:
+        - transactionHash
+        - blockHash
+        - blockNumber
+        - logIndex
+
+    MintActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - MINT
+        owner:
+          $ref: "#/components/schemas/UserAddress"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - owner
+        - value
+        - blockchainInfo
+
+    BurnActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - BURN
+        owner:
+          $ref: "#/components/schemas/UserAddress"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - owner
+        - value
+        - blockchainInfo
+
+    TransferActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TRANSFER
+        from:
+          $ref: "#/components/schemas/UserAddress"
+        owner:
+          $ref: "#/components/schemas/UserAddress"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        purchase:
+          type: boolean
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - from
+        - owner
+        - value
+        - blockchainInfo
+
+    OrderActivitySource:
+      type: string
+      description: "Add here more sources if you have"
+      enum:
+        - RARIBLE
+
+    OrderActivityMatchSide:
+      type: object
+      properties:
+        maker:
+          $ref: "#/components/schemas/UserAddress"
+        hash:
+          type: string
+        asset:
+          $ref: "#/components/schemas/Asset"
+      required:
+        - maker
+        - asset
+
+    OrderMatchSell:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SELL
+        nft:
+          $ref: "#/components/schemas/Asset"
+        payment:
+          $ref: "#/components/schemas/Asset"
+        buyer:
+          $ref: "#/components/schemas/UserAddress"
+        seller:
+          $ref: "#/components/schemas/UserAddress"
+        buyerOrderHash:
+          type: string
+        sellerOrderHash:
+          type: string
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+        type:
+          type: string
+          enum:
+            - SELL
+            - ACCEPT_BID
+        source:
+          $ref: "#/components/schemas/OrderActivitySource"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - nft
+        - payment
+        - price
+        - type
+        - buyer
+        - seller
+        - source
+        - blockchainInfo
+
+    OrderBidActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - BID
+        hash:
+          type: string
+        maker:
+          $ref: "#/components/schemas/UserAddress"
+        make:
+          $ref: "#/components/schemas/Asset"
+        take:
+          $ref: "#/components/schemas/Asset"
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+        priceUsd:
+          $ref: "#/components/schemas/BigDecimal"
+        source:
+          $ref: "#/components/schemas/OrderActivitySource"
+      required:
+        - "@type"
+        - hash
+        - maker
+        - make
+        - take
+        - price
+
+    OrderListActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - LIST
+        hash:
+          type: string
+        maker:
+          $ref: "#/components/schemas/UserAddress"
+        make:
+          $ref: "#/components/schemas/Asset"
+        take:
+          $ref: "#/components/schemas/Asset"
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+        priceUsd:
+          $ref: "#/components/schemas/BigDecimal"
+        source:
+          $ref: "#/components/schemas/OrderActivitySource"
+      required:
+        - "@type"
+        - hash
+        - maker
+        - make
+        - take
+        - price
+
+    OrderCancelBidActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - CANCEL_BID
+        hash:
+          type: string
+        maker:
+          $ref: "#/components/schemas/UserAddress"
+        make:
+          $ref: "#/components/schemas/AssetType"
+        take:
+          $ref: "#/components/schemas/AssetType"
+        source:
+          $ref: "#/components/schemas/OrderActivitySource"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - hash
+        - maker
+        - make
+        - take
+        - blockchainInfo
+
+    OrderCancelListActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - CANCEL_LIST
+        hash:
+          type: string
+        maker:
+          $ref: "#/components/schemas/UserAddress"
+        make:
+          $ref: "#/components/schemas/AssetType"
+        take:
+          $ref: "#/components/schemas/AssetType"
+        source:
+          $ref: "#/components/schemas/OrderActivitySource"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - hash
+        - maker
+        - make
+        - take
+        - blockchainInfo
+
+    AuctionActivitySource:
+      type: string
+      description: "Add more sources if you support it"
+      enum:
+        - RARIBLE
+
+    AuctionOpenActivity:
+      type: object
+      required:
+        - "@type"
+        - auction
+        - blockchainInfo
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_open"
+        auction:
+          $ref: "#/components/schemas/Auction"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+
+    AuctionBidActivity:
+      type: object
+      required:
+        - "@type"
+        - auction
+        - bid
+        - blockchainInfo
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_bid"
+        auction:
+          $ref: "#/components/schemas/Auction"
+        bid:
+          $ref: "#/components/schemas/AuctionBid"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+
+    AuctionFinishActivity:
+      type: object
+      required:
+        - "@type"
+        - auction
+        - blockchainInfo
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_finish"
+        auction:
+          $ref: "#/components/schemas/Auction"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+
+    AuctionCancelActivity:
+      type: object
+      required:
+        - "@type"
+        - auction
+        - blockchainInfo
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_cancel"
+        auction:
+          $ref: "#/components/schemas/Auction"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+
+    AuctionStartActivity:
+      type: object
+      required:
+        - "@type"
+        - auction
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_start"
+        auction:
+          $ref: "#/components/schemas/Auction"
+
+    AuctionEndActivity:
+      type: object
+      required:
+        - "@type"
+        - auction
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "auction_end"
+        auction:
+          $ref: "#/components/schemas/Auction"
+
+    L2DepositActivity:
+      type: object
+      required:
+        - "@type"
+        - user
+        - status
+        - itemId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - L2_DEPOSIT
+        user:
+          $ref: "#/components/schemas/UserAddress"
+        status:
+          type: string
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+
+    L2WithdrawalActivity:
+      type: object
+      required:
+        - "@type"
+        - user
+        - status
+        - itemId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - L2_WITHDRAWAL
+        user:
+          $ref: "#/components/schemas/UserAddress"
+        status:
+          type: string
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+
+    ActivitySlice:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate activities search result"
+        activities:
+          type: array
+          description: "List of found activities"
+          items:
+            $ref: "#/components/schemas/Activity"
+      required:
+        - activities
+
+    #################### Collection - Model #####################
+
+    CollectionId:
+      type: string
+
+    CollectionIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+
+    Collection:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/CollectionId"
+        parent:
+          $ref: "#/components/schemas/CollectionId"
+        type:
+          type: string
+          description: "Set types you are support"
+          enum:
+            - CRYPTO_PUNKS
+        name:
+          type: string
+        symbol:
+          type: string
+        owner:
+          $ref: "#/components/schemas/UserAddress"
+        features:
+          type: array
+          items:
+            type: string
+            enum:
+              - APPROVE_FOR_ALL
+              - SET_URI_PREFIX
+              - BURN
+              - MINT_WITH_ADDRESS
+              - SECONDARY_SALE_FEES
+              - MINT_AND_TRANSFER
+        minters:
+          type: array
+          description: "List of addresses that can mint items in this collection"
+          items:
+            "$ref": "#/components/schemas/UserAddress"
+        meta:
+          "$ref": "#/components/schemas/CollectionMeta"
+      required:
+        - id
+        - name
+        - type
+        - features
+
+    CollectionSlice:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate collections search result"
+        records:
+          default: [ ]
+          type: array
+          items:
+            $ref: "#/components/schemas/Collection"
+      required:
+        - total
+        - records
+
+    CollectionMeta:
+      required:
+        - name
+        - content
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the collection"
+        description:
+          type: string
+          description: "Description of the collection"
+        content:
+          type: array
+          items:
+            "$ref": "#/components/schemas/MetaContent"
+        externalLink:
+          type: string
+          description: "External link to the original website for the collection"
+        sellerFeeBasisPoints:
+          type: integer
+          format: int32
+          description: "Indicates a 1% seller fee"
+        feeRecipient:
+          "$ref": "#/components/schemas/UserAddress"
+
+    #################### Collection - Events
+
+    CollectionEvent:
+      type: object
+      properties:
+        collection:
+          $ref: "#/components/schemas/Collection"
+        eventId:
+          type: string
+      required:
+        - eventId
+        - collection
+      oneOf:
+        - $ref: "#/components/schemas/CollectionUpdateEvent"
+
+    CollectionUpdateEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - UPDATE
+      required:
+        - "@type"
+
+    ########################## Errors #########################
+
+    ApiErrorEntityNotFound:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - NOT_FOUND
+          default: NOT_FOUND
+        message:
+          type: string
+          description: "Error message"
+
+    ApiErrorBadRequest:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - BAD_REQUEST
+            - VALIDATION
+          default: BAD_REQUEST
+        message:
+          type: string
+          description: "Error message"
+
+    ApiErrorServerError:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - UNKNOWN
+          default: UNKNOWN
+        message:
+          type: string
+          description: "Error message"
+
+    Asset:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/AssetType"
+        value:
+          $ref: "#/components/schemas/BigDecimal"
+      required:
+        - type
+        - value
+
+    AssetType:
+      type: object
+      description: "Here are examples of Eth asset types, remove them and describe your own"
+      oneOf:
+        - $ref: "#/components/schemas/EthEthereumAssetType"
+        - $ref: "#/components/schemas/EthErc20AssetType"
+        - $ref: "#/components/schemas/EthErc721AssetType"
+        - $ref: "#/components/schemas/EthErc1155AssetType"
+        - $ref: "#/components/schemas/EthCollectionAssetType"
+
+    EthEthereumAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
+      required:
+        - "@type"
+
+    EthErc20AssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ERC20
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+      required:
+        - "@type"
+        - contract
+
+    EthErc721AssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ERC721
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+      required:
+        - "@type"
+        - contract
+        - tokenId
+
+    EthErc1155AssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ERC1155
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+      required:
+        - "@type"
+        - contract
+        - tokenId
+
+    EthCollectionAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "COLLECTION"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+      required:
+        - "@type"
+        - contract
+
+    #################### Referenced Types ####################
+
+    BigInteger:
+      type: string
+      example: 123456
+    BigDecimal:
+      type: string
+      example: 123456.789
+
+    ContractAddress:
+      type: string
+
+    UserAddress:
+      type: string
+
+  #======================== Parameters============================#
+
+  parameters:
+
+    itemId:
+      name: "itemId"
+      in: query
+      required: true
+      description: "Unique identifier of the Blockchain NFT item"
+      schema:
+        $ref: "#/components/schemas/ItemId"
+
+    collectionId:
+      name: "collectionId"
+      in: query
+      required: true
+      description: "Unique identifier of the Blockchain Item Collection"
+      schema:
+        $ref: "#/components/schemas/CollectionId"
+
+    ownershipId:
+      name: "ownershipId"
+      in: query
+      required: true
+      description: "Ownership Id in format: ${itemId}:${owner}"
+      schema:
+        type: string
+
+    orderId:
+      name: "orderId"
+      in: query
+      required: true
+      description: "Order id, string without special chars"
+      schema:
+        $ref: "#/components/schemas/OrderId"
+
+    auctionId:
+      name: "auctionId"
+      in: query
+      required: true
+      description: "AuctionId, string without special chars"
+      schema:
+        $ref: "#/components/schemas/AuctionId"
+
+    orderStatus:
+      name: "status"
+      in: query
+      required: true
+      schema:
+        $ref: "#/components/schemas/OrderStatus"
+
+    auctionStatus:
+      name: "status"
+      in: query
+      required: true
+      schema:
+        $ref: "#/components/schemas/AuctionStatus"
+
+    activityType:
+      name: "status"
+      in: query
+      required: true
+      schema:
+        $ref: "#/components/schemas/ActivityType"
+
+    size:
+      name: "size"
+      in: query
+      required: false
+      description: "The number of items to return, max = 1000"
+      schema:
+        type: integer
+
+    sort:
+      name: "sort"
+      in: query
+      required: false
+      description: "Sort direction. By default - DESC"
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+
+    currencyId:
+      name: "currencyId"
+      in: query
+      required: true
+      description: "Identifier of currency used by buyer in Order.
+                    For example, in Eth here should be contract address of currency token"
+      schema:
+        $ref: "#/components/schemas/ContractAddress"
+
+    platform:
+      name: "platform"
+      in: query
+      required: false
+      description: "The platform where the Order was created"
+      schema:
+        "$ref": "#/components/schemas/Platform"
+
+    makers:
+      name: "makers"
+      in: query
+      required: false
+      description: "List of the makers of the orders"
+      schema:
+        type: array
+        items:
+          $ref: "#/components/schemas/UserAddress"
+
+    origin:
+      name: "origin"
+      in: query
+      required: false
+      description: "Address of the consumer to receive the commission for the order"
+      schema:
+        type: string
+
+    createdAtFrom:
+      name: "createdAtFrom"
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+
+    createdAtTo:
+      name: "createdAtTo"
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+
+    continuation_item:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {lastUpdateAt}_{id}.
+                    For example, Eth Item continuation looks like: 
+                    1650022165000_0x490571e17d12334eb61eac154251de2ea16f9213:1
+                    Here first part is lastUpdatedAt in MS of last Item from previous page
+                    and the second part - ID of this item. This Item should NOT be included in next response."
+      schema:
+        type: string
+
+    continuation_ownership:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {createdAt}_{id}.
+                    For example, Eth Ownership continuation looks like: 
+                    1650022165000_0x490571e17d12334eb61eac154251de2ea16f9213:1:0xc9154424b823b10579895ccbe442d41b9abd96ed
+                    Here first part is createdAt in MS of last Ownership from previous page
+                    and the second part - ID of this Ownership. This Ownership should NOT be included in next response."
+      schema:
+        type: string
+
+    continuation_order:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {lastUpdateAt}_{id}.
+                    For example, Eth Order continuation looks like: 
+                    1650024044892_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
+                    Here first part is lastUpdatedAt in MS of last Item from previous page
+                    and the second part - ID of this Order. This Order should NOT be included in next response."
+
+    continuation_orderByPrice:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {price}_{id}.
+                    For example, Eth Order continuation looks like: 
+                    123_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
+                    Here first part is price of single Item in the last Order from previous page
+                    and the second part - ID of this Order. This Order should NOT be included in next response."
+
+    continuation_auction:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {lastUpdateAt}_{id}.
+                    Similar to continuation_order"
+
+    continuation_activity:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {date}_{id}.
+                    Similar to continuation_order"
+
+
+  #======================== Responses ============================#
+
+  responses:
+    OrderSliceResponse:
+      description: "OK"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/OrderSlice"
+    OrderCurrenciesResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/OrderCurrencies"
+    AuctionSliceResponse:
+      description: "OK"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AuctionSlice"
+    ActivitySliceResponse:
+      description: "OK"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ActivitySlice"
+
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ApiErrorBadRequest"
+    ServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ApiErrorServerError"
+    EntityNotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ApiErrorEntityNotFound"
