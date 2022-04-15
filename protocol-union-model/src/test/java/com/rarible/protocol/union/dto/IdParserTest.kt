@@ -155,7 +155,7 @@ class IdParserTest {
     fun `extract token from itemId from eth`() {
         val token = "abc"
         val id = ItemIdDto(BlockchainDto.ETHEREUM, token)
-        val extractedToken = IdParser.extractContract(id)
-        assertThat(extractedToken).isEqualTo(token)
+        val extractedContract = IdParser.extractContract(id)
+        assertThat(extractedContract).isNull()
     }
 }

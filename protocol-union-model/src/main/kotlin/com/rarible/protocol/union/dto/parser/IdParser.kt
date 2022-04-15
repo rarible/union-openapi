@@ -100,10 +100,12 @@ object IdParser {
         return Pair(blockchain, id)
     }
 
-    fun extractContract(value: ItemIdDto): String {
+    fun extractContract(value: ItemIdDto): String? {
         // For ItemId there can be ':' in value (token:tokenId for most of the blockchains)
+        // in some saces (Solana) there is no contract part
         val id = value.value
-        return id.split(DELIMITER).first()
+        val parts = id.split(DELIMITER)
+        return if (parts.size >= 2) parts.first() else null
     }
 
     private fun assertSize(
