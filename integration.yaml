@@ -189,7 +189,7 @@ paths:
   "/v0.1/ownerships/byIds":
     post:
       tags:
-        - item-controller
+        - ownership-controller
       description: "Returns Ownerships by set of unique identifiers. If no ownerships found, empty list should be returned.
                     Since this method could accept large batch of IDs, it should be POST"
       operationId: getOwnerhipsByIds
