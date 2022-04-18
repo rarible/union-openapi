@@ -1002,7 +1002,6 @@ paths:
 
   "/v0.1/auctions/all":
     get:
-      deprecated: true
       tags:
         - auction-controller
       description: Returns all auctions by specified parameters
