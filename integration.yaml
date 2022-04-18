@@ -3,6 +3,14 @@ info:
   title: Integration Blockchain OpenAPI
   version: v1.0
 
+#-------------------- General conventions -------------------#
+# 1. All successful responses should be returned with 200 HTTP status code
+# 2. If input params in request are not correct, #ApiErrorBadRequest entity should be returned with 400 HTTP code
+# 3. If unexpected error occurred, #ApiErrorServerError entity should be returned with 500 HTTP code
+# 4. For single-entity requests (like getItemById) #ApiErrorEntityNotFound should be returned with 404 HTTP code
+# 5. For multiple-entity requests (like getItemByIds) empty list should be returned if nothing found (not 404)
+# 6. Events model not used in API, such events should be provided by any queue-like tool (Kafka, for example)
+
 paths:
 
   ######################### Sign API #########################
@@ -34,14 +42,14 @@ paths:
   ######################### Item API #########################
 
   # TODO maybe we can keep only byIds?
-  "/v0.1/items":
+  "/v0.1/items/{itemId}":
     get:
       tags:
         - item-controller
       description: "Returns Item by unique identifier"
       operationId: getItemById
       parameters:
-        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/itemId_path"
       responses:
         "200":
           description: "OK"
@@ -85,10 +93,11 @@ paths:
     get:
       tags:
         - item-controller
-      description: "Returns item royalty by item's unique identifier. If item doesn't exist, empty list should be returned"
+      description: "Returns item royalties by item's unique identifier.
+                    If item doesn't exist, empty list should be returned"
       operationId: getItemRoyaltiesById
       parameters:
-        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/itemId_path"
       responses:
         '200':
           description: OK
@@ -107,10 +116,10 @@ paths:
         - item-controller
       description: "Deletes the NFT item meta. 
                     If Blockchain indexer doesn't support meta caching, this API is not required.
-                    Should return 200 empty response evem if item doesn't exists"
+                    Should return 200 empty response even if item doesn't exists"
       operationId: resetItemMeta
       parameters:
-        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/itemId_path"
       responses:
         '200':
           description: OK
@@ -123,7 +132,7 @@ paths:
     get:
       tags:
         - item-controller
-      description: "Returns all items sorted by lastUpdatedAt and id fields"
+      description: "Returns all Items, sorted by lastUpdatedAt and ID (ASC or DESC)"
       operationId: getAllItems
       parameters:
         - name: "showDeleted"
@@ -135,14 +144,14 @@ paths:
         - name: "lastUpdatedFrom"
           in: query
           required: false
-          description: "Filter condition to return only items that have been updated after this date (timestamp)"
+          description: "Filter condition to return only items that have been updated after this date"
           schema:
             type: integer
             format: date-time
         - name: "lastUpdatedTo"
           in: query
           required: false
-          description: "Filter condition to return only items that have been updated before this date (timestamp)"
+          description: "Filter condition to return only items that have been updated before this date"
           schema:
             type: integer
             format: date-time
@@ -164,14 +173,14 @@ paths:
   ####################### Ownership API #######################
 
   # TODO maybe we can keep only byIds?
-  "/v0.1/ownerships":
+  "/v0.1/ownerships/{ownershipId}":
     get:
       tags:
         - ownership-controller
-      description: "Returns ownership by Id"
+      description: "Returns Ownership by unique identifier"
       operationId: getOwnershipById
       parameters:
-        - $ref: "#/components/parameters/ownershipId"
+        - $ref: "#/components/parameters/ownershipId_path"
       responses:
         "200":
           description: "OK"
@@ -211,15 +220,14 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  # TODO required for reconciliation only. Maybe we can use Elastic?
   "/v0.1/ownerships/byItem":
     get:
       tags:
         - ownership-controller
-      description: "Returns ownerships by item"
+      description: "Returns ownerships of the specified Item, sorted by createdAt and ID (DESC)"
       operationId: getOwnershipsByItem
       parameters:
-        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/itemId_query"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/continuation_ownership"
       responses:
@@ -237,14 +245,14 @@ paths:
   ######################## Order API ########################
 
   # TODO maybe we can keep only byIds?
-  "/v0.1/orders":
+  "/v0.1/orders/{orderId}":
     get:
       tags:
         - order-controller
-      description: "Returns Order by Id"
+      description: "Returns Order by unique identifier"
       operationId: getOrderById
       parameters:
-        - $ref: "#/components/parameters/orderId"
+        - $ref: "#/components/parameters/orderId_path"
       responses:
         "200":
           description: "OK"
@@ -284,10 +292,10 @@ paths:
     get:
       tags:
         - order-controller
-      description: "Returns all orders"
+      description: "Returns all orders, sorted by lastUpdateAt and ID (ASC or DESC)"
       operationId: getOrdersAll
       parameters:
-        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/orderStatuses"
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/continuation_order"
@@ -304,9 +312,9 @@ paths:
       tags:
         - order-controller
       operationId: getSellCurrenciesOfItem
-      description: "Returns currencies taken as payment in all sell orders of the item"
+      description: "Returns currencies used as payment in all sell Orders of the Item"
       parameters:
-        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/itemId_query"
       responses:
         '200':
           $ref: "#/components/responses/OrderCurrenciesResponse"
@@ -320,15 +328,15 @@ paths:
       tags:
         - order-controller
       description: "Returns sell orders by item sorted ASC (cheapest first) by sell price of the single Item. 
-                    Response should contains only Orders created with specified currency."
+                    Response should contain only Orders created with specified currency."
       operationId: getSellOrdersByItem
       parameters:
-        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/itemId_query"
         - $ref: "#/components/parameters/currencyId"
         - $ref: "#/components/parameters/platform"
         - $ref: "#/components/parameters/makers"
         - $ref: "#/components/parameters/origin"
-        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/orderStatuses"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/continuation_orderByPrice"
       responses:
@@ -344,9 +352,9 @@ paths:
       tags:
         - order-controller
       operationId: getBidCurrenciesOfItem
-      description: "Returns currencies taken as payment in all bid Orders of the Item"
+      description: "Returns currencies used as payment in all bid Orders of the Item"
       parameters:
-        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/itemId_query"
       responses:
         '200':
           $ref: "#/components/responses/OrderCurrenciesResponse"
@@ -360,15 +368,15 @@ paths:
       tags:
         - order-controller
       description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item. 
-                    Response should contains only Orders created with specified currency."
+                    Response should contain only Orders created with specified currency."
       operationId: getBidOrdersByItem
       parameters:
-        - $ref: "#/components/parameters/itemId"
+        - $ref: "#/components/parameters/itemId_query"
         - $ref: "#/components/parameters/currencyId"
         - $ref: "#/components/parameters/platform"
         - $ref: "#/components/parameters/makers"
         - $ref: "#/components/parameters/origin"
-        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/orderStatuses"
         - $ref: "#/components/parameters/createdAtFrom" # TODO we don't need this filter for Enrichment
         - $ref: "#/components/parameters/createdAtTo" # TODO we don't need this filter for Enrichment
         - $ref: "#/components/parameters/size"
@@ -390,7 +398,7 @@ paths:
       operationId: getSellCurrenciesOfCollection
       description: "Returns currencies taken as payment in all sell orders of the Collection"
       parameters:
-        - $ref: "#/components/parameters/collectionId"
+        - $ref: "#/components/parameters/collectionId_query"
       responses:
         '200':
           $ref: "#/components/responses/OrderCurrenciesResponse"
@@ -404,15 +412,15 @@ paths:
       tags:
         - order-controller
       description: "Returns sell orders by Collection sorted ASC (cheapest first) by sell price of the single Item. 
-                    Response should contains only Orders created with specified currency."
+                    Response should contain only Orders created with specified currency."
       operationId: getSellOrdersByCollection
       parameters:
-        - $ref: "#/components/parameters/collectionId"
+        - $ref: "#/components/parameters/collectionId_query"
         - $ref: "#/components/parameters/currencyId"
         - $ref: "#/components/parameters/platform"
         - $ref: "#/components/parameters/makers"
         - $ref: "#/components/parameters/origin"
-        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/orderStatuses"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/continuation_orderByPrice"
       responses:
@@ -430,7 +438,7 @@ paths:
       operationId: getBidCurrenciesOfCollection
       description: "Returns currencies taken as payment in all bid Orders of the Collection"
       parameters:
-        - $ref: "#/components/parameters/collectionId"
+        - $ref: "#/components/parameters/collectionId_query"
       responses:
         '200':
           $ref: "#/components/responses/OrderCurrenciesResponse"
@@ -444,15 +452,15 @@ paths:
       tags:
         - order-controller
       description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item. 
-                    Response should contains only Orders created with specified currency."
+                    Response should contain only Orders created with specified currency."
       operationId: getBidOrdersByCollection
       parameters:
-        - $ref: "#/components/parameters/collectionId"
+        - $ref: "#/components/parameters/collectionId_query"
         - $ref: "#/components/parameters/currencyId"
         - $ref: "#/components/parameters/platform"
         - $ref: "#/components/parameters/makers"
         - $ref: "#/components/parameters/origin"
-        - $ref: "#/components/parameters/orderStatus"
+        - $ref: "#/components/parameters/orderStatuses"
         - $ref: "#/components/parameters/createdAtFrom" # TODO we don't need this filter for Enrichment
         - $ref: "#/components/parameters/createdAtTo" # TODO we don't need this filter for Enrichment
         - $ref: "#/components/parameters/size"
@@ -468,14 +476,14 @@ paths:
   #################### Auction API (alpha) ####################
 
   # TODO maybe we can keep only byIds?
-  "/v0.1/auctions":
+  "/v0.1/auctions/{auctionId}":
     get:
       tags:
         - auction-controller
-      description: Returns the auction by id
+      description: "Returns the auction by id"
       operationId: getAuctionById
       parameters:
-        - $ref: "#/components/parameters/auctionId"
+        - $ref: "#/components/parameters/auctionId_path"
       responses:
         '200':
           description: OK
@@ -516,10 +524,10 @@ paths:
       tags:
         - auction-controller
       operationId: getAuctionsByItem
-      description: Returns all auctions by item
+      description: "Returns all auctions by Item, sorted by lastUpdateAt and ID (ASC or DESC)"
       parameters:
-        - $ref: "#/components/parameters/itemId"
-        - $ref: "#/components/parameters/auctionStatus"
+        - $ref: "#/components/parameters/itemId_query"
+        - $ref: "#/components/parameters/auctionStatuses"
         - $ref: "#/components/parameters/origin"
         - $ref: "#/components/parameters/platform"
         - $ref: "#/components/parameters/sort"
@@ -539,13 +547,12 @@ paths:
 
   "/v0.1/auctions/all":
     get:
-      deprecated: true
       tags:
         - auction-controller
-      description: "Returns all auctions by specified parameters"
+      description: "Returns all auctions filtered by specified parameters, sorted by lastUpdateAt and ID (ASC or DESC)"
       operationId: getAuctionsAll
       parameters:
-        - $ref: "#/components/parameters/auctionStatus"
+        - $ref: "#/components/parameters/auctionStatuses"
         - $ref: "#/components/parameters/origin"
         - $ref: "#/components/parameters/platform"
         - $ref: "#/components/parameters/sort"
@@ -566,7 +573,7 @@ paths:
       tags:
         - activity-controller
       description: "Returns Activities by set of unique identifiers. If no Activities found, empty list should be returned.
-                      Since this method could accept large batch of IDs, it should be POST"
+                    Since this method could accept large batch of IDs, it should be POST"
       operationId: getAuctionsByIds
       requestBody:
         content:
@@ -586,14 +593,14 @@ paths:
     get:
       tags:
         - activity-controller
-      description: "Returns activities by Item"
+      description: "Returns activities by Item, sorted by date and ID (DESC or ASC)"
       operationId: getActivitiesByItem
       parameters:
-        - $ref: "#/components/parameters/itemId"
-        - $ref: "#/components/parameters/activityType"
+        - $ref: "#/components/parameters/itemId_query"
+        - $ref: "#/components/parameters/activityTypes"
         - name: "user"
           in: query
-          required: true
+          required: false
           schema:
             $ref: "#/components/schemas/UserAddress"
         - $ref: "#/components/parameters/sort"
@@ -611,10 +618,10 @@ paths:
     get:
       tags:
         - activity-controller
-      description: "Returns all activities"
+      description: "Returns all activities, sorted by date and ID (DESC or ASC)"
       operationId: getAllActivities
       parameters:
-        - $ref: "#/components/parameters/activityType"
+        - $ref: "#/components/parameters/activityTypes"
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/size"
         - $ref: "#/components/parameters/continuation_activity"
@@ -629,14 +636,14 @@ paths:
   ####################### Collection API #######################
 
   # TODO maybe we can keep only byIds?
-  /v0.1/collections:
+  /v0.1/collections/{collectionId}:
     get:
       tags:
         - collection-controller
       description: "Returns collection by unique identifier"
       operationId: getCollectionById
       parameters:
-        - $ref: "#/components/parameters/collectionId"
+        - $ref: "#/components/parameters/collectionId_path"
       responses:
         "200":
           description: "OK"
@@ -656,7 +663,7 @@ paths:
       tags:
         - collection-controller
       description: "Returns Collections by set of unique identifiers. If no Collections found, empty list should be returned.
-                      Since this method could accept large batch of IDs, it should be POST"
+                    Since this method could accept large batch of IDs, it should be POST"
       operationId: getAuctionsByIds
       requestBody:
         content:
@@ -676,11 +683,11 @@ paths:
     get:
       tags:
         - collection-controller
-      description: "Returns all collections"
+      description: "Returns all collections sorted by ID (ASC)"
       operationId: getAllCollections
       parameters:
         - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/continuation_activity"
+        - $ref: "#/components/parameters/continuation_collection"
       responses:
         "200":
           description: "OK"
@@ -703,18 +710,7 @@ components:
         - OPEN_SEA
         # Add more if your indexer supports other platforms
 
-    Payout:
-      type: object
-      properties:
-        account:
-          $ref: "#/components/schemas/UserAddress"
-        value:
-          type: integer
-      required:
-        - account
-        - value
-
-    #################### Sign - Union ####################
+    ####################### Sign Model ########################
 
     SignatureValidationForm:
       required:
@@ -734,7 +730,87 @@ components:
           type: string
           description: "Digital signature of the signer"
 
-    ########################## Meta ###########################
+    ###################### Asset Model ########################
+
+    AssetType:
+      type: object
+      description: "Here are examples of Eth asset types, remove them and describe your own"
+      oneOf:
+        - $ref: "#/components/schemas/EthEthereumAssetType"
+        - $ref: "#/components/schemas/EthErc20AssetType"
+        - $ref: "#/components/schemas/EthErc721AssetType"
+        - $ref: "#/components/schemas/EthErc1155AssetType"
+        - $ref: "#/components/schemas/EthCollectionAssetType"
+
+    EthEthereumAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH
+      required:
+        - "@type"
+
+    EthErc20AssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ERC20
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+      required:
+        - "@type"
+        - contract
+
+    EthErc721AssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ERC721
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+      required:
+        - "@type"
+        - contract
+        - tokenId
+
+    EthErc1155AssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ERC1155
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+      required:
+        - "@type"
+        - contract
+        - tokenId
+
+    EthCollectionAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "COLLECTION"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+      required:
+        - "@type"
+        - contract
+
+    ####################### Meta Model ########################
 
     Meta:
       type: object
@@ -852,7 +928,7 @@ components:
           enum:
             - HTML
 
-    ########################## Item ###########################
+    ######################## Item Model ########################
 
     ItemId:
       type: string
@@ -884,7 +960,7 @@ components:
         lastUpdatedAt:
           type: string
           format: date-time
-          description: "Filter condition to return only items that have been updated at this date"
+          description: "Last date when Item has been changed"
         supply:
           $ref: "#/components/schemas/BigInteger"
         meta:
@@ -1049,7 +1125,7 @@ components:
       required:
         - "@type"
 
-    #################### Ownership - Union ####################
+    ##################### Ownership Model #####################
 
     OwnershipId:
       type: string
@@ -1070,12 +1146,6 @@ components:
         createdAt:
           type: string
           format: "date-time"
-        creators:
-          type: array
-          deprecated: true
-          description: "Creators of the target item"
-          items:
-            $ref: "#/components/schemas/Creator"
         lazyValue:
           $ref: "#/components/schemas/BigInteger"
         pending:
@@ -1160,25 +1230,6 @@ components:
     OrderId:
       type: string
 
-    OrderStatus:
-      type: string
-      enum:
-        - ACTIVE
-        - FILLED
-        - HISTORICAL
-        - INACTIVE
-        - CANCELLED
-
-    OrderIds:
-      type: object
-      required:
-        - ids
-      properties:
-        ids:
-          type: array
-          items:
-            type: string
-
     Order:
       type: object
       properties:
@@ -1241,6 +1292,15 @@ components:
         - take
         - salt
         - data
+
+    OrderStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - FILLED
+        - HISTORICAL
+        - INACTIVE
+        - CANCELLED
 
     OrderData:
       type: object
@@ -1320,6 +1380,16 @@ components:
       required:
         - "@type"
 
+    OrderIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+
     OrderSlice:
       type: object
       properties:
@@ -1372,20 +1442,10 @@ components:
       required:
         - "@type"
 
-    #################### Auction - Union ####################
+    ################## Auction model (alpha) ##################
 
     AuctionId:
       type: string
-
-    AuctionIds:
-      type: object
-      required:
-        - ids
-      properties:
-        ids:
-          type: array
-          items:
-            $ref: "#/components/schemas/AuctionId"
 
     Auction:
       type: object
@@ -1484,16 +1544,19 @@ components:
             - ACTIVE
             - HISTORICAL
 
-    AuctionSort:
-      type: string
-      enum:
-        - LAST_UPDATE_ASC
-        - LAST_UPDATE_DESC
-        - BUY_PRICE_ASC
-
     AuctionData:
       type: object
       description: "Here you can put some custom data for the Auction"
+
+    AuctionIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuctionId"
 
     AuctionSlice:
       type: object
@@ -1536,7 +1599,7 @@ components:
 
     Activity:
       type: object
-      description: "Auction and L2 activities are optional and can be ommited"
+      description: "Auction and L2 activities are optional and can be omitted"
       properties:
         id:
           $ref: "#/components/schemas/ActivityId"
@@ -1568,7 +1631,6 @@ components:
 
     ActivityBlockchainInfo:
       type: object
-      deprecated: true
       properties:
         transactionHash:
           type: string
@@ -1984,16 +2046,6 @@ components:
     CollectionId:
       type: string
 
-    CollectionIds:
-      type: object
-      required:
-        - ids
-      properties:
-        ids:
-          type: array
-          items:
-            $ref: "#/components/schemas/CollectionId"
-
     Collection:
       type: object
       properties:
@@ -2051,6 +2103,16 @@ components:
         - total
         - records
 
+    CollectionIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+
     CollectionMeta:
       required:
         - name
@@ -2059,21 +2121,21 @@ components:
       properties:
         name:
           type: string
-          description: "Name of the collection"
+          description: "Name of the Collection"
         description:
           type: string
-          description: "Description of the collection"
+          description: "Description of the Collection"
         content:
           type: array
           items:
             "$ref": "#/components/schemas/MetaContent"
         externalLink:
           type: string
-          description: "External link to the original website for the collection"
+          description: "External link to the original website for the Collection"
         sellerFeeBasisPoints:
           type: integer
           format: int32
-          description: "Indicates a 1% seller fee"
+          description: "Indicates seller fee (from 0 to 10000, where 10000 == 100%)"
         feeRecipient:
           "$ref": "#/components/schemas/UserAddress"
 
@@ -2161,84 +2223,6 @@ components:
         - type
         - value
 
-    AssetType:
-      type: object
-      description: "Here are examples of Eth asset types, remove them and describe your own"
-      oneOf:
-        - $ref: "#/components/schemas/EthEthereumAssetType"
-        - $ref: "#/components/schemas/EthErc20AssetType"
-        - $ref: "#/components/schemas/EthErc721AssetType"
-        - $ref: "#/components/schemas/EthErc1155AssetType"
-        - $ref: "#/components/schemas/EthCollectionAssetType"
-
-    EthEthereumAssetType:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ETH
-      required:
-        - "@type"
-
-    EthErc20AssetType:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ERC20
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
-      required:
-        - "@type"
-        - contract
-
-    EthErc721AssetType:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ERC721
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId:
-          $ref: "#/components/schemas/BigInteger"
-      required:
-        - "@type"
-        - contract
-        - tokenId
-
-    EthErc1155AssetType:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ERC1155
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId:
-          $ref: "#/components/schemas/BigInteger"
-      required:
-        - "@type"
-        - contract
-        - tokenId
-
-    EthCollectionAssetType:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - "COLLECTION"
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
-      required:
-        - "@type"
-        - contract
-
     #################### Referenced Types ####################
 
     BigInteger:
@@ -2258,7 +2242,7 @@ components:
 
   parameters:
 
-    itemId:
+    itemId_query:
       name: "itemId"
       in: query
       required: true
@@ -2266,31 +2250,47 @@ components:
       schema:
         $ref: "#/components/schemas/ItemId"
 
-    collectionId:
+    itemId_path:
+      name: "itemId"
+      in: path
+      required: true
+      description: "Unique identifier of the Blockchain NFT item"
+      schema:
+        $ref: "#/components/schemas/ItemId"
+
+    collectionId_query:
       name: "collectionId"
       in: query
       required: true
-      description: "Unique identifier of the Blockchain Item Collection"
+      description: "Unique identifier of the Blockchain Collection"
       schema:
         $ref: "#/components/schemas/CollectionId"
 
-    ownershipId:
+    collectionId_path:
+      name: "collectionId"
+      in: path
+      required: true
+      description: "Unique identifier of the Blockchain Collection"
+      schema:
+        $ref: "#/components/schemas/CollectionId"
+
+    ownershipId_path:
       name: "ownershipId"
-      in: query
+      in: path
       required: true
       description: "Ownership Id in format: ${itemId}:${owner}"
       schema:
         type: string
 
-    orderId:
+    orderId_path:
       name: "orderId"
-      in: query
+      in: path
       required: true
       description: "Order id, string without special chars"
       schema:
         $ref: "#/components/schemas/OrderId"
 
-    auctionId:
+    auctionId_path:
       name: "auctionId"
       in: query
       required: true
@@ -2298,26 +2298,32 @@ components:
       schema:
         $ref: "#/components/schemas/AuctionId"
 
-    orderStatus:
+    orderStatuses:
       name: "status"
       in: query
       required: true
       schema:
-        $ref: "#/components/schemas/OrderStatus"
+        type: array
+        items:
+          $ref: "#/components/schemas/OrderStatus"
 
-    auctionStatus:
+    auctionStatuses:
       name: "status"
       in: query
       required: true
       schema:
-        $ref: "#/components/schemas/AuctionStatus"
+        type: array
+        items:
+          $ref: "#/components/schemas/AuctionStatus"
 
-    activityType:
-      name: "status"
+    activityTypes:
+      name: "type"
       in: query
       required: true
       schema:
-        $ref: "#/components/schemas/ActivityType"
+        type: array
+        items:
+          $ref: "#/components/schemas/ActivityType"
 
     size:
       name: "size"
@@ -2446,6 +2452,12 @@ components:
       required: false
       description: "Continuation token from the previous response in format {date}_{id}.
                     Similar to continuation_order"
+
+    continuation_collection:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Just a Collection ID"
 
 
   #======================== Responses ============================#
