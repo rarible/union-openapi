@@ -197,6 +197,13 @@ paths:
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
+        - name: "sync"
+            in: query
+            required: false
+            description: "Request meta for Item if true"
+            schema:
+              type: boolean
+
       responses:
         '200':
           description: OK
@@ -4195,6 +4202,60 @@ components:
       required:
         - "@type"
         - value
+
+    #################### Websocket Types #####################
+
+    ChangeEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - OWNERSHIP
+            - ITEM
+            - FAKE
+        value:
+          $ref: "#/components/schemas/ChangeDto"
+      required:
+        - type
+
+    ChangeDto:
+      type: object
+      required:
+        - eventId
+      properties:
+        eventId:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/PendingOrderCancel"
+        - $ref: "#/components/schemas/PendingOrderMatch"
+
+
+    ItemEventDto:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ITEM_DTO
+        owner:
+          $ref: "#/components/schemas/UnionAddress"
+      required:
+        - "@type"
+
+
+      OwnershipEventDto:
+        type: object
+        properties:
+          "@type":
+            type: string
+            enum:
+              - OWNERSHIP_DTO
+          owner:
+            $ref: "#/components/schemas/UnionAddress"
+        required:
+          - "@type"
+
 
     #################### Referenced Types ####################
 
