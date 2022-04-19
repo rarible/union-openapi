@@ -198,11 +198,11 @@ paths:
           schema:
             $ref: "#/components/schemas/ItemId"
         - name: "sync"
-            in: query
-            required: false
-            description: "Request meta for Item if true"
-            schema:
-              type: boolean
+          in: query
+          required: false
+          description: "Request meta for Item if true"
+          schema:
+            type: boolean
 
       responses:
         '200':
