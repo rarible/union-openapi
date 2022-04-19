@@ -2088,6 +2088,7 @@ components:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of items were found by request"
@@ -2101,13 +2102,13 @@ components:
           items:
             $ref: "#/components/schemas/Item"
       required:
-        - total
         - items
 
     ItemsWithOwnership:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of items were found by request"
@@ -2121,7 +2122,6 @@ components:
           items:
             $ref: "#/components/schemas/ItemWithOwnership"
       required:
-        - total
         - items
 
     CollectionEvent:
@@ -2378,6 +2378,7 @@ components:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of ownerships were found by request"
@@ -2391,7 +2392,6 @@ components:
           items:
             $ref: "#/components/schemas/Ownership"
       required:
-        - total
         - ownerships
 
     OwnershipEvent:
@@ -2565,7 +2565,6 @@ components:
           items:
             $ref: "#/components/schemas/Order"
       required:
-        - total
         - orders
 
     OrderEvent:
@@ -2822,6 +2821,7 @@ components:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of auctions were found by request"
@@ -2835,13 +2835,13 @@ components:
           items:
             $ref: "#/components/schemas/Auction"
       required:
-        - total
         - auctions
 
     AuctionBids:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of auction bids were found by request"
@@ -2855,7 +2855,6 @@ components:
           items:
             $ref: "#/components/schemas/AuctionBid"
       required:
-        - total
         - bids
 
     #################### Activity - Union ####################
@@ -3390,7 +3389,6 @@ components:
           items:
             $ref: "#/components/schemas/Activity"
       required:
-        - total
         - activities
 
     CollectionId:
@@ -3458,6 +3456,7 @@ components:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of ownerships were found by request"
@@ -3470,7 +3469,6 @@ components:
           items:
             $ref: "#/components/schemas/Collection"
       required:
-        - total
         - collections
 
     CollectionMeta:
