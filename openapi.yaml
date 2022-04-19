@@ -197,6 +197,13 @@ paths:
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
+        - name: "sync"
+            in: query
+            required: false
+            description: "Request meta for Item if true"
+            schema:
+              type: boolean
+
       responses:
         '200':
           description: OK
