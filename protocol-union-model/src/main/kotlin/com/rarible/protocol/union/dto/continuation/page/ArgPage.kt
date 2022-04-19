@@ -1,5 +1,6 @@
 package com.rarible.protocol.union.dto.continuation.page
 
+@Deprecated("Will be removed into BRAVO-2055")
 data class ArgPage<T>(
     val arg: String,
     val argContinuation: String?,

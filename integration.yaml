@@ -114,7 +114,7 @@ paths:
     delete:
       tags:
         - item-controller
-      description: "Deletes the NFT item meta. 
+      description: "Deletes the NFT item meta.
                     If Blockchain indexer doesn't support meta caching, this API is not required.
                     Should return 200 empty response even if item doesn't exists"
       operationId: resetItemMeta
@@ -327,7 +327,7 @@ paths:
     get:
       tags:
         - order-controller
-      description: "Returns sell orders by item sorted ASC (cheapest first) by sell price of the single Item. 
+      description: "Returns sell orders by item sorted ASC (cheapest first) by sell price of the single Item.
                     Response should contain only Orders created with specified currency."
       operationId: getSellOrdersByItem
       parameters:
@@ -367,7 +367,7 @@ paths:
     get:
       tags:
         - order-controller
-      description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item. 
+      description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item.
                     Response should contain only Orders created with specified currency."
       operationId: getBidOrdersByItem
       parameters:
@@ -411,7 +411,7 @@ paths:
     get:
       tags:
         - order-controller
-      description: "Returns sell orders by Collection sorted ASC (cheapest first) by sell price of the single Item. 
+      description: "Returns sell orders by Collection sorted ASC (cheapest first) by sell price of the single Item.
                     Response should contain only Orders created with specified currency."
       operationId: getSellOrdersByCollection
       parameters:
@@ -451,7 +451,7 @@ paths:
     get:
       tags:
         - order-controller
-      description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item. 
+      description: "Returns bid orders by item sorted DESC (highest bid first) by bid price of the single Item.
                     Response should contain only Orders created with specified currency."
       operationId: getBidOrdersByCollection
       parameters:
@@ -1571,7 +1571,6 @@ components:
           items:
             $ref: "#/components/schemas/Auction"
       required:
-        - total
         - records
 
     #################### Activity - Model #####################
@@ -2100,7 +2099,6 @@ components:
           items:
             $ref: "#/components/schemas/Collection"
       required:
-        - total
         - records
 
     CollectionIds:
@@ -2400,7 +2398,7 @@ components:
       in: query
       required: false
       description: "Continuation token from the previous response in format {lastUpdateAt}_{id}.
-                    For example, Eth Item continuation looks like: 
+                    For example, Eth Item continuation looks like:
                     1650022165000_0x490571e17d12334eb61eac154251de2ea16f9213:1
                     Here first part is lastUpdatedAt in MS of last Item from previous page
                     and the second part - ID of this item. This Item should NOT be included in next response."
@@ -2412,7 +2410,7 @@ components:
       in: query
       required: false
       description: "Continuation token from the previous response in format {createdAt}_{id}.
-                    For example, Eth Ownership continuation looks like: 
+                    For example, Eth Ownership continuation looks like:
                     1650022165000_0x490571e17d12334eb61eac154251de2ea16f9213:1:0xc9154424b823b10579895ccbe442d41b9abd96ed
                     Here first part is createdAt in MS of last Ownership from previous page
                     and the second part - ID of this Ownership. This Ownership should NOT be included in next response."
@@ -2424,7 +2422,7 @@ components:
       in: query
       required: false
       description: "Continuation token from the previous response in format {lastUpdateAt}_{id}.
-                    For example, Eth Order continuation looks like: 
+                    For example, Eth Order continuation looks like:
                     1650024044892_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
                     Here first part is lastUpdatedAt in MS of last Item from previous page
                     and the second part - ID of this Order. This Order should NOT be included in next response."
@@ -2434,7 +2432,7 @@ components:
       in: query
       required: false
       description: "Continuation token from the previous response in format {price}_{id}.
-                    For example, Eth Order continuation looks like: 
+                    For example, Eth Order continuation looks like:
                     123_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
                     Here first part is price of single Item in the last Order from previous page
                     and the second part - ID of this Order. This Order should NOT be included in next response."
