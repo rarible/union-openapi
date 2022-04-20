@@ -821,7 +821,7 @@ paths:
         - name: "maker"
           in: query
           required: true
-          description: "The maker of the order"
+          description: "The maker of the bid"
           schema:
             $ref: "#/components/schemas/UnionAddress"
         - name: "blockchains"
@@ -1951,7 +1951,7 @@ components:
     ItemId:
       type: string
       description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-      example: "ETHEREUM:0x60f80121936a0d46b5279700f9df786054aa5ee5:12345"
+      example: "ETHEREUM:0xd07dc4262bcdbf85190c01c996b4c06a461d2430:88510"
 
     ItemIds:
       type: object
@@ -2192,7 +2192,7 @@ components:
 
     OwnershipId:
       type: string
-      example: "${blockchain}:${token}:${tokenId}:${owner}"
+      example: "ETHEREUM:0xB66a603f4cFe17e3D27B87a8BfCaD319856518B8:32292934596187112148346015918544186536963932779440027682601542850818403729410:0x4765273c477c2dc484da4f1984639e943adccfeb"
 
     Ownership:
       type: object
@@ -2435,7 +2435,7 @@ components:
 
     OrderId:
       type: string
-      example: "${blockchain}:${id}"
+      example: "ETHEREUM:0xee770986a23176a3c0bce5df2f1b28a6770c8b5950b92a121699b3aff26b0027"
 
     OrderIds:
       type: object
@@ -4279,11 +4279,11 @@ components:
     ContractAddress:
       type: string
       description: "Blockchain contract address in Union format `${blockchain}:${token}`"
-      example: "POLYGON:0x60f80121c31a0d46b5279700f9df739484aa51111"
+      example: "ETHEREUM:0xd07dc4262bcdbf85190c01c996b4c06a461d2430"
     UnionAddress:
       type: string
       description: "Blockchain address in Union format `${blockchainGroup}:${token}`"
-      example: "ETHEREUM:0x60f80121c31a0d46b5279700f9df786054aa5ee5"
+      example: "ETHEREUM:0x4765273c477c2dc484da4f1984639e943adccfeb"
 
   #======================== Responses ============================#
 
