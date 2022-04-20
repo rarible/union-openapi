@@ -110,6 +110,29 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  "/v0.1/items/{itemId}/meta":
+    get:
+      tags:
+        - item-controller
+      deprecated: true
+      description: Returns the NFT item meta by identifier
+      operationId: getItemMetaById
+      parameters:
+        - $ref: "#/components/parameters/itemId_path"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meta"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   "/v0.1/items/{itemId}/resetMeta":
     delete:
       tags:
@@ -963,8 +986,6 @@ components:
           description: "Last date when Item has been changed"
         supply:
           $ref: "#/components/schemas/BigInteger"
-        meta:
-          $ref: "#/components/schemas/Meta"
         deleted:
           type: boolean
           description: "Item was deleted or not"
