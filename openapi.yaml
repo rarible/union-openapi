@@ -1983,20 +1983,6 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/Creator"
-        owners:
-          type: array
-          deprecated: true
-          description: "Owners of the target item"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/UnionAddress"
-        royalties:
-          type: array
-          deprecated: true
-          description: Use a special endpoint '/v0.1/items/{itemId}/royalty'
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/Royalty"
         lazySupply:
           $ref: "#/components/schemas/BigInteger"
         pending:
@@ -2483,12 +2469,6 @@ components:
           $ref: "#/components/schemas/BigDecimal"
         takePriceUsd:
           $ref: "#/components/schemas/BigDecimal"
-        priceHistory:
-          deprecated: true
-          type: array
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/OrderPriceHistoryRecord"
         maker:
           $ref: "#/components/schemas/UnionAddress"
         taker:
@@ -2536,21 +2516,6 @@ components:
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
         - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
-
-    OrderPriceHistoryRecord:
-      type: object
-      required:
-        - date
-        - makeValue
-        - takeValue
-      properties:
-        date:
-          type: string
-          format: date-time
-        makeValue:
-          $ref: "#/components/schemas/BigDecimal"
-        takeValue:
-          $ref: "#/components/schemas/BigDecimal"
 
     Orders:
       type: object
