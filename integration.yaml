@@ -114,7 +114,6 @@ paths:
     get:
       tags:
         - item-controller
-      deprecated: true
       description: Returns the NFT item meta by identifier
       operationId: getItemMetaById
       parameters:
