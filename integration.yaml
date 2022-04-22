@@ -329,6 +329,24 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  "/v0.1/orders/sync":
+    get:
+      tags:
+        - order-controller
+      description: "Returns all orders, sorted by lastUpdateAt and ID (ASC or DESC)"
+      operationId: getAllSync
+      parameters:
+        - $ref: "#/components/parameters/sync_sort"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/continuation_orderByDbUpdated"
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderSliceResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   "/v0.1/orders/sell/byItem/currencies":
     get:
       tags:
@@ -1273,6 +1291,9 @@ components:
           type: string
           format: "date-time"
         lastUpdatedAt:
+          type: string
+          format: "date-time"
+        dbUpdatedAt:
           type: string
           format: "date-time"
         makePrice:
@@ -2362,6 +2383,17 @@ components:
           - ASC
           - DESC
 
+    sync_sort:
+      name: "sync_sort"
+      in: query
+      required: false
+      description: "Sort direction. By default - ASC"
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+
     currencyId:
       name: "currencyId"
       in: query
@@ -2444,7 +2476,7 @@ components:
       description: "Continuation token from the previous response in format {lastUpdateAt}_{id}.
                     For example, Eth Order continuation looks like:
                     1650024044892_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
-                    Here first part is lastUpdatedAt in MS of last Item from previous page
+                    Here first part is lastUpdatedAt in MS of last Order from previous page
                     and the second part - ID of this Order. This Order should NOT be included in next response."
 
     continuation_orderByPrice:
@@ -2455,6 +2487,16 @@ components:
                     For example, Eth Order continuation looks like:
                     123_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
                     Here first part is price of single Item in the last Order from previous page
+                    and the second part - ID of this Order. This Order should NOT be included in next response."
+
+    continuation_orderByDbUpdated:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {dbUpdatedAt}_{id}.
+                    For example, Eth Order continuation looks like:
+                    1650024044892_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
+                    Here first part is dbUpdatedAt in MS of last Order from previous page
                     and the second part - ID of this Order. This Order should NOT be included in next response."
 
     continuation_auction:
