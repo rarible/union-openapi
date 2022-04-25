@@ -1708,6 +1708,8 @@ components:
         - OPEN_SEA
         - CRYPTO_PUNKS
         - IMMUTABLEX
+        - HEN
+        - OBJKT
         - OTHER
 
     Blockchain:
