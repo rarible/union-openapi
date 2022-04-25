@@ -197,6 +197,13 @@ paths:
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
+        - name: "sync"
+          in: query
+          required: false
+          description: "Request meta for Item if true"
+          schema:
+            type: boolean
+
       responses:
         '200':
           description: OK
@@ -617,6 +624,49 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/OrderStatus"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/orders/sync:
+    get:
+      tags:
+        - order-controller
+      description: "Returns all orders sorting by data base update"
+      operationId: getAllSync
+      parameters:
+        - name: "blockchain"
+          in: query
+          required: true
+          description: "Type of the blockchain network"
+          schema:
+            $ref: "#/components/schemas/Blockchain"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Order sort"
+          schema:
+            $ref: "#/components/schemas/OrderSyncSort"
       responses:
         "200":
           description: "OK"
@@ -2463,6 +2513,9 @@ components:
         lastUpdatedAt:
           type: string
           format: "date-time"
+        dbUpdatedAt:
+          type: string
+          format: "date-time"
         makePrice:
           $ref: "#/components/schemas/BigDecimal"
         takePrice:
@@ -2574,6 +2627,12 @@ components:
       enum:
         - LAST_UPDATE_ASC
         - LAST_UPDATE_DESC
+
+    OrderSyncSort:
+      type: string
+      enum:
+        - DB_UPDATE_ASC
+        - DB_UPDATE_DESC
 
     #################### Auction - Union ####################
 
