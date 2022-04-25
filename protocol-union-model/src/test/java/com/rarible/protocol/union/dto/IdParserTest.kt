@@ -1,9 +1,11 @@
 package com.rarible.protocol.union.dto
 
 import com.rarible.protocol.union.dto.parser.IdParser
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
 
 class IdParserTest {
 
@@ -100,11 +102,12 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse collection id - too many parts`() {
+    fun `parse collection id - with semicolon`() {
         val id = "FLOW:abc:123"
-        assertThrows(BlockchainIdFormatException::class.java) {
-            IdParser.parseCollectionId(id)
-        }
+        val collectionId = IdParser.parseCollectionId(id)
+
+        assertEquals(BlockchainDto.FLOW, collectionId.blockchain)
+        assertEquals("abc:123", collectionId.value)
     }
 
     @Test
@@ -140,4 +143,19 @@ class IdParserTest {
         }
     }
 
+    @Test
+    fun `extract contract from itemId from eth`() {
+        val contract = "abc"
+        val id = ItemIdDto(BlockchainDto.ETHEREUM, contract, BigInteger.TEN)
+        val extractedContract = IdParser.extractContract(id)
+        assertThat(extractedContract).isEqualTo(contract)
+    }
+
+    @Test
+    fun `extract token from itemId from eth`() {
+        val token = "abc"
+        val id = ItemIdDto(BlockchainDto.ETHEREUM, token)
+        val extractedContract = IdParser.extractContract(id)
+        assertThat(extractedContract).isNull()
+    }
 }

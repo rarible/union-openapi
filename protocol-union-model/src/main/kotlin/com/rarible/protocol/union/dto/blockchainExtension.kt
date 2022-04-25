@@ -7,7 +7,8 @@ private val subchains = mapOf(
     BlockchainGroupDto.ETHEREUM to listOf(BlockchainDto.ETHEREUM, BlockchainDto.POLYGON),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
-    BlockchainGroupDto.SOLANA to listOf(BlockchainDto.SOLANA)
+    BlockchainGroupDto.SOLANA to listOf(BlockchainDto.SOLANA),
+    BlockchainGroupDto.IMMUTABLEX to listOf(BlockchainDto.IMMUTABLEX)
 )
 
 private val groups = subchains.entries

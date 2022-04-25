@@ -58,9 +58,8 @@ object IdParser {
     }
 
     fun parseCollectionId(value: String): CollectionIdDto {
-        val pair = split(value, 2)
-        val blockchain = parseBlockchain(pair[0])
-        val collectionId = if (blockchain.group() == BlockchainGroupDto.ETHEREUM) pair[1].lowercase() else pair[1]
+        val (blockchain, id) = extractBlockchain(value)
+        val collectionId = if (blockchain.group() == BlockchainGroupDto.ETHEREUM) id.lowercase() else id
         return CollectionIdDto(blockchain, collectionId)
     }
 
@@ -99,6 +98,14 @@ object IdParser {
         val blockchain = parseBlockchain(value.substring(0, delim))
         val id = value.substring(delim + DELIMITER.length)
         return Pair(blockchain, id)
+    }
+
+    fun extractContract(value: ItemIdDto): String? {
+        // For ItemId there can be ':' in value (token:tokenId for most of the blockchains)
+        // in some saces (Solana) there is no contract part
+        val id = value.value
+        val parts = id.split(DELIMITER)
+        return if (parts.size >= 2) parts.first() else null
     }
 
     private fun assertSize(

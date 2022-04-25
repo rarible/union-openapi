@@ -871,7 +871,7 @@ paths:
         - name: "maker"
           in: query
           required: true
-          description: "The maker of the order"
+          description: "The maker of the bid"
           schema:
             $ref: "#/components/schemas/UnionAddress"
         - name: "blockchains"
@@ -1052,7 +1052,6 @@ paths:
 
   "/v0.1/auctions/all":
     get:
-      deprecated: true
       tags:
         - auction-controller
       description: Returns all auctions by specified parameters
@@ -1758,6 +1757,9 @@ components:
         - RARIBLE
         - OPEN_SEA
         - CRYPTO_PUNKS
+        - IMMUTABLEX
+        - HEN
+        - OBJKT
         - OTHER
 
     Blockchain:
@@ -1768,6 +1770,7 @@ components:
         - FLOW
         - TEZOS
         - SOLANA
+        - IMMUTABLEX
 
     BlockchainGroup:
       type: string
@@ -1776,6 +1779,7 @@ components:
         - FLOW
         - TEZOS
         - SOLANA
+        - IMMUTABLEX
 
     Payout:
       type: object
@@ -1999,7 +2003,7 @@ components:
     ItemId:
       type: string
       description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-      example: "ETHEREUM:0x60f80121936a0d46b5279700f9df786054aa5ee5:12345"
+      example: "ETHEREUM:0xd07dc4262bcdbf85190c01c996b4c06a461d2430:88510"
 
     ItemIds:
       type: object
@@ -2031,20 +2035,6 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/Creator"
-        owners:
-          type: array
-          deprecated: true
-          description: "Owners of the target item"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/UnionAddress"
-        royalties:
-          type: array
-          deprecated: true
-          description: Use a special endpoint '/v0.1/items/{itemId}/royalty'
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/Royalty"
         lazySupply:
           $ref: "#/components/schemas/BigInteger"
         pending:
@@ -2136,6 +2126,7 @@ components:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of items were found by request"
@@ -2149,13 +2140,13 @@ components:
           items:
             $ref: "#/components/schemas/Item"
       required:
-        - total
         - items
 
     ItemsWithOwnership:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of items were found by request"
@@ -2169,7 +2160,6 @@ components:
           items:
             $ref: "#/components/schemas/ItemWithOwnership"
       required:
-        - total
         - items
 
     CollectionEvent:
@@ -2240,7 +2230,7 @@ components:
 
     OwnershipId:
       type: string
-      example: "${blockchain}:${token}:${tokenId}:${owner}"
+      example: "ETHEREUM:0x51efe9abd39bc59017c1756bd2b1b97d80d45073:4:0x4765273c477c2dc484da4f1984639e943adccfeb"
 
     Ownership:
       type: object
@@ -2426,6 +2416,7 @@ components:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of ownerships were found by request"
@@ -2439,7 +2430,6 @@ components:
           items:
             $ref: "#/components/schemas/Ownership"
       required:
-        - total
         - ownerships
 
     OwnershipEvent:
@@ -2483,7 +2473,7 @@ components:
 
     OrderId:
       type: string
-      example: "${blockchain}:${id}"
+      example: "ETHEREUM:0xee770986a23176a3c0bce5df2f1b28a6770c8b5950b92a121699b3aff26b0027"
 
     OrderIds:
       type: object
@@ -2534,12 +2524,6 @@ components:
           $ref: "#/components/schemas/BigDecimal"
         takePriceUsd:
           $ref: "#/components/schemas/BigDecimal"
-        priceHistory:
-          deprecated: true
-          type: array
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/OrderPriceHistoryRecord"
         maker:
           $ref: "#/components/schemas/UnionAddress"
         taker:
@@ -2586,21 +2570,7 @@ components:
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
-
-    OrderPriceHistoryRecord:
-      type: object
-      required:
-        - date
-        - makeValue
-        - takeValue
-      properties:
-        date:
-          type: string
-          format: date-time
-        makeValue:
-          $ref: "#/components/schemas/BigDecimal"
-        takeValue:
-          $ref: "#/components/schemas/BigDecimal"
+        - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
 
     Orders:
       type: object
@@ -2615,7 +2585,6 @@ components:
           items:
             $ref: "#/components/schemas/Order"
       required:
-        - total
         - orders
 
     OrderEvent:
@@ -2878,6 +2847,7 @@ components:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of auctions were found by request"
@@ -2891,13 +2861,13 @@ components:
           items:
             $ref: "#/components/schemas/Auction"
       required:
-        - total
         - auctions
 
     AuctionBids:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of auction bids were found by request"
@@ -2911,7 +2881,6 @@ components:
           items:
             $ref: "#/components/schemas/AuctionBid"
       required:
-        - total
         - bids
 
     #################### Activity - Union ####################
@@ -2990,6 +2959,8 @@ components:
         - $ref: "#/components/schemas/AuctionCancelActivity"
         - $ref: "#/components/schemas/AuctionStartActivity"
         - $ref: "#/components/schemas/AuctionEndActivity"
+        - $ref: "#/components/schemas/L2DepositActivity"
+        - $ref: "#/components/schemas/L2WithdrawalActivity"
       required:
         - id
         - date
@@ -3086,6 +3057,7 @@ components:
         - RARIBLE
         - OPEN_SEA
         - CRYPTO_PUNKS
+        - IMMUTABLEX
 
     OrderActivityMatchSide:
       type: object
@@ -3385,6 +3357,48 @@ components:
         auction:
           $ref: "#/components/schemas/Auction"
 
+    L2DepositActivity:
+      type: object
+      required:
+        - "@type"
+        - user
+        - status
+        - itemId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - L2_DEPOSIT
+        user:
+          $ref: "#/components/schemas/UnionAddress"
+        status:
+          type: string
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+
+    L2WithdrawalActivity:
+      type: object
+      required:
+        - "@type"
+        - user
+        - status
+        - itemId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - L2_WITHDRAWAL
+        user:
+          $ref: "#/components/schemas/UnionAddress"
+        status:
+          type: string
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+
     Activities:
       type: object
       properties:
@@ -3401,7 +3415,6 @@ components:
           items:
             $ref: "#/components/schemas/Activity"
       required:
-        - total
         - activities
 
     CollectionId:
@@ -3428,6 +3441,7 @@ components:
             - TEZOS_NFT
             - TEZOS_MT
             - SOLANA
+            - IMMUTABLEX
         name:
           type: string
         symbol:
@@ -3468,6 +3482,7 @@ components:
       type: object
       properties:
         total:
+          deprecated: true
           type: integer
           format: int64
           description: "Number of ownerships were found by request"
@@ -3480,7 +3495,6 @@ components:
           items:
             $ref: "#/components/schemas/Collection"
       required:
-        - total
         - collections
 
     CollectionMeta:
@@ -4153,6 +4167,30 @@ components:
         - payouts
         - originFees
 
+    #################### Order - Immutablex ####################
+
+    ImmutablexOrderDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - IMMUTABLEX_RARIBLE_V1
+        payouts:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        originFees:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+      required:
+        - "@type"
+        - payouts
+        - originFees
+
     #################### Order - Solana ####################
 
     SolanaAuctionHouseDataV1:
@@ -4267,11 +4305,11 @@ components:
     ContractAddress:
       type: string
       description: "Blockchain contract address in Union format `${blockchain}:${token}`"
-      example: "POLYGON:0x60f80121c31a0d46b5279700f9df739484aa51111"
+      example: "ETHEREUM:0xd07dc4262bcdbf85190c01c996b4c06a461d2430"
     UnionAddress:
       type: string
       description: "Blockchain address in Union format `${blockchainGroup}:${token}`"
-      example: "ETHEREUM:0x60f80121c31a0d46b5279700f9df786054aa5ee5"
+      example: "ETHEREUM:0x4765273c477c2dc484da4f1984639e943adccfeb"
 
   #======================== Responses ============================#
 

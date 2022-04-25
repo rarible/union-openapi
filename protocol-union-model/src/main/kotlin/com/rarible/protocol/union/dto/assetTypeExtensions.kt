@@ -44,7 +44,8 @@ val AssetTypeDto.ext: AssetTypeExtension
         //---- ETHEREUM - other
         is EthGenerativeArtAssetTypeDto -> AssetTypeExtension(
             isNft = false,
-            isCurrency = false
+            isCurrency = false,
+            collectionId = toCollectionId(contract, contract.value)
         )
         is EthCollectionAssetTypeDto -> AssetTypeExtension(
             isNft = true,
