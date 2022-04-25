@@ -636,6 +636,49 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/orders/sync:
+    get:
+      tags:
+        - order-controller
+      description: "Returns all orders sorting by data base update"
+      operationId: getAllSync
+      parameters:
+        - name: "blockchain"
+          in: query
+          required: true
+          description: "Type of the blockchain network"
+          schema:
+            $ref: "#/components/schemas/Blockchain"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Order sort"
+          schema:
+            $ref: "#/components/schemas/OrderSyncSort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/orders/sell/byMaker:
     get:
       tags:
@@ -2480,6 +2523,9 @@ components:
         lastUpdatedAt:
           type: string
           format: "date-time"
+        dbUpdatedAt:
+          type: string
+          format: "date-time"
         makePrice:
           $ref: "#/components/schemas/BigDecimal"
         takePrice:
@@ -2612,6 +2658,12 @@ components:
       enum:
         - LAST_UPDATE_ASC
         - LAST_UPDATE_DESC
+
+    OrderSyncSort:
+      type: string
+      enum:
+        - DB_UPDATE_ASC
+        - DB_UPDATE_DESC
 
     #################### Auction - Union ####################
 
