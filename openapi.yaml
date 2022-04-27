@@ -530,45 +530,6 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/ownerships/all:
-    get:
-      tags:
-        - ownership-controller
-      description: "Returns all ownerships"
-      operationId: getAllOwnerships
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Ownerships"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   ######################## Order API ########################
 
   /v0.1/orders/{id}:
