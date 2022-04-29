@@ -2266,6 +2266,9 @@ components:
         createdAt:
           type: string
           format: "date-time"
+        lastUpdatedAt:
+          type: string
+          format: "date-time"
         creators:
           type: array
           deprecated: true
