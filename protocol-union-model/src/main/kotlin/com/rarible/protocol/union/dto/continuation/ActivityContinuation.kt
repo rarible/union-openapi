@@ -25,4 +25,26 @@ object ActivityContinuation {
             )
         }
     }
+
+    object ByLastUpdatedSyncAndIdDesc :
+        ContinuationFactory<ActivityDto, DateIdContinuation> {
+        override fun getContinuation(entity: ActivityDto): DateIdContinuation {
+            return DateIdContinuation(
+                entity.lastUpdatedAt ?: entity.date,
+                entity.id.value,
+                false
+            )
+        }
+    }
+
+    object ByLastUpdatedSyncAndIdAsc :
+        ContinuationFactory<ActivityDto, DateIdContinuation> {
+        override fun getContinuation(entity: ActivityDto): DateIdContinuation {
+            return DateIdContinuation(
+                entity.lastUpdatedAt ?: entity.date,
+                entity.id.value,
+                true
+            )
+        }
+    }
 }
