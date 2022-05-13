@@ -3104,6 +3104,8 @@ components:
         - OPEN_SEA
         - CRYPTO_PUNKS
         - IMMUTABLEX
+        - HEN
+        - OBJKT
 
     OrderActivityMatchSide:
       type: object
