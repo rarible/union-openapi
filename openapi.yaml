@@ -666,7 +666,7 @@ paths:
           required: false
           description: "Order sort"
           schema:
-            $ref: "#/components/schemas/OrderSyncSort"
+            $ref: "#/components/schemas/SyncSort"
       responses:
         "200":
           description: "OK"
@@ -1542,6 +1542,49 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/activities/sync:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns all activities sorting by data base update"
+      operationId: getAllActivitiesSync
+      parameters:
+        - name: "blockchain"
+          in: query
+          required: true
+          description: "Type of the blockchain network"
+          schema:
+            $ref: "#/components/schemas/Blockchain"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sorting by data base update time"
+          schema:
+            "$ref": "#/components/schemas/SyncSort"
       responses:
         "200":
           description: "OK"
@@ -2628,12 +2671,6 @@ components:
         - LAST_UPDATE_ASC
         - LAST_UPDATE_DESC
 
-    OrderSyncSort:
-      type: string
-      enum:
-        - DB_UPDATE_ASC
-        - DB_UPDATE_DESC
-
     #################### Auction - Union ####################
 
     AuctionId:
@@ -2895,6 +2932,12 @@ components:
         - LATEST_FIRST
         - EARLIEST_FIRST
 
+    SyncSort:
+      type: string
+      enum:
+        - DB_UPDATE_ASC
+        - DB_UPDATE_DESC
+
     ActivityType:
       type: string
       enum:
@@ -2940,6 +2983,9 @@ components:
         id:
           $ref: "#/components/schemas/ActivityId"
         date:
+          type: string
+          format: "date-time"
+        lastUpdatedAt:
           type: string
           format: "date-time"
         reverted:
