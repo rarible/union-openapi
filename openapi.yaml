@@ -1860,7 +1860,7 @@ components:
     CurrencyId:
       type: string
       description: "Currency Id, has format `${blockchain}:${token}` or `${blockchain}:${token}:${tokenId}`"
-      example: "TEZOS:KT1JBNFcB5tiycHNdYGYCtR3kk6JaJysUCi8:0"
+      example: "${currencyId}"
 
     CurrencyUsdRate:
       type: object
@@ -2046,7 +2046,7 @@ components:
     ItemId:
       type: string
       description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-      example: "ETHEREUM:0xd07dc4262bcdbf85190c01c996b4c06a461d2430:88510"
+      example: "${itemId}"
 
     ItemIds:
       type: object
@@ -2273,7 +2273,7 @@ components:
 
     OwnershipId:
       type: string
-      example: "ETHEREUM:0x51efe9abd39bc59017c1756bd2b1b97d80d45073:4:0x4765273c477c2dc484da4f1984639e943adccfeb"
+      example: "${ownershipId}"
 
     Ownership:
       type: object
@@ -2519,7 +2519,7 @@ components:
 
     OrderId:
       type: string
-      example: "ETHEREUM:0xee770986a23176a3c0bce5df2f1b28a6770c8b5950b92a121699b3aff26b0027"
+      example: "${orderId}"
 
     OrderIds:
       type: object
@@ -3469,7 +3469,7 @@ components:
     CollectionId:
       type: string
       description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
-      example: "ETHEREUM:0x60f80121936a0d46b5279700f9df786054aa5ee5"
+      example: "${collectionId}"
 
     Collection:
       type: object
@@ -4358,7 +4358,7 @@ components:
     UnionAddress:
       type: string
       description: "Blockchain address in Union format `${blockchainGroup}:${token}`"
-      example: "ETHEREUM:0x4765273c477c2dc484da4f1984639e943adccfeb"
+      example: "${userId}"
 
   #======================== Responses ============================#
 
