@@ -89,6 +89,7 @@ paths:
           in: query
           required: true
           description: "Date and time for getting currency USD rate"
+          example: "2022-01-01T12:00:00Z"
           schema:
             type: string
             format: date-time
