@@ -4252,6 +4252,10 @@ components:
           type: string
           enum:
             - SOLANA_AUCTION_HOUSE_V1
+        fee:
+          type: integer
+        requiresSignOff:
+          type: boolean
         auctionHouse:
           $ref: "#/components/schemas/ContractAddress"
       required:
