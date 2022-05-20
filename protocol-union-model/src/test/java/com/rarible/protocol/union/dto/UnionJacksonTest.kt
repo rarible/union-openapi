@@ -228,4 +228,26 @@ class UnionJacksonTest {
         val deserialized = mapper.readValue(serialized, ContractAddress::class.java)
         assertEquals(ethOrderId, deserialized)
     }
+
+    @Test
+    fun `currency id`() {
+        val currencyId = CurrencyIdDto(BlockchainDto.POLYGON, "abc", null)
+
+        val serialized = mapper.writeValueAsString(currencyId)
+        assertEquals("\"POLYGON:abc\"", serialized)
+
+        val deserialized = mapper.readValue(serialized, CurrencyIdDto::class.java)
+        assertEquals(currencyId, deserialized)
+    }
+
+    @Test
+    fun `currency id - with token id`() {
+        val currencyId = CurrencyIdDto(BlockchainDto.POLYGON, "abc", BigInteger.ONE)
+
+        val serialized = mapper.writeValueAsString(currencyId)
+        assertEquals("\"POLYGON:abc:1\"", serialized)
+
+        val deserialized = mapper.readValue(serialized, CurrencyIdDto::class.java)
+        assertEquals(currencyId, deserialized)
+    }
 }

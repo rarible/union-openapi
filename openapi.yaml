@@ -105,6 +105,24 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  "/v0.1/currencies/all":
+    get:
+      tags:
+        - currency-controller
+      description: "Get all registered currencies"
+      operationId: getAllCurrencies
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Currencies"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################### Item API #########################
 
   /v0.1/items/{itemId}:
@@ -1885,6 +1903,30 @@ components:
           type: string
           format: date-time
           description: "Date and time of currency USD rate"
+
+    Currency:
+      type: object
+      properties:
+        currencyId:
+          $ref: '#/components/schemas/CurrencyId'
+        symbol:
+          type: string
+        alias:
+          type: string
+          description: "Alias to real coin, 'usd' means 1:1 to USD"
+      required:
+        - currencyId
+        - symbol
+
+    Currencies:
+      type: object
+      required:
+        - currencies
+      properties:
+        currencies:
+          type: array
+          items:
+            $ref: "#/components/schemas/Currency"
 
     #################### Meta - Union ####################
 
