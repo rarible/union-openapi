@@ -41,7 +41,8 @@ paths:
 
   ######################### Item API #########################
 
-  # TODO maybe we can keep only byIds?
+  #--------------- Minimal Required Item API
+
   "/v0.1/items/{itemId}":
     get:
       tags:
@@ -89,27 +90,6 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/items/{itemId}/royalties":
-    get:
-      tags:
-        - item-controller
-      description: "Returns item royalties by item's unique identifier.
-                    If item doesn't exist, empty list should be returned"
-      operationId: getItemRoyaltiesById
-      parameters:
-        - $ref: "#/components/parameters/itemId_path"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Royalties"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   "/v0.1/items/{itemId}/meta":
     get:
       tags:
@@ -132,30 +112,12 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/items/{itemId}/resetMeta":
-    delete:
-      tags:
-        - item-controller
-      description: "Deletes the NFT item meta.
-                    If Blockchain indexer doesn't support meta caching, this API is not required.
-                    Should return 200 empty response even if item doesn't exists"
-      operationId: resetItemMeta
-      parameters:
-        - $ref: "#/components/parameters/itemId_path"
-      responses:
-        '200':
-          description: OK
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/items/all":
+  "/v0.1/items/sync":
     get:
       tags:
         - item-controller
-      description: "Returns all Items, sorted by lastUpdatedAt and ID (ASC or DESC)"
-      operationId: getAllItems
+      description: "Returns all Items, sorted by dbUpdatedAt and ID (ASC or DESC)"
+      operationId: syncAll
       parameters:
         - name: "showDeleted"
           in: query
@@ -179,7 +141,7 @@ paths:
             format: date-time
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/continuation_item"
+        - $ref: "#/components/parameters/continuation_item_sync"
       responses:
         "200":
           description: "OK"
@@ -192,9 +154,49 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  #--------------- Optional but desirable Item API
+
+  "/v0.1/items/{itemId}/royalties":
+    get:
+      tags:
+        - item-controller
+      description: "Returns item royalties by item's unique identifier.
+                    If item doesn't exist, empty list should be returned"
+      operationId: getItemRoyaltiesById
+      parameters:
+        - $ref: "#/components/parameters/itemId_path"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Royalties"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/items/{itemId}/resetMeta":
+    delete:
+      tags:
+        - item-controller
+      description: "Deletes the NFT item meta.
+                    If Blockchain indexer doesn't support meta caching, this API is not required.
+                    Should return 200 empty response even if item doesn't exists"
+      operationId: resetItemMeta
+      parameters:
+        - $ref: "#/components/parameters/itemId_path"
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ####################### Ownership API #######################
 
-  # TODO maybe we can keep only byIds?
   "/v0.1/ownerships/{ownershipId}":
     get:
       tags:
@@ -266,7 +268,6 @@ paths:
 
   ######################## Order API ########################
 
-  # TODO maybe we can keep only byIds?
   "/v0.1/orders/{orderId}":
     get:
       tags:
@@ -310,35 +311,16 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/orders/all":
-    get:
-      tags:
-        - order-controller
-      description: "Returns all orders, sorted by lastUpdateAt and ID (ASC or DESC)"
-      operationId: getOrdersAll
-      parameters:
-        - $ref: "#/components/parameters/orderStatuses"
-        - $ref: "#/components/parameters/sort"
-        - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/continuation_order"
-      responses:
-        "200":
-          $ref: "#/components/responses/OrderSliceResponse"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   "/v0.1/orders/sync":
     get:
       tags:
         - order-controller
-      description: "Returns all orders, sorted by lastUpdateAt and ID (ASC or DESC)"
-      operationId: getAllSync
+      description: "Returns all orders, sorted by dbUpdateAt and ID (ASC or DESC)"
+      operationId: syncAll
       parameters:
         - $ref: "#/components/parameters/sync_sort"
         - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/continuation_orderByDbUpdated"
+        - $ref: "#/components/parameters/continuation_order_sync"
       responses:
         "200":
           $ref: "#/components/responses/OrderSliceResponse"
@@ -515,7 +497,6 @@ paths:
 
   #################### Auction API (alpha) ####################
 
-  # TODO maybe we can keep only byIds?
   "/v0.1/auctions/{auctionId}":
     get:
       tags:
@@ -585,19 +566,19 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/auctions/all":
+  "/v0.1/auctions/sync":
     get:
       tags:
         - auction-controller
-      description: "Returns all auctions filtered by specified parameters, sorted by lastUpdateAt and ID (ASC or DESC)"
-      operationId: getAuctionsAll
+      description: "Returns all auctions filtered by specified parameters, sorted by dbUpdateAt and ID (ASC or DESC)"
+      operationId: syncAll
       parameters:
         - $ref: "#/components/parameters/auctionStatuses"
         - $ref: "#/components/parameters/origin"
         - $ref: "#/components/parameters/platform"
         - $ref: "#/components/parameters/sort"
         - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/continuation_auction"
+        - $ref: "#/components/parameters/continuation_auction_sync"
       responses:
         "200":
           $ref: "#/components/responses/AuctionSliceResponse"
@@ -614,7 +595,7 @@ paths:
         - activity-controller
       description: "Returns Activities by set of unique identifiers. If no Activities found, empty list should be returned.
                     Since this method could accept large batch of IDs, it should be POST"
-      operationId: getAuctionsByIds
+      operationId: getActivitiesByIds
       requestBody:
         content:
           application/json:
@@ -719,15 +700,15 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/collections/all:
+  /v0.1/collections/sync:
     get:
       tags:
         - collection-controller
       description: "Returns all collections sorted by ID (ASC)"
-      operationId: getAllCollections
+      operationId: syncAll
       parameters:
         - $ref: "#/components/parameters/size"
-        - $ref: "#/components/parameters/continuation_collection"
+        - $ref: "#/components/parameters/continuation_collection_sync"
       responses:
         "200":
           description: "OK"
@@ -1000,7 +981,11 @@ components:
         lastUpdatedAt:
           type: string
           format: date-time
-          description: "Last date when Item has been changed"
+          description: "Last date when Item has been changed in blockchain"
+        dbUpdatedAt:
+          type: string
+          format: date-time
+          description: "Last date when Item has been changed in indexer's DB"
         supply:
           $ref: "#/components/schemas/BigInteger"
         deleted:
@@ -1015,6 +1000,7 @@ components:
         - pending
         - mintedAt
         - lastUpdatedAt
+        - dbUpdatedAt
         - supply
         - deleted
 
@@ -1293,9 +1279,11 @@ components:
         lastUpdatedAt:
           type: string
           format: "date-time"
+          description: "Last date when Item has been changed in blockchain"
         dbUpdatedAt:
           type: string
           format: "date-time"
+          description: "Last date when Order has been changed in indexer's DB"
         makePrice:
           $ref: "#/components/schemas/BigDecimal"
         takePrice:
@@ -1327,6 +1315,7 @@ components:
         - makeStock
         - createdAt
         - lastUpdatedAt
+        - dbUpdatedAt
         - type
         - maker
         - make
@@ -1500,6 +1489,7 @@ components:
         - minimalPrice
         - createdAt
         - lastUpdateAt
+        - dbUpdatedAt
         - status
         - ongoing
         - hash
@@ -1526,7 +1516,10 @@ components:
         createdAt:
           type: string
           format: date-time
-        lastUpdateAt:
+        lastUpdatedAt:
+          type: string
+          format: date-time
+        dbUpdatedAt:
           type: string
           format: date-time
         buyPrice:
@@ -2122,11 +2115,16 @@ components:
             "$ref": "#/components/schemas/UserAddress"
         meta:
           "$ref": "#/components/schemas/CollectionMeta"
+        dbUpdatedAt:
+          type: string
+          format: date-time
+          description: "Last date when Collection has been changed in indexer's DB"
       required:
         - id
         - name
         - type
         - features
+        - dbUpdatedAt
 
     CollectionSlice:
       type: object
@@ -2425,7 +2423,9 @@ components:
       name: "origin"
       in: query
       required: false
-      description: "Address of the consumer to receive the commission for the order"
+      description: "Address of the consumer to receive the commission for the order.
+                    If your indexer doesn't support filtering by origin, empty list should be returned if this
+                    parameter has been passed to the request."
       schema:
         type: string
 
@@ -2457,6 +2457,18 @@ components:
       schema:
         type: string
 
+    continuation_item_sync:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {dbUpdatedAt}_{id}.
+                    For example, Eth Item continuation looks like:
+                    1650022165000_0x490571e17d12334eb61eac154251de2ea16f9213:1
+                    Here first part is dbUpdatedAt in MS of last Item from previous page
+                    and the second part - ID of this item. This Item should NOT be included in next response."
+      schema:
+        type: string
+
     continuation_ownership:
       name: "continuation"
       in: query
@@ -2479,6 +2491,16 @@ components:
                     Here first part is lastUpdatedAt in MS of last Order from previous page
                     and the second part - ID of this Order. This Order should NOT be included in next response."
 
+    continuation_order_sync:
+      name: "continuation"
+      in: query
+      required: false
+      description: "Continuation token from the previous response in format {dbUpdatedAt}_{id}.
+                    For example, Eth Order continuation looks like:
+                    1650024044892_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
+                    Here first part is dbUpdatedAt in MS of last Order from previous page
+                    and the second part - ID of this Order. This Order should NOT be included in next response."
+
     continuation_orderByPrice:
       name: "continuation"
       in: query
@@ -2489,36 +2511,30 @@ components:
                     Here first part is price of single Item in the last Order from previous page
                     and the second part - ID of this Order. This Order should NOT be included in next response."
 
-    continuation_orderByDbUpdated:
-      name: "continuation"
-      in: query
-      required: false
-      description: "Continuation token from the previous response in format {dbUpdatedAt}_{id}.
-                    For example, Eth Order continuation looks like:
-                    1650024044892_0xd642e3c6556ab4ed60bdda87d05380c6443b65ac8bc629c1fe7073b2f097b9b2
-                    Here first part is dbUpdatedAt in MS of last Order from previous page
-                    and the second part - ID of this Order. This Order should NOT be included in next response."
-
     continuation_auction:
       name: "continuation"
       in: query
       required: false
-      description: "Continuation token from the previous response in format {lastUpdateAt}_{id}.
+      description: "Continuation token from the previous response in format {lastUpdatedAt}_{id}.
                     Similar to continuation_order"
 
-    continuation_activity:
+    continuation_auction_sync:
       name: "continuation"
       in: query
       required: false
-      description: "Continuation token from the previous response in format {date}_{id}.
+      description: "Continuation token from the previous response in format {dbUpdatedAt}_{id}.
                     Similar to continuation_order"
 
-    continuation_collection:
+    continuation_collection_sync:
       name: "continuation"
       in: query
       required: false
-      description: "Just a Collection ID"
-
+      description: "Continuation token from the previous response in format {dbUpdatedAt}_{id}.
+                    For example, Eth Collection continuation looks like:
+                    1650022165000_0x490571e17d12334eb61eac154251de2ea16f9213
+                    Here first part is dbUpdatedAt in MS of last Collection from previous page
+                    and the second part - ID of this Collection. 
+                    This Collection should NOT be included in next response."
 
   #======================== Responses ============================#
 
