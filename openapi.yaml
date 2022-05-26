@@ -1447,6 +1447,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+        - name: "newSearchEngine"
+          in: query
+          required: false
+          description: "Enforce new search engine usage"
+          deprecated: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "OK"
@@ -1504,6 +1511,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+        - name: "newSearchEngine"
+          in: query
+          required: false
+          description: "Enforce new search engine usage"
+          deprecated: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "OK"
@@ -1561,6 +1575,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+        - name: "newSearchEngine"
+          in: query
+          required: false
+          description: "Enforce new search engine usage"
+          deprecated: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "OK"
@@ -1664,6 +1685,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+        - name: "newSearchEngine"
+          in: query
+          required: false
+          description: "Enforce new search engine usage"
+          deprecated: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "OK"
