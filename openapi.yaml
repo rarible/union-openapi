@@ -1823,6 +1823,7 @@ components:
         - HEN
         - OBJKT
         - OTHER
+        - APTOS
 
     Blockchain:
       type: string
@@ -1833,6 +1834,7 @@ components:
         - TEZOS
         - SOLANA
         - IMMUTABLEX
+        - APTOS
 
     BlockchainGroup:
       type: string
@@ -1842,6 +1844,7 @@ components:
         - TEZOS
         - SOLANA
         - IMMUTABLEX
+        - APTOS
 
     Payout:
       type: object
@@ -2682,6 +2685,7 @@ components:
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
         - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
+        - "$ref": "#/components/schemas/AptosOrderDataV1"
 
     Orders:
       type: object
@@ -3174,6 +3178,7 @@ components:
         - IMMUTABLEX
         - HEN
         - OBJKT
+        - APTOS
 
     OrderActivityMatchSide:
       type: object
@@ -3558,6 +3563,7 @@ components:
             - TEZOS_MT
             - SOLANA
             - IMMUTABLEX
+            - APTOS
         name:
           type: string
         symbol:
@@ -4328,6 +4334,31 @@ components:
           $ref: "#/components/schemas/ContractAddress"
       required:
         - "@type"
+
+
+    #################### Order - Immutablex ####################
+
+    AptosOrderDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - APTOS_RARIBLE_V1
+        payouts:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        originFees:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+      required:
+        - "@type"
+        - payouts
+        - originFees
 
     #################### Subscription-related ####################
 
