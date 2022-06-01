@@ -1973,6 +1973,25 @@ components:
         description:
           type: string
           description: "Description of the NFT item"
+        createdAt:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+        genres:
+          type: array
+          items:
+            type: string
+        language:
+          type: string
+        rights:
+          type: string
+        rightsUri:
+          type: string
+        externalUri:
+          type: string
         attributes:
           type: array
           description: "Attributes of the NFT item"
@@ -1988,13 +2007,10 @@ components:
           description: "Restrictions types set for this item"
           items:
             $ref: "#/components/schemas/RestrictionType"
-        raw:
-          type: string
       required:
         - name
         - attributes
         - content
-        - restrictions
 
     MetaAttribute:
       required:
@@ -2013,6 +2029,8 @@ components:
     MetaContent:
       type: object
       properties:
+        fileName:
+          type: string
         url:
           type: string
         representation:
@@ -2118,6 +2136,20 @@ components:
       required:
         - success
 
+    ################### Common - Union ###################
+
+    OriginOrders:
+      type: object
+      properties:
+        origin:
+          type: string
+        bestSellOrder:
+          $ref: "#/components/schemas/Order"
+        bestBidOrder:
+          $ref: "#/components/schemas/Order"
+      required:
+        - origin
+
     #################### Item - Union ####################
 
     ItemId:
@@ -2182,6 +2214,10 @@ components:
           $ref: "#/components/schemas/Order"
         bestBidOrder:
           $ref: "#/components/schemas/Order"
+        originOrders:
+          type: array
+          items:
+            $ref: "#/components/schemas/OriginOrders"
         auctions:
           type: array
           default: [ ]
@@ -2398,6 +2434,10 @@ components:
           $ref: "#/components/schemas/Auction"
         bestSellOrder:
           $ref: "#/components/schemas/Order"
+        originOrders:
+          type: array
+          items:
+            $ref: "#/components/schemas/OriginOrders"
       required:
         - id
         - blockchain
@@ -3191,6 +3231,8 @@ components:
         - OPEN_SEA
         - CRYPTO_PUNKS
         - IMMUTABLEX
+        - HEN
+        - OBJKT
 
     OrderActivityMatchSide:
       type: object
@@ -3604,6 +3646,10 @@ components:
           $ref: "#/components/schemas/Order"
         bestSellOrder:
           $ref: "#/components/schemas/Order"
+        originOrders:
+          type: array
+          items:
+            $ref: "#/components/schemas/OriginOrders"
       required:
         - id
         - blockchain
@@ -4333,6 +4379,10 @@ components:
           type: string
           enum:
             - SOLANA_AUCTION_HOUSE_V1
+        fee:
+          type: integer
+        requiresSignOff:
+          type: boolean
         auctionHouse:
           $ref: "#/components/schemas/ContractAddress"
       required:
