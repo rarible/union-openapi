@@ -1939,6 +1939,25 @@ components:
         description:
           type: string
           description: "Description of the NFT item"
+        createdAt:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+        genres:
+          type: array
+          items:
+            type: string
+        language:
+          type: string
+        rights:
+          type: string
+        rightsUri:
+          type: string
+        externalUri:
+          type: string
         attributes:
           type: array
           description: "Attributes of the NFT item"
@@ -1954,13 +1973,10 @@ components:
           description: "Restrictions types set for this item"
           items:
             $ref: "#/components/schemas/RestrictionType"
-        raw:
-          type: string
       required:
         - name
         - attributes
         - content
-        - restrictions
 
     MetaAttribute:
       required:
@@ -1979,6 +1995,8 @@ components:
     MetaContent:
       type: object
       properties:
+        fileName:
+          type: string
         url:
           type: string
         representation:
