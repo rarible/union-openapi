@@ -1625,6 +1625,12 @@ paths:
           description: "Sorting by data base update time"
           schema:
             "$ref": "#/components/schemas/SyncSort"
+        - name: "type"
+          in: query
+          required: false
+          description: "Filtering by activity type"
+          schema:
+            "$ref": "#/components/schemas/SyncType"
       responses:
         "200":
           description: "OK"
@@ -3011,6 +3017,13 @@ components:
       enum:
         - DB_UPDATE_ASC
         - DB_UPDATE_DESC
+
+    SyncType:
+      type: string
+      enum:
+        - ORDER
+        - NFT
+        - AUCTION
 
     ActivityType:
       type: string
