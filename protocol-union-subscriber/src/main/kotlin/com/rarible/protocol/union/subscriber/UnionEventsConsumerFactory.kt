@@ -68,7 +68,11 @@ class UnionEventsConsumerFactory(
             valueClass = ActivityDto::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = UnionEventTopicProvider.getActivityTopic(environment),
-            bootstrapServers = brokerReplicaSet
+            bootstrapServers = brokerReplicaSet,
+            properties = mapOf(
+                "session.timeout.ms" to "30000",
+                "heartbeat.interval.ms" to "10000"
+            )
         )
     }
 
