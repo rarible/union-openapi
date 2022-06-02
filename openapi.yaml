@@ -1550,7 +1550,9 @@ paths:
           required: true
           description: "Address of the collection"
           schema:
-            $ref: "#/components/schemas/ContractAddress"
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ContractAddress"
         - name: "continuation"
           in: query
           required: false
