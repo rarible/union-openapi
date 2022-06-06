@@ -1447,6 +1447,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+        - name: "newSearchEngine"
+          in: query
+          required: false
+          description: "Enforce new search engine usage"
+          deprecated: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "OK"
@@ -1504,6 +1511,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+        - name: "newSearchEngine"
+          in: query
+          required: false
+          description: "Enforce new search engine usage"
+          deprecated: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "OK"
@@ -1536,7 +1550,9 @@ paths:
           required: true
           description: "Address of the collection"
           schema:
-            $ref: "#/components/schemas/ContractAddress"
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ContractAddress"
         - name: "continuation"
           in: query
           required: false
@@ -1561,6 +1577,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+        - name: "newSearchEngine"
+          in: query
+          required: false
+          description: "Enforce new search engine usage"
+          deprecated: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "OK"
@@ -1604,6 +1627,12 @@ paths:
           description: "Sorting by data base update time"
           schema:
             "$ref": "#/components/schemas/SyncSort"
+        - name: "type"
+          in: query
+          required: false
+          description: "Filtering by activity type"
+          schema:
+            "$ref": "#/components/schemas/SyncType"
       responses:
         "200":
           description: "OK"
@@ -1664,6 +1693,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+        - name: "newSearchEngine"
+          in: query
+          required: false
+          description: "Enforce new search engine usage"
+          deprecated: true
+          schema:
+            type: boolean
       responses:
         "200":
           description: "OK"
@@ -1942,6 +1978,25 @@ components:
         description:
           type: string
           description: "Description of the NFT item"
+        createdAt:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+        genres:
+          type: array
+          items:
+            type: string
+        language:
+          type: string
+        rights:
+          type: string
+        rightsUri:
+          type: string
+        externalUri:
+          type: string
         attributes:
           type: array
           description: "Attributes of the NFT item"
@@ -1957,13 +2012,10 @@ components:
           description: "Restrictions types set for this item"
           items:
             $ref: "#/components/schemas/RestrictionType"
-        raw:
-          type: string
       required:
         - name
         - attributes
         - content
-        - restrictions
 
     MetaAttribute:
       required:
@@ -1982,6 +2034,8 @@ components:
     MetaContent:
       type: object
       properties:
+        fileName:
+          type: string
         url:
           type: string
         representation:
@@ -3009,6 +3063,13 @@ components:
       enum:
         - DB_UPDATE_ASC
         - DB_UPDATE_DESC
+
+    SyncType:
+      type: string
+      enum:
+        - ORDER
+        - NFT
+        - AUCTION
 
     ActivityType:
       type: string
