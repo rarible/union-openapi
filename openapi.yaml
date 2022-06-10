@@ -1987,12 +1987,17 @@ components:
           items:
             type: string
         language:
+          description: "Language in RFC 1176 format"
           type: string
         rights:
           type: string
         rightsUri:
           type: string
         externalUri:
+          description: "URI to external page related to the Item"
+          type: string
+        originalMetaUri:
+          description: "URI to the original meta JSON"
           type: string
         attributes:
           type: array
@@ -3690,6 +3695,30 @@ components:
         description:
           type: string
           description: "Description of the collection"
+        createdAt:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+        genres:
+          type: array
+          items:
+            type: string
+        language:
+          description: "Language in RFC 1176 format"
+          type: string
+        rights:
+          type: string
+        rightsUri:
+          type: string
+        externalUri:
+          description: "URI to external page related to the collection"
+          type: string
+        originalMetaUri:
+          description: "URI to the original meta JSON"
+          type: string
         content:
           default: [ ]
           type: array
