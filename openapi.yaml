@@ -3077,6 +3077,8 @@ components:
         lastUpdatedAt:
           type: string
           format: "date-time"
+        cursor:
+          type: string
         reverted:
           type: boolean
       oneOf:
