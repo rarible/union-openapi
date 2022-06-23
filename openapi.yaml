@@ -2736,6 +2736,7 @@ components:
         - "$ref": "#/components/schemas/EthOrderDataLegacy"
         - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/EthOrderOpenSeaV1DataV1"
+        - "$ref": "#/components/schemas/EthOrderSeaportDataV1"
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
@@ -3945,6 +3946,113 @@ components:
         stub:
           type: string
           default: "STUB"
+      required:
+        - "@type"
+
+    EthSeaportOrderType:
+      type: string
+      enum:
+        - FULL_OPEN
+        - PARTIAL_OPEN
+        - FULL_RESTRICTED
+        - PARTIAL_RESTRICTED
+
+    EthSeaportItemType:
+      type: string
+      enum:
+        - NATIVE
+        - ERC20
+        - ERC721
+        - ERC1155
+        - ERC721_WITH_CRITERIA
+        - ERC1155_WITH_CRITERIA
+
+    EthSeaportOffer:
+      type: object
+      properties:
+        itemType:
+          $ref: "#/components/schemas/EthSeaportItemType"
+        token:
+          $ref: "#/components/schemas/UnionAddress"
+        identifierOrCriteria:
+          $ref: "#/components/schemas/BigInteger"
+        startAmount:
+          $ref: "#/components/schemas/BigInteger"
+        endAmount:
+          $ref: "#/components/schemas/BigInteger"
+      required:
+        - itemType
+        - token
+        - identifierOrCriteria
+        - startAmount
+        - endAmount
+
+    EthSeaportConsideration:
+      type: object
+      properties:
+        itemType:
+          $ref: "#/components/schemas/EthSeaportItemType"
+        token:
+          $ref: "#/components/schemas/UnionAddress"
+        identifierOrCriteria:
+          $ref: "#/components/schemas/BigInteger"
+        startAmount:
+          $ref: "#/components/schemas/BigInteger"
+        endAmount:
+          $ref: "#/components/schemas/BigInteger"
+        recipient:
+          $ref: "#/components/schemas/UnionAddress"
+      required:
+        - itemType
+        - token
+        - identifierOrCriteria
+        - startAmount
+        - endAmount
+        - recipient
+
+    EthOrderSeaportDataV1:
+      type: object
+      properties:
+        protocol:
+          $ref: "#/components/schemas/UnionAddress"
+        orderType:
+          $ref: "#/components/schemas/EthSeaportOrderType"
+        offer:
+          type: array
+          items:
+            $ref: "#/components/schemas/EthSeaportOffer"
+        consideration:
+          type: array
+          items:
+            $ref: "#/components/schemas/EthSeaportConsideration"
+        zone:
+          $ref: "#/components/schemas/UnionAddress"
+        zoneHash:
+          type: string
+        conduitKey:
+          type: string
+        counter:
+          type: integer
+          format: int64
+      required:
+        - protocol
+        - orderType
+        - offer
+        - consideration
+        - zone
+        - zoneHash
+        - conduitKey
+        - counter
+      oneOf:
+        - "$ref": "#/components/schemas/EthOrderBasicSeaportDataV1"
+
+    EthOrderBasicSeaportDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_BASIC_SEAPORT_DATA_V1
       required:
         - "@type"
 
