@@ -2739,6 +2739,7 @@ components:
         - "$ref": "#/components/schemas/EthOrderSeaportDataV1"
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
+        - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV2"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
         - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
@@ -3827,6 +3828,32 @@ components:
           type: string
           enum:
             - TEZOS_RARIBLE_V2
+        payouts:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        originFees:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        makerEdpk:
+          type: string
+        takerEdpk:
+          type: string
+      required:
+        - "@type"
+        - payouts
+        - originFees
+
+    TezosOrderDataRaribleV2DataV2:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_RARIBLE_V3
         payouts:
           type: array
           default: [ ]
