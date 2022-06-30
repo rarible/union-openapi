@@ -512,6 +512,30 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/ownerships/byIds:
+    post:
+      tags:
+        - ownership-controller
+      description: "Returns Ownerships by Ids"
+      operationId: getOwnershipsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OwnershipIds"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ownerships"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/ownerships/byItem:
     get:
       tags:
@@ -2394,6 +2418,17 @@ components:
     OwnershipId:
       type: string
       example: "${ownershipId}"
+
+    OwnershipIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          description: "List of the Ownerhips ids"
+          items:
+            $ref: "#/components/schemas/OwnershipId"
 
     Ownership:
       type: object
