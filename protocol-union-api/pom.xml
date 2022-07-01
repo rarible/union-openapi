@@ -23,6 +23,10 @@
             <groupId>com.rarible.protocol.union</groupId>
             <artifactId>protocol-union-model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.rarible.protocol.union</groupId>
+            <artifactId>protocol-union-statistics-openapi</artifactId>
+        </dependency>
 
         <!-- =============== Rarible-core ================ -->
         <dependency>
@@ -49,6 +53,10 @@
                     <dependencies>
                         <dependency>
                             <name>protocol-union-model</name>
+                            <packageName>${codegen.package}</packageName>
+                        </dependency>
+                        <dependency>
+                            <name>protocol-union-statistics-openapi</name>
                             <packageName>${codegen.package}</packageName>
                         </dependency>
                     </dependencies>
