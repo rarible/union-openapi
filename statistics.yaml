@@ -1,0 +1,860 @@
+openapi: 3.0.1
+
+info:
+  title: Rarible OLAP API
+  description: Spring API to access NFT transactions' data for charts and statistics
+    on the Rarible web-site.
+  version: 0.1.0
+
+paths:
+  "/v0.1/data/trending/collections":
+    get:
+      tags:
+        - statistics-controller
+      description: Get trending collections
+      operationId: getTrendingCollection
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/Blockchain"
+        - name: period
+          in: query
+          description: Time period of trending statistics
+          required: false
+          schema:
+            type: string
+            default: "WEEK"
+        - name: filters
+          in: query
+          description: Filter of trending statistics
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Limit of records in trending statistics
+          required: false
+          schema:
+            type: string
+            default: '10'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/TrendingCollectionEntry"
+              example:
+                - id: ETHEREUM:0xd8a5d498ab43ed060cb6629b97a19e3e4276dd9f
+                  numberOfSales:
+                    value: 4847
+                    changePercent: 1785.9922178988327
+                  volumeUsd:
+                    currency: USD
+                    value: 6353514.679736262
+                    changePercent: 2415.324967987071
+                  volumeNative:
+                    currency: ETH
+                    value: 3095.884291383326
+                  floorPrice:
+                    currency: ETH
+                    value: 0.5749
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/v0.1/data/leaderboards/{entity}":
+    get:
+      tags:
+        - statistics-controller
+      description: Get leaderboard of users
+      operationId: getUserLeaderboard
+      parameters:
+        - name: entity
+          in: path
+          description: Type of users in leaderboard
+          required: true
+          schema:
+            "$ref": "#/components/schemas/UserType"
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/Blockchain"
+        - name: source
+          in: query
+          description: Source
+          required: false
+          schema:
+            "$ref": "#/components/schemas/PlatformSource"
+        - name: period
+          in: query
+          description: Time period of leaderboard
+          required: false
+          schema:
+            type: string
+            default: WEEK
+        - name: filters
+          in: query
+          description: Filter of leaderboard
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: string
+            default: '10'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/UserLeaderboardEntry"
+              example:
+                - id: ETHEREUM:0xf1fa9ceb517f67646c9063f315f8b70cf26aa4e8
+                  volumeUsd:
+                    currency: USD
+                    value: 18172788.19333184
+                  volumeNative:
+                    currency: MATIC
+                    value: 27343817.491841666
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/v0.1/data/leaderboards/collections":
+    get:
+      tags:
+        - statistics-controller
+      description: Get leaderboard of collections
+      operationId: getCollectionLeaderboard
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/Blockchain"
+        - name: period
+          in: query
+          description: Time period of leaderboard
+          required: false
+          schema:
+            type: string
+            default: WEEK
+        - name: filters
+          in: query
+          description: Filter of leaderboard
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: string
+            default: '10'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/CollectionLeaderboardEntry"
+              example:
+                - id: ETHEREUM:0x160c404b2b49cbc3240055ceaee026df1e8497a0
+                  volumeUsd:
+                    currency: USD
+                    value: 1607998.304789745
+                    changePercent: 69.12237444684479
+                  volumeNative:
+                    currency: ETH
+                    value: 782.5400412839579
+                  floorPrice:
+                    currency: ETH
+                    value: 1.55
+                  totalItemSupply: 10
+                  ownersCount: 10
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+
+  "/v0.1/data/collections/{collection}/transactions":
+    get:
+      tags:
+        - statistics-controller
+      description: Get historical statistics about collection transactions
+      operationId: getTransactions
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 3602
+                  - 2566
+                  - 285
+                currentValue: 260
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/v0.1/data/collections/{collection}/stats":
+    get:
+      tags:
+        - statistics-controller
+      description: Get general statistics about collection
+      operationId: getCollectionStats
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            type: string
+            default: USD
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GeneralStatsResponse"
+              example:
+                highestSale: 43.71
+                floorPrice: 1.45
+                marketCap: 14529
+                items: 10020
+                owners: 6472
+                volume: 41913.50477591493
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+
+  "/v0.1/data/collections/{collection}/sellers":
+    get:
+      tags:
+        - statistics-controller
+      description: Get historical statistics about collection sellers
+      operationId: getSellers
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 2744
+                  - 5487
+                  - 895
+                currentValue: 1767
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+
+  "/v0.1/data/collections/{collection}/prices":
+    get:
+      tags:
+        - statistics-controller
+      description: Get historical statistics about collection items prices
+      operationId: getPrices
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            type: string
+            default: USD
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PricesResponse"
+              example:
+                dates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                avgPrices:
+                  - 3.0356821472801507
+                  - 3.0695980858360876
+                  - 4.084722218806717
+                medianPrices:
+                  - 2.999
+                  - 3.1
+                  - 4.12
+                minPrices:
+                  - 0.45
+                  - 0.25
+                  - 2.26
+                sumPrices:
+                  - 10934.527094503102
+                  - 7876.5886882554005
+                  - 1164.1458323599143
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/v0.1/data/collections/{collection}/owners":
+    get:
+      tags:
+        - statistics-controller
+      description: Get historical statistics about collection owners
+      operationId: getOwners
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 2215
+                  - 6381
+                  - 6363
+                currentValue: 6476
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/v0.1/data/collections/{collection}/marketcap":
+    get:
+      tags:
+        - statistics-controller
+      description: Get historical statistics about collection market cap
+      operationId: getMarketcap
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            type: string
+            default: USD
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 6800
+                  - 16683.68
+                  - 19038
+                currentValue: 14529
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/v0.1/data/collections/{collection}/gmv":
+    get:
+      tags:
+        - statistics-controller
+      description: Get historical statistics about collection gross merchandise value
+      operationId: getGmv
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            type: string
+            default: USD
+        - name: period
+          in: query
+          description: Time period of statistics
+          required: false
+          schema:
+            type: string
+            default: DAY
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 10934.527094503102
+                  - 7876.5886882554005
+                  - 1164.1458323599143
+                currentValue: 498.19370351666873
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/v0.1/data/collections/{collection}/floorPrice":
+    get:
+      tags:
+        - statistics-controller
+      description: Get historical statistics about collection item floor price
+      operationId: getFloorPrice
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            type: string
+            default: USD
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 1.7
+                  - 1.69
+                  - 1.9
+                currentValue: 1.45
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/v0.1/data/collections/{collection}/buyers":
+    get:
+      tags:
+        - statistics-controller
+      description: Get historical statistics about collection buyers
+      operationId: getBuyers
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CollectionPattern"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-08'
+                  - '2022-05-09'
+                  - '2022-05-10'
+                historicalValues:
+                  - 524
+                  - 791
+                  - 1619
+                currentValue: 1767
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                type: string
+components:
+  schemas:
+
+    CollectionPattern:
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|SOLANA):.*$"
+      type: string
+
+    CurrencyType:
+      type: string
+      description: Currency
+      enum:
+        - USD
+        - ETH
+        - XTZ
+        - FLOW
+        - MATIC
+        - SOL
+    CurrencyAmount:
+      required:
+        - currency
+        - value
+      type: object
+      properties:
+        currency:
+          "$ref": "#/components/schemas/CurrencyType"
+        value:
+          type: number
+          description: Amount of currency
+          format: float
+
+    CurrencyAmountWithChange:
+      required:
+        - currency
+        - value
+      type: object
+      properties:
+        currency:
+          "$ref": "#/components/schemas/CurrencyType"
+        value:
+          type: number
+          description: Amount of currency
+          format: float
+        changePercent:
+          type: number
+          description: Percentage of change
+          format: float
+
+    IntegerNumberWithChange:
+      required:
+        - value
+      type: object
+      properties:
+        value:
+          type: integer
+          description: Value of integer number
+          format: int64
+        changePercent:
+          type: number
+          description: Percentage of change
+          format: float
+
+    TrendingCollectionEntry:
+      required:
+        - id
+        - numberOfSales
+        - volumeNative
+        - volumeUsd
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of collection
+        numberOfSales:
+          "$ref": "#/components/schemas/IntegerNumberWithChange"
+        volumeUsd:
+          "$ref": "#/components/schemas/CurrencyAmountWithChange"
+        volumeNative:
+          "$ref": "#/components/schemas/CurrencyAmount"
+        floorPrice:
+          "$ref": "#/components/schemas/CurrencyAmount"
+
+    UserLeaderboardEntry:
+      required:
+        - id
+        - volumeNative
+        - volumeUsd
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of user
+        volumeUsd:
+          "$ref": "#/components/schemas/CurrencyAmount"
+        volumeNative:
+          "$ref": "#/components/schemas/CurrencyAmount"
+
+    UserType:
+      type: string
+      enum:
+        - sellers
+        - buyers
+
+    PlatformSource:
+      type: string
+      enum:
+        - RARIBLE
+        - OPEN_SEA
+
+    CollectionLeaderboardEntry:
+      required:
+        - id
+        - ownersCount
+        - totalItemSupply
+        - volumeNative
+        - volumeUsd
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of collection
+        volumeUsd:
+          "$ref": "#/components/schemas/CurrencyAmountWithChange"
+        volumeNative:
+          "$ref": "#/components/schemas/CurrencyAmount"
+        floorPrice:
+          "$ref": "#/components/schemas/CurrencyAmount"
+        totalItemSupply:
+          type: integer
+          format: int32
+        ownersCount:
+          type: integer
+          format: int32
+
+    StatsGraphResponse:
+      required:
+        - historicalDates
+        - historicalValues
+      type: object
+      properties:
+        historicalDates:
+          type: array
+          description: Dates of historical statistics
+          items:
+            type: string
+            description: Dates of historical statistics
+        historicalValues:
+          type: array
+          description: Values of historical statistics
+          items:
+            type: number
+            description: Values of historical statistics
+            format: float
+        currentValue:
+          type: number
+          description: Current value
+          format: float
+
+    GeneralStatsResponse:
+      required:
+        - highestSale
+        - items
+        - owners
+        - volume
+      type: object
+      properties:
+        highestSale:
+          type: number
+          description: Price of the highest sale of collection item
+          format: float
+        floorPrice:
+          type: number
+          description: Floor price of collection item
+          format: float
+        marketCap:
+          type: number
+          description: Market cap of collection
+          format: float
+        items:
+          type: integer
+          description: Count of collection items
+          format: int32
+        owners:
+          type: integer
+          description: Count of collection items owners
+          format: int32
+        volume:
+          type: number
+          description: Volume of collection sales
+          format: float
+
+    PricesResponse:
+      required:
+        - avgPrices
+        - dates
+        - medianPrices
+        - minPrices
+        - sumPrices
+      type: object
+      properties:
+        dates:
+          type: array
+          description: Dates of historical statistics
+          items:
+            type: string
+            description: Dates of historical statistics
+        avgPrices:
+          type: array
+          description: Collection items average prices of historical statistics
+          items:
+            type: number
+            description: Collection items average prices of historical statistics
+            format: float
+        medianPrices:
+          type: array
+          description: Collection items median prices of historical statistics
+          items:
+            type: number
+            description: Collection items median prices of historical statistics
+            format: float
+        minPrices:
+          type: array
+          description: Collection items min prices of historical statistics
+          items:
+            type: number
+            description: Collection items min prices of historical statistics
+            format: float
+        sumPrices:
+          type: array
+          description: Collection items sum prices of historical statistics
+          items:
+            type: number
+            description: Collection items sum prices of historical statistics
+            format: float
