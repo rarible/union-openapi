@@ -535,9 +535,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ExtendedTraitProperty'
+                $ref: '#/components/schemas/ExtendedTraitProperties'
 
   ####################### Ownership API #######################
 
@@ -2559,6 +2557,21 @@ components:
           type: number
           format: bigdecimal
           description: Rarity percent
+
+    ExtendedTraitProperties:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate result"
+        traits:
+          type: array
+          description: "List of ExtendedTraitProperty"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/ExtendedTraitProperty"
+      required:
+        - traits
 
 
     #################### Ownership - Union ####################
