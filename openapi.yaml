@@ -483,6 +483,41 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/traits/search:
+    get:
+      tags:
+        - item-controller
+      description: "Returns combination of Item attribute key with list of values"
+      operationId: searchItemTraits
+      parameters:
+        - name: filter
+          description: filter
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: collectionIds
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          description: Collections identifiers to which traits belong
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ####################### Ownership API #######################
 
   /v0.1/ownerships/{ownershipId}:
@@ -2412,6 +2447,38 @@ components:
       required:
         - "@type"
         - itemId
+
+    #################### Trait - Union ####################
+
+    Trait:
+      title: Trait
+      type: object
+      description: Combination of Item attribute key with list of values
+      required:
+        - key
+        - values
+      properties:
+        key:
+          $ref: '#/components/schemas/TraitEntry'
+        values:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/TraitEntry'
+
+    TraitEntry:
+      title: TraitEntry
+      type: object
+      description: Combination of Item attribute key/value with it's count
+      required:
+        - value
+        - count
+      properties:
+        value:
+          type: string
+        count:
+          type: integer
+          format: int64
 
     #################### Ownership - Union ####################
 
