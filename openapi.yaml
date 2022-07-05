@@ -483,12 +483,12 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/traits/search:
+  /v0.1/items/traits/search:
     get:
       tags:
         - item-controller
       description: "Returns combination of Item attribute key with list of values"
-      operationId: searchItemTraits
+      operationId:  getItemTraits
       parameters:
         - name: filter
           description: filter
@@ -510,9 +510,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Trait'
+                $ref: '#/components/schemas/Traits'
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
@@ -2449,7 +2447,25 @@ components:
         - itemId
 
     #################### Trait - Union ####################
-
+    Traits:
+      type: object
+      properties:
+        total:
+          deprecated: true
+          type: integer
+          format: int64
+          description: "Number of traits were found by request"
+        continuation:
+          type: string
+          description: "Continuation token to paginate traits search result"
+        traits:
+          type: array
+          description: "List of found traits"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Trait"
+      required:
+        - traits
     Trait:
       title: Trait
       type: object
