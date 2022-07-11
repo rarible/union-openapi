@@ -483,12 +483,47 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/items/traits:
+    get:
+      tags:
+        - item-controller
+      operationId: queryTraits
+      deprecated: true
+      parameters:
+        - name: keys
+          description: Trait keys
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: collectionIds
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          description: Collections identifiers to which traits belong
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Traits'
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/items/traits/search:
     get:
       tags:
         - item-controller
       description: "Returns combination of Item attribute key with list of values"
-      operationId:  getItemTraits
+      operationId:  searchTraits
       deprecated: true
       parameters:
         - name: filter
@@ -3011,6 +3046,8 @@ components:
       oneOf:
         - "$ref": "#/components/schemas/EthOrderDataLegacy"
         - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV1"
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Sell"
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Buy"
         - "$ref": "#/components/schemas/EthOrderOpenSeaV1DataV1"
         - "$ref": "#/components/schemas/EthOrderSeaportDataV1"
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
@@ -4170,6 +4207,45 @@ components:
         - "@type"
         - payouts
         - originFees
+
+    EthOrderDataRaribleV2DataV3Sell:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_RARIBLE_V2_DATA_V3_SELL
+        payout:
+          $ref: "#/components/schemas/Payout"
+        originFeeFirst:
+          $ref: "#/components/schemas/Payout"
+        originFeeSecond:
+          $ref: "#/components/schemas/Payout"
+        maxFeesBasePoint:
+          type: integer
+        marketplaceMarker:
+          type: string
+      required:
+        - "@type"
+        - maxFeesBasePoint
+
+    EthOrderDataRaribleV2DataV3Buy:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_RARIBLE_V2_DATA_V3_BUY
+        payout:
+          $ref: "#/components/schemas/Payout"
+        originFeeFirst:
+          $ref: "#/components/schemas/Payout"
+        originFeeSecond:
+          $ref: "#/components/schemas/Payout"
+        marketplaceMarker:
+          type: string
+      required:
+        - "@type"
 
     EthOrderOpenSeaV1DataV1:
       type: object
