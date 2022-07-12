@@ -2388,7 +2388,6 @@ components:
         - deleted
         - sellers
         - auctions
-        - self
 
     ItemLastSale:
       type: object
@@ -3985,7 +3984,6 @@ components:
         - name
         - type
         - features
-        - self
 
     Collections:
       type: object
