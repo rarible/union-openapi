@@ -662,6 +662,30 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/ownerships/search:
+    post:
+      tags:
+        - ownership-controller
+      description: "Complex ownerships search"
+      operationId: search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OwnershipSearchRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ownerships"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################## Order API ########################
 
   /v0.1/orders/{id}:
@@ -2869,6 +2893,62 @@ components:
             - DELETE
       required:
         - "@type"
+
+    OwnershipSearchRequest:
+      title: "OwnershipSearchQuery"
+      type: object
+      description: "Ownerships complex search query"
+      required:
+        - size
+        - filter
+      properties:
+        size:
+          minimum: 1
+          maximum: 1000
+          default: 50
+          type: integer
+          format: int32
+          description: "Number of entities returned"
+        continuation:
+          type: string
+          description: "Continuation token to paginate ownerships search result"
+        filter:
+          $ref: "#/components/schemas/OwnershipSearchFilter"
+
+    OwnershipSearchFilter:
+      type: object
+      description: "Filter for ownerships search query"
+      properties:
+        blockchains:
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        owners:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnionAddress"
+        collections:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemId"
+        auctions:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuctionId"
+        auctionsOwners:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnionAddress"
+        beforeDate:
+          type: string
+          format: date-time
+        afterDate:
+          type: string
+          format: date-time
 
     #################### Order - Union ####################
 
