@@ -393,21 +393,19 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/items/all:
+  /v0.1/items/sync:
     get:
       tags:
         - item-controller
-      description: "Returns all items"
-      operationId: getAllItems
+      description: "Return all items sorted by database update date"
+      operationId: syncItems
       parameters:
-        - name: "blockchains"
+        - name: "blockchain"
           in: query
-          required: false
-          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
+          required: true
+          description: "Type of the blockchain network"
           schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
+            $ref: "#/components/schemas/Blockchain"
         - name: "continuation"
           in: query
           required: false
@@ -420,26 +418,6 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
-        - name: "showDeleted"
-          in: query
-          required: false
-          description: "Include deleted items"
-          schema:
-            type: boolean
-        - name: "lastUpdatedFrom"
-          in: query
-          required: false
-          description: "Filter condition to return only items that have been updated after this date (timestamp)"
-          schema:
-            type: integer
-            format: int64
-        - name: "lastUpdatedTo"
-          in: query
-          required: false
-          description: "Filter condition to return only items that have been updated before this date (timestamp)"
-          schema:
-            type: integer
-            format: "int64"
       responses:
         "200":
           description: "OK"
@@ -708,65 +686,12 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/orders/all:
-    get:
-      tags:
-        - order-controller
-      description: "Returns all orders"
-      operationId: getOrdersAll
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          description: "Type of the blockchain network"
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-        - name: "sort"
-          in: query
-          required: false
-          description: "Order sort"
-          schema:
-            $ref: "#/components/schemas/OrderSort"
-        - name: "status"
-          in: query
-          required: false
-          description: "Order status"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/OrderStatus"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Orders"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   /v0.1/orders/sync:
     get:
       tags:
         - order-controller
-      description: "Returns all orders sorting by data base update"
-      operationId: getAllSync
+      description: "Returns all orders sorted by database update date"
+      operationId: syncOrders
       parameters:
         - name: "blockchain"
           in: query
@@ -786,12 +711,6 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
-        - name: "sort"
-          in: query
-          required: false
-          description: "Order sort"
-          schema:
-            $ref: "#/components/schemas/SyncSort"
       responses:
         "200":
           description: "OK"
@@ -1175,47 +1094,19 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/auctions/all":
+  "/v0.1/auctions/sync":
     get:
       tags:
         - auction-controller
-      description: Returns all auctions by specified parameters
-      operationId: getAuctionsAll
+      description: Returns all auctions sorder by database update date
+      operationId: syncAuctions
       parameters:
-        - name: "blockchains"
+        - name: "blockchain"
           in: query
-          required: false
-          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
+          required: true
+          description: "Type of the blockchain network"
           schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: sort
-          description: "Sorting by target criteria"
-          in: query
-          required: false
-          schema:
-            "$ref": "#/components/schemas/AuctionSort"
-        - name: status
-          description: "The auction statuses"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/AuctionStatus"
-        - name: origin
-          description: "Address of the consumer to receive the commission for auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: platform
-          description: "The platform where the auction was created"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/Platform"
+            $ref: "#/components/schemas/Blockchain"
         - name: continuation
           description: "Continuation token from the previous response"
           in: query
@@ -1706,8 +1597,8 @@ paths:
     get:
       tags:
         - activity-controller
-      description: "Returns all activities sorting by data base update"
-      operationId: getAllActivitiesSync
+      description: "Returns all activities sorted by database update date"
+      operationId: syncActivities
       parameters:
         - name: "blockchain"
           in: query
@@ -1727,12 +1618,6 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
-        - name: "sort"
-          in: query
-          required: false
-          description: "Sorting by data base update time"
-          schema:
-            "$ref": "#/components/schemas/SyncSort"
         - name: "type"
           in: query
           required: false
@@ -1912,21 +1797,19 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/collections/all:
+  /v0.1/collections/sync:
     get:
       tags:
         - collection-controller
-      description: "Returns all collections"
-      operationId: getAllCollections
+      description: "Returns all collections sorted by database update date"
+      operationId: syncCollections
       parameters:
-        - name: "blockchains"
+        - name: "blockchain"
           in: query
-          required: false
-          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
+          required: true
+          description: "Type of the blockchain network"
           schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
+            $ref: "#/components/schemas/Blockchain"
         - name: "continuation"
           in: query
           required: false
@@ -3305,12 +3188,6 @@ components:
       enum:
         - LATEST_FIRST
         - EARLIEST_FIRST
-
-    SyncSort:
-      type: string
-      enum:
-        - DB_UPDATE_ASC
-        - DB_UPDATE_DESC
 
     SyncType:
       type: string
