@@ -2402,37 +2402,21 @@ components:
           $ref: "#/components/schemas/CollectionId"
         parent:
           $ref: "#/components/schemas/CollectionId"
-        blockchain:
-          $ref: "#/components/schemas/Blockchain"
+        blockchainType:
+          $ref: "#/components/schemas/BlockchainType"
+        chain:
+          type: string
         type:
           type: string
           enum:
-            - CRYPTO_PUNKS
-            - ERC721
-            - ERC1155
-            - FLOW
-            - TEZOS_NFT
-            - TEZOS_MT
-            - SOLANA
-            - IMMUTABLEX
+            - SINGLE
+            - MULTIPLE
         name:
           type: string
         symbol:
           type: string
         owner:
           $ref: "#/components/schemas/Address"
-        features:
-          type: array
-          default: [ ]
-          items:
-            type: string
-            enum:
-              - APPROVE_FOR_ALL
-              - SET_URI_PREFIX
-              - BURN
-              - MINT_WITH_ADDRESS
-              - SECONDARY_SALE_FEES
-              - MINT_AND_TRANSFER
         minters:
           type: array
           description: "List of addresses that can mint items in this collection"
