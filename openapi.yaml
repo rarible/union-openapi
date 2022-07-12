@@ -760,20 +760,6 @@ components:
           enum:
             - HTML
 
-    ################### Common - Union ###################
-
-    OriginOrders:
-      type: object
-      properties:
-        origin:
-          type: string
-        bestSellOrder:
-          $ref: "#/components/schemas/Order"
-        bestBidOrder:
-          $ref: "#/components/schemas/Order"
-      required:
-        - origin
-
     #################### Item - Union ####################
 
     ItemId:
@@ -838,10 +824,6 @@ components:
           $ref: "#/components/schemas/Order"
         bestBidOrder:
           $ref: "#/components/schemas/Order"
-        originOrders:
-          type: array
-          items:
-            $ref: "#/components/schemas/OriginOrders"
         auctions:
           type: array
           default: [ ]
@@ -1176,10 +1158,6 @@ components:
           $ref: "#/components/schemas/Auction"
         bestSellOrder:
           $ref: "#/components/schemas/Order"
-        originOrders:
-          type: array
-          items:
-            $ref: "#/components/schemas/OriginOrders"
       required:
         - id
         - blockchain
@@ -2428,10 +2406,6 @@ components:
           $ref: "#/components/schemas/Order"
         bestSellOrder:
           $ref: "#/components/schemas/Order"
-        originOrders:
-          type: array
-          items:
-            $ref: "#/components/schemas/OriginOrders"
       required:
         - id
         - blockchain
