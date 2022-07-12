@@ -11,7 +11,7 @@ paths:
     post:
       tags:
         - signature-controller
-      description: "Validation of the order signature"
+      description: "Validate personal message signature. Can be used to validate user actions or sign-in"
       operationId: validate
       requestBody:
         content:
@@ -32,45 +32,6 @@ paths:
           $ref: "#/components/responses/ServerError"
 
   ######################### Currency API #########################
-
-  "/v0.1/currency/rate/usd":
-    get:
-      deprecated: true
-      tags:
-        - currency-controller
-      description: "Get currency USD rate"
-      operationId: getCurrencyUsdRate
-      parameters:
-        - name: blockchain
-          in: query
-          required: true
-          description: "Type of the blockchain network"
-          schema:
-            "$ref": "#/components/schemas/Blockchain"
-        - name: address
-          in: query
-          required: true
-          description: "Address of the currency"
-          schema:
-            type: string
-        - name: at
-          in: query
-          required: true
-          description: "Date and time for getting currency USD rate"
-          schema:
-            type: string
-            format: date-time
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CurrencyUsdRate"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
 
   "/v0.1/currencies/{currencyId}/rates/usd":
     get:
@@ -129,7 +90,7 @@ paths:
     get:
       tags:
         - item-controller
-      description: "Returns Item by Id"
+      description: "Returns Item by id"
       operationId: getItemById
       parameters:
         - name: "itemId"
@@ -156,7 +117,7 @@ paths:
     post:
       tags:
         - item-controller
-      description: "Returns Items by Ids"
+      description: "Returns Items by list of ids"
       operationId: getItemByIds
       requestBody:
         content:
@@ -182,7 +143,7 @@ paths:
     get:
       tags:
         - item-controller
-      description: Returns item royalty by identifier
+      description: Returns item royalties by id
       operationId: getItemRoyaltiesById
       parameters:
         - name: "itemId"
@@ -207,187 +168,25 @@ paths:
     delete:
       tags:
         - item-controller
-      description: "Deletes the NFT item meta by Id"
+      description: "Reset and reload Item metadata cache"
       operationId: resetItemMeta
       parameters:
         - name: "itemId"
           in: path
           required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
+          description: "Item id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
         - name: "sync"
           in: query
           required: false
-          description: "Request meta for Item if true"
+          description: "Do not respond until metadata is refreshed if true"
           schema:
             type: boolean
 
       responses:
         '200':
           description: OK
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/items/byOwner:
-    get:
-      tags:
-        - item-controller
-      description: "Returns Item by owner"
-      operationId: getItemsByOwner
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "owner"
-          in: query
-          required: true
-          description: "Address of the item owner"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Items"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/items/byCreator:
-    get:
-      tags:
-        - item-controller
-      description: "Returns Item by creator"
-      operationId: getItemsByCreator
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "creator"
-          in: query
-          required: true
-          description: "Address of the item creator"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Items"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/items/byCollection:
-    get:
-      tags:
-        - item-controller
-      description: "Returns items by collection"
-      operationId: getItemsByCollection
-      parameters:
-        - name: "collection"
-          in: query
-          required: true
-          description: "Address of the collection"
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Items"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/items/byOwnerWithOwnership:
-    get:
-      tags:
-        - item-controller
-      description: "Returns items by owner with ownership"
-      operationId: getItemsByOwnerWithOwnership
-      parameters:
-        - name: "owner"
-          in: query
-          required: true
-          description: "Address of the owner"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ItemsWithOwnership"
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
@@ -430,102 +229,13 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/items/traits:
-    get:
-      tags:
-        - item-controller
-      operationId: queryTraits
-      deprecated: true
-      parameters:
-        - name: keys
-          description: Trait keys
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: collectionIds
-          in: query
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
-          description: Collections identifiers to which traits belong
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Traits'
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/items/traits/search:
-    get:
-      tags:
-        - item-controller
-      description: "Returns combination of Item attribute key with list of values"
-      operationId:  searchTraits
-      deprecated: true
-      parameters:
-        - name: filter
-          description: filter
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: collectionIds
-          in: query
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
-          description: Collections identifiers to which traits belong
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Traits'
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/items/traits/rarity:
-    post:
-      tags:
-        - item-controller
-      operationId: queryTraitsWithRarity
-      deprecated: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TraitsRarityRequest'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExtendedTraitProperties'
-
   ####################### Ownership API #######################
 
   /v0.1/ownerships/{ownershipId}:
     get:
       tags:
         - ownership-controller
-      description: "Returns ownership by Id"
+      description: "Returns ownership by id"
       operationId: getOwnershipById
       parameters:
         - name: "ownershipId"
@@ -552,74 +262,13 @@ paths:
     post:
       tags:
         - ownership-controller
-      description: "Returns Ownerships by Ids"
+      description: "Returns Ownerships by list of ids"
       operationId: getOwnershipsByIds
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/OwnershipIds"
-        required: true
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Ownerships"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/ownerships/byItem:
-    get:
-      tags:
-        - ownership-controller
-      description: "Returns ownerships by item"
-      operationId: getOwnershipsByItem
-      parameters:
-        - name: "itemId"
-          in: query
-          required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/ItemId"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Ownerships"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/ownerships/search:
-    post:
-      tags:
-        - ownership-controller
-      description: "Complex ownerships search"
-      operationId: search
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OwnershipSearchRequest"
         required: true
       responses:
         "200":
@@ -666,7 +315,7 @@ paths:
     post:
       tags:
         - order-controller
-      description: "Returns the orders that have been put on sale"
+      description: "Returns orders by list of ids"
       operationId: getOrdersByIds
       requestBody:
         content:
@@ -723,875 +372,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/orders/sell/byMaker:
-    get:
-      tags:
-        - order-controller
-      description: "Returns sell orders by maker"
-      operationId: getSellOrdersByMaker
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: platform
-          in: query
-          required: false
-          description: "The platform where the order was created"
-          schema:
-            "$ref": "#/components/schemas/Platform"
-        - name: "maker"
-          in: query
-          required: true
-          description: "The maker of the order"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "origin"
-          in: query
-          required: false
-          description: "Address of the consumer to receive the commission for the order"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            minimum: 1
-            type: integer
-        - name: "status"
-          in: query
-          required: false
-          description: "Order status"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/OrderStatus"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Orders"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/orders/sell/byItem:
-    get:
-      tags:
-        - order-controller
-      description: "Returns sell orders by item"
-      operationId: getSellOrdersByItem
-      parameters:
-        - name: "platform"
-          in: query
-          required: false
-          description: "The platform where the order was created"
-          schema:
-            "$ref": "#/components/schemas/Platform"
-        - name: "itemId"
-          in: query
-          required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/ItemId"
-        - name: "maker"
-          in: query
-          required: false
-          description: "The maker of the bid"
-          schema:
-            "$ref": "#/components/schemas/UnionAddress"
-        - name: "origin"
-          in: query
-          required: false
-          description: "Address of the consumer to receive the commission for the order"
-          schema:
-            "$ref": "#/components/schemas/UnionAddress"
-        - name: "status"
-          in: query
-          required: false
-          description: "Order status"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/OrderStatus"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            minimum: 1
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Orders"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/orders/sell:
-    get:
-      tags:
-        - order-controller
-      description: "Returns all sell orders"
-      operationId: getSellOrders
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "platform"
-          in: query
-          required: false
-          description: "The platform where the order was created"
-          schema:
-            "$ref": "#/components/schemas/Platform"
-        - name: "origin"
-          in: query
-          required: false
-          description: "Address of the consumer to receive the commission for the order"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Orders"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/orders/bids/byMaker:
-    get:
-      tags:
-        - order-controller
-      description: "Returns order bids by maker"
-      operationId: getOrderBidsByMaker
-      parameters:
-        - name: "maker"
-          in: query
-          required: true
-          description: "The maker of the bid"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "blockchains"
-          in: query
-          required: false
-          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: platform
-          in: query
-          required: false
-          description: "The platform where the order was created"
-          schema:
-            "$ref": "#/components/schemas/Platform"
-        - name: "origin"
-          in: query
-          required: false
-          description: "Address of the consumer to receive the commission for the order"
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "status"
-          in: query
-          required: false
-          description: "Order status"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/OrderStatus"
-        - name: "start"
-          in: query
-          required: false
-          description: "Lower time border of data (timestamp)"
-          schema:
-            type: integer
-            format: int64
-        - name: "end"
-          in: query
-          required: false
-          description: "Upper time border of data (timestamp)"
-          schema:
-            type: integer
-            format: int64
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Orders"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/orders/bids/byItem:
-    get:
-      tags:
-        - order-controller
-      description: "Returns order bids by item"
-      operationId: getOrderBidsByItem
-      parameters:
-        - name: platform
-          in: query
-          required: false
-          description: "The platform where the order was created"
-          schema:
-            "$ref": "#/components/schemas/Platform"
-        - name: "itemId"
-          in: query
-          required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/ItemId"
-        - name: "maker"
-          in: query
-          required: false
-          description: "The maker of the bid"
-          schema:
-            type: array
-            items:
-              "$ref": "#/components/schemas/UnionAddress"
-        - name: "origin"
-          in: query
-          required: false
-          description: "Address of the consumer to receive the commission for the order"
-          schema:
-            "$ref": "#/components/schemas/UnionAddress"
-        - name: "status"
-          in: query
-          required: false
-          description: "Order status"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/OrderStatus"
-        - name: "start"
-          in: query
-          required: false
-          description: "Lower time border of data (timestamp)"
-          schema:
-            type: integer
-            format: int64
-        - name: "end"
-          in: query
-          required: false
-          description: "Upper time border of data (timestamp)"
-          schema:
-            type: integer
-            format: int64
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Orders"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  ######################## Auction API ########################
-
-  "/v0.1/auctions/{id}":
-    get:
-      tags:
-        - auction-controller
-      description: Returns the auction by id
-      operationId: getAuctionById
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          description: "Auction Id, has format `${blockchain}:${id}`"
-          schema:
-            $ref: "#/components/schemas/AuctionId"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auction"
-        '404':
-          $ref: "#/components/responses/EntityNotFound"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/sync":
-    get:
-      tags:
-        - auction-controller
-      description: Returns all auctions sorder by database update date
-      operationId: syncAuctions
-      parameters:
-        - name: "blockchain"
-          in: query
-          required: true
-          description: "Type of the blockchain network"
-          schema:
-            $ref: "#/components/schemas/Blockchain"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of auctions to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auctions"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/bySeller":
-    get:
-      tags:
-        - auction-controller
-      operationId: getAuctionsBySeller
-      description: Returns all auctions by seller
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: seller
-          description: "The seller of the auction"
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: status
-          description: "The auction statuses"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/AuctionStatus"
-        - name: origin
-          description: "Address of the consumer to receive the commission for auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: platform
-          description: "The platform where the auction was created"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/Platform"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of items to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auctions"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/byItem":
-    get:
-      tags:
-        - auction-controller
-      operationId: getAuctionsByItem
-      description: Returns all auctions by item
-      parameters:
-        - name: "itemId"
-          in: query
-          required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/ItemId"
-        - name: seller
-          description: "The seller of the auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: sort
-          description: "Sorting by target criteria"
-          in: query
-          required: false
-          schema:
-            "$ref": "#/components/schemas/AuctionSort"
-        - name: origin
-          description: "Address of the consumer to receive the commission for auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: status
-          description: "The auction statuses"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/AuctionStatus"
-        - name: platform
-          description: "The platform where the auction was created"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/Platform"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of items to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auctions"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/byCollection":
-    get:
-      tags:
-        - auction-controller
-      operationId: getAuctionsByCollection
-      description: Returns all auctions by collection
-      parameters:
-        - name: contract
-          description: "Address of the NFT collection"
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: seller
-          description: "The seller of the auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: origin
-          description: "Address of the consumer to receive the commission for auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: status
-          description: "The auctions statuses"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/AuctionStatus"
-        - name: platform
-          description: "The platform where the auction was created"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/Platform"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of items to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auctions"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/{id}/bids":
-    get:
-      tags:
-        - auction-controller
-      operationId: getAuctionBidsById
-      description: Returns all auction bids by auction id
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          description: "Auction Id, has format `${blockchain}:${id}`"
-          schema:
-            $ref: "#/components/schemas/AuctionId"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of bids to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AuctionBids"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   ######################## Activity API ########################
-
-  /v0.1/activities/byUser:
-    get:
-      tags:
-        - activity-controller
-      description: "Returns activities by user"
-      operationId: getActivitiesByUser
-      parameters:
-        - name: "type"
-          in: query
-          required: true
-          description: "Activity type"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/UserActivityType"
-        - name: "blockchains"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "user"
-          in: query
-          required: true
-          description: "Addresses of the users"
-          schema:
-            type: array
-            items:
-              "$ref": "#/components/schemas/UnionAddress"
-        - name: "from"
-          in: query
-          required: false
-          description: "Lower time border of data"
-          schema:
-            type: string
-            format: "date-time"
-        - name: "to"
-          in: query
-          required: false
-          description: "Upper time border of data"
-          schema:
-            type: string
-            format: "date-time"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "cursor"
-          in: query
-          required: false
-          description: "Combined continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-        - name: "sort"
-          in: query
-          required: false
-          description: "Sorting by data update time"
-          schema:
-            "$ref": "#/components/schemas/ActivitySort"
-        - name: "newSearchEngine"
-          in: query
-          required: false
-          description: "Enforce new search engine usage"
-          deprecated: true
-          schema:
-            type: boolean
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Activities"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/activities/byItem:
-    get:
-      tags:
-        - activity-controller
-      description: "Returns activities by item"
-      operationId: getActivitiesByItem
-      parameters:
-        - name: "type"
-          in: query
-          required: true
-          description: "Activity type"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/ActivityType"
-        - name: "itemId"
-          in: query
-          required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/ItemId"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "cursor"
-          in: query
-          required: false
-          description: "Combined continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-        - name: sort
-          in: query
-          required: false
-          description: "Sorting by data update time"
-          schema:
-            "$ref": "#/components/schemas/ActivitySort"
-        - name: "newSearchEngine"
-          in: query
-          required: false
-          description: "Enforce new search engine usage"
-          deprecated: true
-          schema:
-            type: boolean
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Activities"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/activities/byCollection:
-    get:
-      tags:
-        - activity-controller
-      description: "Returns activities by collection"
-      operationId: getActivitiesByCollection
-      parameters:
-        - name: "type"
-          in: query
-          required: true
-          description: "Activity type"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/ActivityType"
-        - name: "collection"
-          in: query
-          required: true
-          description: "Address of the collection"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/ContractAddress"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "cursor"
-          in: query
-          required: false
-          description: "Combined continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-        - name: "sort"
-          in: query
-          required: false
-          description: "Sorting by data update time"
-          schema:
-            "$ref": "#/components/schemas/ActivitySort"
-        - name: "newSearchEngine"
-          in: query
-          required: false
-          description: "Enforce new search engine usage"
-          deprecated: true
-          schema:
-            type: boolean
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Activities"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
 
   /v0.1/activities/sync:
     get:
@@ -1624,73 +405,6 @@ paths:
           description: "Filtering by activity type"
           schema:
             "$ref": "#/components/schemas/SyncType"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Activities"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/activities/all:
-    get:
-      tags:
-        - activity-controller
-      description: "Returns all activities"
-      operationId: getAllActivities
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "type"
-          in: query
-          required: true
-          description: "Activity type"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/ActivityType"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "cursor"
-          in: query
-          required: false
-          description: "Combined continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-            format: int32
-        - name: "sort"
-          in: query
-          required: false
-          description: "Sorting by data update time"
-          schema:
-            "$ref": "#/components/schemas/ActivitySort"
-        - name: "newSearchEngine"
-          in: query
-          required: false
-          description: "Enforce new search engine usage"
-          deprecated: true
-          schema:
-            type: boolean
       responses:
         "200":
           description: "OK"
@@ -1753,50 +467,6 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/collections/byOwner:
-    get:
-      tags:
-        - collection-controller
-      description: "Returns collection by owner"
-      operationId: getCollectionsByOwner
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "owner"
-          in: query
-          description: "Owner of searching collections"
-          required: true
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Collections"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   /v0.1/collections/sync:
     get:
       tags:
@@ -1851,28 +521,23 @@ components:
 
     Blockchain:
       type: string
-      enum:
-        - ETHEREUM
-        - POLYGON
-        - FLOW
-        - TEZOS
-        - SOLANA
-        - IMMUTABLEX
+      description: "Blockchain, has format `${BlockchainType}.${chain}` where chain is chain id or chain name"
+      example: "EVM.1 or SOLANA.DEVNET"
 
-    BlockchainGroup:
+    BlockchainType:
       type: string
       enum:
-        - ETHEREUM
+        - EVM
         - FLOW
         - TEZOS
         - SOLANA
-        - IMMUTABLEX
+        - IMX
 
     Payout:
       type: object
       properties:
         account:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         value:
           type: integer
       required:
@@ -1889,7 +554,7 @@ components:
       type: object
       properties:
         signer:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         publicKey:
           type: string
           description: "The creator's public key"
@@ -2209,9 +874,9 @@ components:
           type: string
           format: date-time
         seller:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         buyer:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         value:
           $ref: "#/components/schemas/BigDecimal"
         currency:
@@ -2481,7 +1146,7 @@ components:
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         owner:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         value:
           $ref: "#/components/schemas/BigInteger"
         source:
@@ -2541,7 +1206,7 @@ components:
         collection:
           $ref: "#/components/schemas/CollectionId"
         owner:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         value:
           $ref: "#/components/schemas/BigInteger"
         createdAt:
@@ -2570,7 +1235,7 @@ components:
       type: object
       properties:
         owner:
-          "$ref": "#/components/schemas/UnionAddress"
+          "$ref": "#/components/schemas/Address"
         contract:
           "$ref": "#/components/schemas/ContractAddress"
         tokenId:
@@ -2613,7 +1278,7 @@ components:
           enum:
             - TRANSFER
         from:
-          "$ref": "#/components/schemas/UnionAddress"
+          "$ref": "#/components/schemas/Address"
       required:
         - "@type"
         - owner
@@ -2624,7 +1289,7 @@ components:
       type: object
       properties:
         account:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         value:
           type: integer
       required:
@@ -2645,7 +1310,7 @@ components:
       type: object
       properties:
         account:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         value:
           type: integer
       required:
@@ -2741,7 +1406,7 @@ components:
         owners:
           type: array
           items:
-            $ref: "#/components/schemas/UnionAddress"
+            $ref: "#/components/schemas/Address"
         collections:
           type: array
           items:
@@ -2757,7 +1422,7 @@ components:
         auctionsOwners:
           type: array
           items:
-            $ref: "#/components/schemas/UnionAddress"
+            $ref: "#/components/schemas/Address"
         beforeDate:
           type: string
           format: date-time
@@ -2821,9 +1486,9 @@ components:
         takePriceUsd:
           $ref: "#/components/schemas/BigDecimal"
         maker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         taker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         make:
           $ref: "#/components/schemas/Asset"
         take:
@@ -2985,7 +1650,7 @@ components:
         - status
       properties:
         buyer:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         amount:
           $ref: "#/components/schemas/BigDecimal"
         date:
@@ -3081,7 +1746,7 @@ components:
           enum:
             - RARIBLE_AUCTION_V1
         seller:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         sell:
           $ref: "#/components/schemas/Asset"
         buy:
@@ -3279,7 +1944,7 @@ components:
           enum:
             - MINT
         owner:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
         tokenId: # Deprecated, replaced by itemId
@@ -3306,7 +1971,7 @@ components:
           enum:
             - BURN
         owner:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
         tokenId: # Deprecated, replaced by itemId
@@ -3333,9 +1998,9 @@ components:
           enum:
             - TRANSFER
         from:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         owner:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         contract: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/ContractAddress"
         tokenId: # Deprecated, replaced by itemId
@@ -3371,7 +2036,7 @@ components:
       type: object
       properties:
         maker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         hash:
           type: string
         asset:
@@ -3425,9 +2090,9 @@ components:
         payment:
           $ref: "#/components/schemas/Asset"
         buyer:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         seller:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         buyerOrderHash:
           type: string
         sellerOrderHash:
@@ -3461,7 +2126,7 @@ components:
         hash:
           type: string
         maker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         make:
           $ref: "#/components/schemas/Asset"
         take:
@@ -3490,7 +2155,7 @@ components:
         hash:
           type: string
         maker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         make:
           $ref: "#/components/schemas/Asset"
         take:
@@ -3519,7 +2184,7 @@ components:
         hash:
           type: string
         maker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         make:
           $ref: "#/components/schemas/AssetType"
         take:
@@ -3548,7 +2213,7 @@ components:
         hash:
           type: string
         maker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         make:
           $ref: "#/components/schemas/AssetType"
         take:
@@ -3678,7 +2343,7 @@ components:
           enum:
             - L2_DEPOSIT
         user:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         status:
           type: string
         itemId:
@@ -3699,7 +2364,7 @@ components:
           enum:
             - L2_WITHDRAWAL
         user:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         status:
           type: string
         itemId:
@@ -3755,7 +2420,7 @@ components:
         symbol:
           type: string
         owner:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         features:
           type: array
           default: [ ]
@@ -3772,7 +2437,7 @@ components:
           type: array
           description: "List of addresses that can mint items in this collection"
           items:
-            "$ref": "#/components/schemas/UnionAddress"
+            "$ref": "#/components/schemas/Address"
         meta:
           "$ref": "#/components/schemas/CollectionMeta"
         bestBidOrder:
@@ -3859,7 +2524,7 @@ components:
           description: "Indicates a 1% seller fee"
         feeRecipient:
           description: "Where seller fees will be paid to"
-          "$ref": "#/components/schemas/UnionAddress"
+          "$ref": "#/components/schemas/Address"
 
     ActivityBlockchainInfo:
       type: object
@@ -4064,7 +2729,7 @@ components:
           enum:
             - ETH_OPEN_SEA_V1
         exchange:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         makerRelayerFee:
           $ref: "#/components/schemas/BigInteger"
         takerRelayerFee:
@@ -4074,7 +2739,7 @@ components:
         takerProtocolFee:
           $ref: "#/components/schemas/BigInteger"
         feeRecipient:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         feeMethod:
           type: string
           enum:
@@ -4100,7 +2765,7 @@ components:
         replacementPattern:
           type: string
         staticTarget:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         staticExtraData:
           type: string
         extra:
@@ -4161,7 +2826,7 @@ components:
         itemType:
           $ref: "#/components/schemas/EthSeaportItemType"
         token:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         identifierOrCriteria:
           $ref: "#/components/schemas/BigInteger"
         startAmount:
@@ -4181,7 +2846,7 @@ components:
         itemType:
           $ref: "#/components/schemas/EthSeaportItemType"
         token:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         identifierOrCriteria:
           $ref: "#/components/schemas/BigInteger"
         startAmount:
@@ -4189,7 +2854,7 @@ components:
         endAmount:
           $ref: "#/components/schemas/BigInteger"
         recipient:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
       required:
         - itemType
         - token
@@ -4202,7 +2867,7 @@ components:
       type: object
       properties:
         protocol:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         orderType:
           $ref: "#/components/schemas/EthSeaportOrderType"
         offer:
@@ -4214,7 +2879,7 @@ components:
           items:
             $ref: "#/components/schemas/EthSeaportConsideration"
         zone:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         zoneHash:
           type: string
         conduitKey:
@@ -4260,7 +2925,7 @@ components:
           type: string
           format: date-time
         maker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
       oneOf:
         - $ref: "#/components/schemas/PendingOrderCancel"
         - $ref: "#/components/schemas/PendingOrderMatch"
@@ -4281,7 +2946,7 @@ components:
         fill:
           $ref: "#/components/schemas/BigDecimal"
         taker:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
         counterHash:
           type: string
         makeUsd:
@@ -4304,7 +2969,7 @@ components:
           enum:
             - CANCEL
         owner:
-          $ref: "#/components/schemas/UnionAddress"
+          $ref: "#/components/schemas/Address"
       required:
         - "@type"
 
@@ -4810,17 +3475,19 @@ components:
     BigInteger:
       type: string
       example: 123456
+
     BigDecimal:
       type: string
       example: 123456.789
 
     ContractAddress:
       type: string
-      description: "Blockchain contract address in Union format `${blockchain}:${token}`"
-      example: "ETHEREUM:0xd07dc4262bcdbf85190c01c996b4c06a461d2430"
-    UnionAddress:
+      description: "Blockchain contract address, format is `${blockchainType}.${chain}:${address}`"
+      example: "EVM.1:0xd07dc4262bcdbf85190c01c996b4c06a461d2430"
+
+    Address:
       type: string
-      description: "Blockchain address in Union format `${blockchainGroup}:${token}`"
+      description: "Blockchain address, format `${blockchainType}:${address}`"
       example: "${userId}"
 
   #======================== Responses ============================#
