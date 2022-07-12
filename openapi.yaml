@@ -2374,6 +2374,8 @@ components:
           description: "Total count of users selling this item ATM"
         lastSale:
           $ref: "#/components/schemas/ItemLastSale"
+        self:
+          type: boolean
       required:
         - id
         - blockchain
@@ -2386,6 +2388,7 @@ components:
         - deleted
         - sellers
         - auctions
+        - self
 
     ItemLastSale:
       type: object
@@ -3974,12 +3977,15 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/OriginOrders"
+        self:
+          type: boolean
       required:
         - id
         - blockchain
         - name
         - type
         - features
+        - self
 
     Collections:
       type: object
