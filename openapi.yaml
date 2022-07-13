@@ -419,7 +419,7 @@ paths:
 
   ####################### Collection API #######################
 
-  /v0.1/collections/{collection}:
+  /v1/collections/{collection}:
     get:
       tags:
         - collection-controller
@@ -446,7 +446,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/collections/{collection}/refreshMeta":
+  "/v1/collections/{collection}/refreshMeta":
     delete:
       tags:
         - collection-controller
@@ -467,7 +467,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/collections/sync:
+  /v1/collections/sync:
     get:
       tags:
         - collection-controller
@@ -480,10 +480,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
+        - name: "cursor"
           in: query
           required: false
-          description: "Continuation token from the previous response"
+          description: "Combined continuation token to paginate activities search result"
           schema:
             type: string
         - name: "size"
@@ -503,6 +503,31 @@ paths:
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v1/collections/search:
+    post:
+      tags:
+        - collection-controller
+      description: "Returns all collections that match the search criteria"
+      operationId: searchCollection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionSearch"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collections"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/EntityNotFound"
+        "500":
           $ref: "#/components/responses/ServerError"
 
 components:
@@ -2385,14 +2410,12 @@ components:
         chain:
           type: string
         type:
-          type: string
-          enum:
-            - SINGLE
-            - MULTIPLE
-        name:
-          type: string
-        symbol:
-          type: string
+          $ref: "#/components/schemas/CollectionType"
+#        Removed because it was discussed to move name and symbol to metaCollection
+#        name:
+#          type: string
+#        symbol:
+#          type: string
         owner:
           $ref: "#/components/schemas/Address"
         minters:
@@ -2413,6 +2436,12 @@ components:
         - type
         - features
 
+    CollectionType:
+      type: string
+      enum:
+        - SINGLE
+        - MULTIPLE
+
     Collections:
       type: object
       properties:
@@ -2421,9 +2450,9 @@ components:
           type: integer
           format: int64
           description: "Number of ownerships were found by request"
-        continuation:
+        cursor:
           type: string
-          description: "Continuation token to paginate collections search result"
+          description: "Combined continuation token to paginate activities search result"
         collections:
           default: [ ]
           type: array
@@ -2441,6 +2470,9 @@ components:
         name:
           type: string
           description: "Name of the collection"
+        symbol:
+          type: string
+          description: "An abbreviated name for NFTs in this collection"
         description:
           type: string
           description: "Description of the collection"
@@ -2483,6 +2515,101 @@ components:
         feeRecipient:
           description: "Where seller fees will be paid to"
           "$ref": "#/components/schemas/Address"
+
+    CollectionSearch:
+      type: object
+      properties:
+        parents:
+          default: []
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        blockchainTypes:
+          default: []
+          type: array
+          items:
+            $ref: "#/components/schemas/BlockchainType"
+        chains:
+          default: []
+          type: array
+          items:
+            type: string
+        types:
+          default: []
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionType"
+        owners:
+          default: []
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        minters:
+          default: []
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        meta:
+          type: object
+          properties:
+            names:
+              default: []
+              type: array
+              items:
+                type: string
+            symbol:
+              default: []
+              type: array
+              items:
+                type: string
+            descriptions:
+              default: []
+              type: array
+              items:
+                type: string
+            createdAt:
+              $ref: "#/components/schemas/SearchDate"
+            tags:
+              default: []
+              type: array
+              items:
+                type: string
+            genres:
+              default: []
+              type: array
+              items:
+                type: string
+        metaContent:
+          type: object
+          properties:
+            contentType:
+              default: []
+              type: array
+              items:
+                type: string
+            contentMimeType:
+              default: []
+              type: array
+              items:
+                type: string
+            contentWidth:
+              $ref: "#/components/schemas/SearchBigInteger"
+            contentHeight:
+              $ref: "#/components/schemas/SearchBigInteger"
+            contentSize:
+              $ref: "#/components/schemas/SearchBigInteger"
+        royalties:
+          type: object
+          properties:
+            sellerFeeBasisPoints:
+              $ref: "#/components/schemas/SearchBigInteger"
+            feeRecipients:
+              default: []
+              type: array
+              items:
+                $ref: "#/components/schemas/Address"
+
+
 
     ActivityBlockchainInfo:
       type: object
@@ -3339,6 +3466,44 @@ components:
           $ref: "#/components/schemas/ContractAddress"
       required:
         - "@type"
+
+    #======================== Other – For Search ============================#
+
+    SearchDate:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        operator:
+          $ref: "#/components/schemas/ComparisonOperator"
+
+    SearchBigDecimal:
+      type: object
+      properties:
+        firstDate:
+          $ref: "#/components/schemas/BigDecimal"
+        operator:
+          $ref: "#/components/schemas/ComparisonOperator"
+
+    SearchBigInteger:
+      type: object
+      properties:
+        firstDate:
+          $ref: "#/components/schemas/BigInteger"
+        operator:
+          $ref: "#/components/schemas/ComparisonOperator"
+
+    ComparisonOperator:
+      default: EQUAL
+      type: string
+      enum:
+        - EQUAL
+        - GREATER
+        - LESS
+        - GREATER_OR_EQUAL
+        - LESS_OR_EQUAL
+        - NOT_EQUAL
 
     #################### Subscription-related ####################
 
