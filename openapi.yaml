@@ -510,12 +510,12 @@ paths:
       tags:
         - collection-controller
       description: "Returns all collections that match the search criteria"
-      operationId: searchCollection
+      operationId: collectionSearch
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CollectionsSearch"
+              $ref: "#/components/schemas/CollectionsSearchForm"
       responses:
         "200":
           description: "OK"
@@ -2449,7 +2449,7 @@ components:
           deprecated: true
           type: integer
           format: int64
-          description: "Number of ownerships were found by request"
+          description: "Number of collections were found by request"
         cursor:
           type: string
           description: "Combined continuation token to paginate activities search result"
@@ -2516,27 +2516,19 @@ components:
           description: "Where seller fees will be paid to"
           "$ref": "#/components/schemas/Address"
 
-    CollectionsSearch:
+    CollectionsSearchForm:
       type: object
       properties:
-        parents:
-          default: []
-          description: "Allows you to search for collections among parent collections"
-          type: array
-          items:
-            $ref: "#/components/schemas/CollectionId"
+        cursor:
+          default: null
+          description: "Combined continuation token to paginate activities search result"
+          type: string
         blockchains:
           default: []
           description: "Allows you to limit the search to selected blockchains"
           type: array
           items:
-            $ref: "#/components/schemas/BlockchainType"
-        chains:
-          default: []
-          description: "Allows you to limit the search to selected chains"
-          type: array
-          items:
-            type: string
+            $ref: "#/components/schemas/Blockchain"
         types:
           default: []
           description: "Allows you to restrict the search to single and multiple collections"
@@ -2576,69 +2568,6 @@ components:
               type: array
               items:
                 type: string
-            createdAt:
-              description: "Allows you to search for collections by creation date, you can search with the condition:
-              greater than, less than, equal to, not equal to, greater than or equal to, less than or equal to"
-              $ref: "#/components/schemas/SearchDate"
-            tags:
-              default: []
-              description: "Allows you to search for collections by tags"
-              type: array
-              items:
-                type: string
-            genres:
-              default: []
-              description: "Allows you to search for collections by tags"
-              type: array
-              items:
-                type: string
-        metaContent:
-          type: object
-          properties:
-            contentType:
-              default: []
-              description: "Allows you to look for a collection with a given type, not to be confused with NFT content"
-              type: array
-              items:
-                type: string
-            contentMimeType:
-              default: []
-              description: "Allows you to look for a collection with the content of a given type MIME, not to be
-              confused with the content of NFT"
-              type: array
-              items:
-                type: string
-            contentWidth:
-              description: "Allows you to look for a collection with the content of a given width, not to be 
-              confused with the content of NFT, you can search with the condition:
-              greater than, less than, equal to, not equal to, greater than or equal to, less than or equal to"
-              $ref: "#/components/schemas/SearchBigInteger"
-            contentHeight:
-              description: "Allows you to look for a collection with the content of a given height, not to be 
-              confused with the content of NFT, you can search with the condition:
-              greater than, less than, equal to, not equal to, greater than or equal to, less than or equal to"
-              $ref: "#/components/schemas/SearchBigInteger"
-            contentSize:
-              description: "Allows you to look for a collection with the content of a given file size, not to be
-              confused with the content of NFT, you can search with the condition:
-              greater than, less than, equal to, not equal to, greater than or equal to, less than or equal to"
-              $ref: "#/components/schemas/SearchBigInteger"
-        royalties:
-          type: object
-          properties:
-            sellerFeeBasisPoints:
-              description: "Allows you to look for a collection with the size of the royalty of a given value, 
-              you can search with the condition: greater than, less than, equal to, not equal to, greater than or 
-              equal to, less than or equal to"
-              $ref: "#/components/schemas/SearchBigInteger"
-            feeRecipients:
-              default: []
-              description: "Allows you to look for collections with specified recipients of the royalties"
-              type: array
-              items:
-                $ref: "#/components/schemas/Address"
-
-
 
     ActivityBlockchainInfo:
       type: object
