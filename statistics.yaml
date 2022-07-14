@@ -16,7 +16,7 @@ paths:
       parameters:
         - name: blockchain
           in: query
-          description: OlapBlockchain
+          description: Blockchain
           required: false
           schema:
             "$ref": "#/components/schemas/OlapBlockchain"
@@ -85,7 +85,7 @@ paths:
             "$ref": "#/components/schemas/OlapUserType"
         - name: blockchain
           in: query
-          description: OlapBlockchain
+          description: Blockchain
           required: false
           schema:
             "$ref": "#/components/schemas/OlapBlockchain"
@@ -147,7 +147,7 @@ paths:
       parameters:
         - name: blockchain
           in: query
-          description: OlapBlockchain
+          description: Blockchain
           required: false
           schema:
             "$ref": "#/components/schemas/OlapBlockchain"
