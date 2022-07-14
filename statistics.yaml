@@ -14,7 +14,7 @@ paths:
       description: Get trending collections
       operationId: getTrendingCollection
       parameters:
-        - name: OlapBlockchain
+        - name: blockchain
           in: query
           description: OlapBlockchain
           required: false
@@ -83,7 +83,7 @@ paths:
           required: true
           schema:
             "$ref": "#/components/schemas/OlapUserType"
-        - name: OlapBlockchain
+        - name: blockchain
           in: query
           description: OlapBlockchain
           required: false
@@ -145,7 +145,7 @@ paths:
       description: Get leaderboard of collections
       operationId: getCollectionLeaderboard
       parameters:
-        - name: OlapBlockchain
+        - name: blockchain
           in: query
           description: OlapBlockchain
           required: false
