@@ -572,6 +572,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExtendedTraitProperties'
 
+  /v0.1/items/search:
+    post:
+      tags:
+        - item-controller
+      description: "Complex search for items"
+      operationId: searchItems
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ItemsSearchRequest"
+        required: true
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Items"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ####################### Ownership API #######################
 
   /v0.1/ownerships/{ownershipId}:
@@ -2648,7 +2672,7 @@ components:
       properties:
         ids:
           type: array
-          description: "List of the Ownerhips ids"
+          description: "List of the Ownerships ids"
           items:
             $ref: "#/components/schemas/OwnershipId"
 
@@ -2949,6 +2973,71 @@ components:
           type: string
           format: date-time
         afterDate:
+          type: string
+          format: date-time
+
+    ItemsSearchRequest:
+      type: object
+      description: "Complex search request for items"
+      required:
+        - size
+        - filter
+      properties:
+        size:
+          minimum: 1
+          maximum: 1000
+          default: 50
+          type: integer
+          format: int32
+          description: "Number of entities returned"
+        continuation:
+          type: string
+          description: "Continuation token to paginate items search result"
+        filter:
+          $ref: "#/components/schemas/ItemsSearchFilter"
+
+
+    ItemsSearchFilter:
+      type: object
+      description: "Filter for items search query"
+      properties:
+        blockchains:
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        collections:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        deleted:
+          type: boolean
+          default: false
+        names:
+          type: array
+          items:
+            type: string
+        descriptions:
+          type: array
+          items:
+            type: string
+        traits:
+          type: array
+          items:
+            $ref: "#/components/schemas/TraitProperty"
+        creators:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnionAddress"
+        mintedAtFrom:
+          type: string
+          format: date-time
+        mintedAtTo:
+          type: string
+          format: date-time
+        lastUpdatedAtFrom:
+          type: string
+          format: date-time
+        lastUpdatedAtTo:
           type: string
           format: date-time
 
