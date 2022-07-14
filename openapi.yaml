@@ -419,7 +419,7 @@ paths:
 
   ####################### Collection API #######################
 
-  /v1/collections/{collection}:
+  /v1/collections/{id}:
     get:
       tags:
         - collection-controller
@@ -446,7 +446,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v1/collections/{collection}/refreshMeta":
+  "/v1/collections/{id}/refreshMeta":
     delete:
       tags:
         - collection-controller
@@ -515,7 +515,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CollectionSearch"
+              $ref: "#/components/schemas/CollectionsSearch"
       responses:
         "200":
           description: "OK"
@@ -2516,36 +2516,42 @@ components:
           description: "Where seller fees will be paid to"
           "$ref": "#/components/schemas/Address"
 
-    CollectionSearch:
+    CollectionsSearch:
       type: object
       properties:
         parents:
           default: []
+          description: "Allows you to search for collections among parent collections"
           type: array
           items:
             $ref: "#/components/schemas/CollectionId"
-        blockchainTypes:
+        blockchains:
           default: []
+          description: "Allows you to limit the search to selected blockchains"
           type: array
           items:
             $ref: "#/components/schemas/BlockchainType"
         chains:
           default: []
+          description: "Allows you to limit the search to selected chains"
           type: array
           items:
             type: string
         types:
           default: []
+          description: "Allows you to restrict the search to single and multiple collections"
           type: array
           items:
             $ref: "#/components/schemas/CollectionType"
         owners:
           default: []
+          description: "Allows you to search for collections owned by specific addresses"
           type: array
           items:
             $ref: "#/components/schemas/Address"
         minters:
           default: []
+          description: "Allows you to search for collections whose creators are specific addresses"
           type: array
           items:
             $ref: "#/components/schemas/Address"
@@ -2554,28 +2560,35 @@ components:
           properties:
             names:
               default: []
+              description: "Allows you to search for collections by name, partial occurrence is possible, case insensitive"
               type: array
               items:
                 type: string
-            symbol:
+            symbols:
               default: []
+              description: "Allows you to search for collections by symbol, partial occurrence is possible, case insensitive"
               type: array
               items:
                 type: string
             descriptions:
               default: []
+              description: "Allows you to search for collections by description, partial occurrence is possible, case insensitive"
               type: array
               items:
                 type: string
             createdAt:
+              description: "Allows you to search for collections by creation date, you can search with the condition:
+              greater than, less than, equal to, not equal to, greater than or equal to, less than or equal to"
               $ref: "#/components/schemas/SearchDate"
             tags:
               default: []
+              description: "Allows you to search for collections by tags"
               type: array
               items:
                 type: string
             genres:
               default: []
+              description: "Allows you to search for collections by tags"
               type: array
               items:
                 type: string
@@ -2584,27 +2597,43 @@ components:
           properties:
             contentType:
               default: []
+              description: "Allows you to look for a collection with a given type, not to be confused with NFT content"
               type: array
               items:
                 type: string
             contentMimeType:
               default: []
+              description: "Allows you to look for a collection with the content of a given type MIME, not to be
+              confused with the content of NFT"
               type: array
               items:
                 type: string
             contentWidth:
+              description: "Allows you to look for a collection with the content of a given width, not to be 
+              confused with the content of NFT, you can search with the condition:
+              greater than, less than, equal to, not equal to, greater than or equal to, less than or equal to"
               $ref: "#/components/schemas/SearchBigInteger"
             contentHeight:
+              description: "Allows you to look for a collection with the content of a given height, not to be 
+              confused with the content of NFT, you can search with the condition:
+              greater than, less than, equal to, not equal to, greater than or equal to, less than or equal to"
               $ref: "#/components/schemas/SearchBigInteger"
             contentSize:
+              description: "Allows you to look for a collection with the content of a given file size, not to be
+              confused with the content of NFT, you can search with the condition:
+              greater than, less than, equal to, not equal to, greater than or equal to, less than or equal to"
               $ref: "#/components/schemas/SearchBigInteger"
         royalties:
           type: object
           properties:
             sellerFeeBasisPoints:
+              description: "Allows you to look for a collection with the size of the royalty of a given value, 
+              you can search with the condition: greater than, less than, equal to, not equal to, greater than or 
+              equal to, less than or equal to"
               $ref: "#/components/schemas/SearchBigInteger"
             feeRecipients:
               default: []
+              description: "Allows you to look for collections with specified recipients of the royalties"
               type: array
               items:
                 $ref: "#/components/schemas/Address"
@@ -3481,7 +3510,7 @@ components:
     SearchBigDecimal:
       type: object
       properties:
-        firstDate:
+        value:
           $ref: "#/components/schemas/BigDecimal"
         operator:
           $ref: "#/components/schemas/ComparisonOperator"
@@ -3489,7 +3518,7 @@ components:
     SearchBigInteger:
       type: object
       properties:
-        firstDate:
+        value:
           $ref: "#/components/schemas/BigInteger"
         operator:
           $ref: "#/components/schemas/ComparisonOperator"
