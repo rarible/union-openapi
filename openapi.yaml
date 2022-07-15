@@ -205,10 +205,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
+        - name: "nextPage"
           in: query
           required: false
-          description: "Continuation token from the previous response"
+          description: "Token to get the next page of results"
           schema:
             type: string
         - name: "size"
@@ -348,10 +348,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
+        - name: "nextPage"
           in: query
           required: false
-          description: "Continuation token from the previous response"
+          description: "Token to get the next page of results"
           schema:
             type: string
         - name: "size"
@@ -387,10 +387,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
+        - name: "nextPage"
           in: query
           required: false
-          description: "Continuation token from the previous response"
+          description: "Token to get the next page of results"
           schema:
             type: string
         - name: "size"
@@ -480,10 +480,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "cursor"
+        - name: "nextPage"
           in: query
           required: false
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
           schema:
             type: string
         - name: "size"
@@ -917,9 +917,9 @@ components:
           type: integer
           format: int64
           description: "Number of items were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate items search result"
+          description: "Token to get the next page of results"
         items:
           type: array
           description: "List of found items"
@@ -937,9 +937,9 @@ components:
           type: integer
           format: int64
           description: "Number of items were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate items search result"
+          description: "Token to get the next page of results"
         items:
           type: array
           description: "List of found items"
@@ -1017,9 +1017,9 @@ components:
     Traits:
       type: object
       properties:
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate traits search result"
+          description: "Token to get the next page of results"
         traits:
           type: array
           description: "List of found traits"
@@ -1107,9 +1107,9 @@ components:
     ExtendedTraitProperties:
       type: object
       properties:
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate result"
+          description: "Token to get the next page of results"
         traits:
           type: array
           description: "List of ExtendedTraitProperty"
@@ -1328,9 +1328,9 @@ components:
           type: integer
           format: int64
           description: "Number of ownerships were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate Ownerships search result"
+          description: "Token to get the next page of results"
         ownerships:
           type: array
           default: [ ]
@@ -1392,9 +1392,9 @@ components:
           type: integer
           format: int32
           description: "Number of entities returned"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate ownerships search result"
+          description: "Token to get the next page of results"
         filter:
           $ref: "#/components/schemas/OwnershipSearchFilter"
 
@@ -1543,9 +1543,9 @@ components:
     Orders:
       type: object
       properties:
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate orders search result"
+          description: "Token to get the next page of results"
         orders:
           type: array
           description: "List of found orders"
@@ -1813,9 +1813,9 @@ components:
           type: integer
           format: int64
           description: "Number of auctions were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate auctions search result"
+          description: "Token to get the next page of results"
         auctions:
           type: array
           description: "List of found auctions"
@@ -1833,9 +1833,9 @@ components:
           type: integer
           format: int64
           description: "Number of auction bids were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate auction bids search result"
+          description: "Token to get the next page of results"
         bids:
           type: array
           description: "List of found auction bids"
@@ -1914,7 +1914,7 @@ components:
         lastUpdatedAt:
           type: string
           format: "date-time"
-        cursor:
+        nextPage:
           type: string
         reverted:
           type: boolean
@@ -2378,12 +2378,9 @@ components:
     Activities:
       type: object
       properties:
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate activities search result"
-        cursor:
-          type: string
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
         activities:
           type: array
           default: [ ]
@@ -2445,9 +2442,9 @@ components:
           type: integer
           format: int64
           description: "Number of collections were found by request"
-        cursor:
+        nextPage:
           type: string
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
         collections:
           default: [ ]
           type: array
@@ -2514,9 +2511,9 @@ components:
     CollectionSearchForm:
       type: object
       properties:
-        cursor:
+        nextPage:
           default: null
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
           type: string
         blockchain:
           default: []
