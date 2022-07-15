@@ -205,10 +205,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
+        - name: "cursor"
           in: query
           required: false
-          description: "Continuation token from the previous response"
+          description: "Combined continuation token to paginate activities search result"
           schema:
             type: string
         - name: "size"
@@ -227,6 +227,31 @@ paths:
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v1/items/search:
+    post:
+      tags:
+        - item-controller
+      description: "Returns all items that match the search criteria"
+      operationId: itemSearch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ItemSearchForm"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Items"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/EntityNotFound"
+        "500":
           $ref: "#/components/responses/ServerError"
 
   ####################### Ownership API #######################
@@ -787,8 +812,6 @@ components:
           $ref: "#/components/schemas/Blockchain"
         collection:
           $ref: "#/components/schemas/CollectionId"
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         creators:
@@ -799,12 +822,6 @@ components:
             $ref: "#/components/schemas/Creator"
         lazySupply:
           $ref: "#/components/schemas/BigInteger"
-        pending:
-          type: array
-          description: "Pending information about the item"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/ItemTransfer"
         mintedAt:
           type: string
           format: date-time
@@ -849,6 +866,99 @@ components:
         - sellers
         - auctions
 
+    ItemSearchForm:
+      type: object
+      properties:
+        cursor:
+          default: null
+          description: "Combined continuation token to paginate activities search result"
+          type: string
+        blockchain:
+          default: []
+          description: "Type of the blockchain network"
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        collection:
+          default: []
+          description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        tokenId:
+          default: []
+            description: "Token Id"
+            type: array
+            items:
+              $ref: "#/components/schemas/SearchBigInteger"
+        creator:
+          default: []
+          description: "Item creator's address"
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        lazySupply:
+          $ref: "#/components/schemas/SearchBigInteger"
+        supply:
+          $ref: "#/components/schemas/SearchBigInteger"
+        mintedAt:
+          $ref: "#/components/schemas/SearchDate"
+        lastUpdatedAt:
+          $ref: "#/components/schemas/SearchDate"
+        meta:
+          default: null
+          description: "An object describing the parameters for searching for items by meta-information"
+          type: object
+          properties:
+            name:
+              default: null
+              description: "Item name"
+              type: array
+              items:
+                type: string
+            description:
+              default: null
+              description: "Item description"
+              type: array
+              items:
+                type: string
+            attribute:
+              default: null
+              description: "Item attributes"
+              type: array
+              items:
+                $ref: "#/components/schemas/MetaAttribute"
+        metaContent:
+          default: null
+          description: "An object describing the parameters for searching for items by meta content"
+          type: object
+          properties:
+            type:
+              default: null
+              description: "The type of content contained in the item"
+              example: "IMAGE/VIDEO/AUDIO/MODEL_3D/HTML"
+              type: array
+              items:
+                type: string
+            mimeType:
+              default: null
+              description: "The MIME type (RFC 6838) of content contained in the item"
+              example: "image/png"
+              type: array
+              items:
+                type: string
+        sale:
+          default: null
+          description: "An object that describes the parameters for searching for items based on information about sell orders"
+          type: object
+          properties:
+            totalStock:
+              $ref: "#/components/schemas/SearchBigInteger"
+            sellers:
+              $ref: "#/components/schemas/SearchBigInteger"
+            priceUsd:
+              $ref: "#/components/schemas/SearchBigDecimal"
+
     ItemLastSale:
       type: object
       properties:
@@ -892,9 +1002,9 @@ components:
           type: integer
           format: int64
           description: "Number of items were found by request"
-        continuation:
+        cursor:
           type: string
-          description: "Continuation token to paginate items search result"
+          description: "Combined continuation token to paginate activities search result"
         items:
           type: array
           description: "List of found items"
@@ -3339,6 +3449,44 @@ components:
           $ref: "#/components/schemas/ContractAddress"
       required:
         - "@type"
+
+    #======================== Other – For Search ============================#
+
+    SearchDate:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        operator:
+          $ref: "#/components/schemas/ComparisonOperator"
+
+    SearchBigDecimal:
+      type: object
+      properties:
+        value:
+          $ref: "#/components/schemas/BigDecimal"
+        operator:
+          $ref: "#/components/schemas/ComparisonOperator"
+
+    SearchBigInteger:
+      type: object
+      properties:
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        operator:
+          $ref: "#/components/schemas/ComparisonOperator"
+
+    ComparisonOperator:
+      default: EQUAL
+      type: string
+      enum:
+        - EQUAL
+        - GREATER
+        - LESS
+        - GREATER_OR_EQUAL
+        - LESS_OR_EQUAL
+        - NOT_EQUAL
 
     #################### Subscription-related ####################
 
