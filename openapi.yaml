@@ -2557,27 +2557,6 @@ components:
             description: "Available values: name, symbol, description"
             example: "name, symbol, description"
             type: string
-        meta:
-          type: object
-          properties:
-            name:
-              default: []
-              description: "Allows you to search for collections by name, partial occurrence is possible, case insensitive"
-              type: array
-              items:
-                type: string
-            symbol:
-              default: []
-              description: "Allows you to search for collections by symbol, partial occurrence is possible, case insensitive"
-              type: array
-              items:
-                type: string
-            description:
-              default: []
-              description: "Allows you to search for collections by description, partial occurrence is possible, case insensitive"
-              type: array
-              items:
-                type: string
 
     ActivityBlockchainInfo:
       type: object
