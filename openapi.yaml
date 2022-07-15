@@ -515,7 +515,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CollectionsSearchForm"
+              $ref: "#/components/schemas/CollectionSearchForm"
       responses:
         "200":
           description: "OK"
@@ -2516,32 +2516,32 @@ components:
           description: "Where seller fees will be paid to"
           "$ref": "#/components/schemas/Address"
 
-    CollectionsSearchForm:
+    CollectionSearchForm:
       type: object
       properties:
         cursor:
           default: null
           description: "Combined continuation token to paginate activities search result"
           type: string
-        blockchains:
+        blockchain:
           default: []
           description: "Allows you to limit the search to selected blockchains"
           type: array
           items:
             $ref: "#/components/schemas/Blockchain"
-        types:
+        type:
           default: []
           description: "Allows you to restrict the search to single and multiple collections"
           type: array
           items:
             $ref: "#/components/schemas/CollectionType"
-        owners:
+        owner:
           default: []
           description: "Allows you to search for collections owned by specific addresses"
           type: array
           items:
             $ref: "#/components/schemas/Address"
-        minters:
+        minter:
           default: []
           description: "Allows you to search for collections whose creators are specific addresses"
           type: array
@@ -2550,19 +2550,19 @@ components:
         meta:
           type: object
           properties:
-            names:
+            name:
               default: []
               description: "Allows you to search for collections by name, partial occurrence is possible, case insensitive"
               type: array
               items:
                 type: string
-            symbols:
+            symbol:
               default: []
               description: "Allows you to search for collections by symbol, partial occurrence is possible, case insensitive"
               type: array
               items:
                 type: string
-            descriptions:
+            description:
               default: []
               description: "Allows you to search for collections by description, partial occurrence is possible, case insensitive"
               type: array
