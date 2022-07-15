@@ -467,7 +467,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v1/collections/sync:
+  /v1/collections:
     get:
       tags:
         - collection-controller
@@ -510,7 +510,7 @@ paths:
       tags:
         - collection-controller
       description: "Returns all collections that match the search criteria"
-      operationId: collectionSearch
+      operationId: searchCollections
       requestBody:
         content:
           application/json:
@@ -2411,11 +2411,6 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/CollectionType"
-#        Removed because it was discussed to move name and symbol to metaCollection
-#        name:
-#          type: string
-#        symbol:
-#          type: string
         owner:
           $ref: "#/components/schemas/Address"
         minters:
@@ -2531,19 +2526,19 @@ components:
             $ref: "#/components/schemas/Blockchain"
         type:
           default: []
-          description: "Allows you to restrict the search to single and multiple collections"
+          description: "Allows you to find collections by type"
           type: array
           items:
             $ref: "#/components/schemas/CollectionType"
         owner:
           default: []
-          description: "Allows you to search for collections owned by specific addresses"
+          description: "Allows you to find collections owned by specific addresses"
           type: array
           items:
             $ref: "#/components/schemas/Address"
         minter:
           default: []
-          description: "Allows you to search for collections whose creators are specific addresses"
+          description: "Allows you to find private collections where specific minter can mint tokens"
           type: array
           items:
             $ref: "#/components/schemas/Address"
