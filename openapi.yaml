@@ -505,7 +505,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v1/collections/search:
+  /v1/collections/:
     post:
       tags:
         - collection-controller
@@ -2542,6 +2542,21 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Address"
+        text:
+          default: null
+          description: "The search string parameter"
+          type: string
+        textSearchOptions:
+          default: null
+          description: "For full-text search in collections, you can search by: name, symbol, description. 
+          Leave this field blank to search across all attributes."
+          example: "null, [name, symbol, description], []"
+          type: array
+          items:
+            default: null
+            description: "Available values: name, symbol, description"
+            example: "name, symbol, description"
+            type: string
         meta:
           type: object
           properties:
