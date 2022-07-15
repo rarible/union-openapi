@@ -10,7 +10,7 @@ paths:
   "/v0.1/data/trending/collections":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get trending collections
       operationId: getTrendingCollection
       parameters:
@@ -19,7 +19,7 @@ paths:
           description: Blockchain
           required: false
           schema:
-            "$ref": "#/components/schemas/Blockchain"
+            "$ref": "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
           description: Time period of trending statistics
@@ -48,7 +48,7 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/TrendingCollectionEntry"
+                  "$ref": "#/components/schemas/OlapTrendingCollectionEntry"
               example:
                 - id: ETHEREUM:0xd8a5d498ab43ed060cb6629b97a19e3e4276dd9f
                   numberOfSales:
@@ -73,7 +73,7 @@ paths:
   "/v0.1/data/leaderboards/{entity}":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get leaderboard of users
       operationId: getUserLeaderboard
       parameters:
@@ -82,19 +82,19 @@ paths:
           description: Type of users in leaderboard
           required: true
           schema:
-            "$ref": "#/components/schemas/UserType"
+            "$ref": "#/components/schemas/OlapUserType"
         - name: blockchain
           in: query
           description: Blockchain
           required: false
           schema:
-            "$ref": "#/components/schemas/Blockchain"
+            "$ref": "#/components/schemas/OlapBlockchain"
         - name: source
           in: query
           description: Source
           required: false
           schema:
-            "$ref": "#/components/schemas/PlatformSource"
+            "$ref": "#/components/schemas/OlapPlatformSource"
         - name: period
           in: query
           description: Time period of leaderboard
@@ -123,7 +123,7 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/UserLeaderboardEntry"
+                  "$ref": "#/components/schemas/OlapUserLeaderboardEntry"
               example:
                 - id: ETHEREUM:0xf1fa9ceb517f67646c9063f315f8b70cf26aa4e8
                   volumeUsd:
@@ -141,7 +141,7 @@ paths:
   "/v0.1/data/leaderboards/collections":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get leaderboard of collections
       operationId: getCollectionLeaderboard
       parameters:
@@ -150,7 +150,7 @@ paths:
           description: Blockchain
           required: false
           schema:
-            "$ref": "#/components/schemas/Blockchain"
+            "$ref": "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
           description: Time period of leaderboard
@@ -179,7 +179,7 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/CollectionLeaderboardEntry"
+                  "$ref": "#/components/schemas/OlapCollectionLeaderboardEntry"
               example:
                 - id: ETHEREUM:0x160c404b2b49cbc3240055ceaee026df1e8497a0
                   volumeUsd:
@@ -204,7 +204,7 @@ paths:
   "/v0.1/data/collections/{collection}/transactions":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get historical statistics about collection transactions
       operationId: getTransactions
       parameters:
@@ -213,7 +213,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: filters
           in: query
           description: Filters of statistics
@@ -226,7 +226,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/StatsGraphResponse"
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
               example:
                 historicalDates:
                   - '2022-05-05'
@@ -246,7 +246,7 @@ paths:
   "/v0.1/data/collections/{collection}/stats":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get general statistics about collection
       operationId: getCollectionStats
       parameters:
@@ -255,7 +255,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: currency
           in: query
           description: Currency of statistics
@@ -269,7 +269,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/GeneralStatsResponse"
+                "$ref": "#/components/schemas/OlapGeneralStatsResponse"
               example:
                 highestSale: 43.71
                 floorPrice: 1.45
@@ -287,7 +287,7 @@ paths:
   "/v0.1/data/collections/{collection}/sellers":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get historical statistics about collection sellers
       operationId: getSellers
       parameters:
@@ -296,7 +296,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: filters
           in: query
           description: Filters of statistics
@@ -309,7 +309,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/StatsGraphResponse"
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
               example:
                 historicalDates:
                   - '2022-05-05'
@@ -330,7 +330,7 @@ paths:
   "/v0.1/data/collections/{collection}/prices":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get historical statistics about collection items prices
       operationId: getPrices
       parameters:
@@ -339,7 +339,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: currency
           in: query
           description: Currency of statistics
@@ -359,7 +359,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/PricesResponse"
+                "$ref": "#/components/schemas/OlapPricesResponse"
               example:
                 dates:
                   - '2022-05-05'
@@ -390,7 +390,7 @@ paths:
   "/v0.1/data/collections/{collection}/owners":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get historical statistics about collection owners
       operationId: getOwners
       parameters:
@@ -399,7 +399,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: filters
           in: query
           description: Filters of statistics
@@ -412,7 +412,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/StatsGraphResponse"
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
               example:
                 historicalDates:
                   - '2022-05-05'
@@ -432,7 +432,7 @@ paths:
   "/v0.1/data/collections/{collection}/marketcap":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get historical statistics about collection market cap
       operationId: getMarketcap
       parameters:
@@ -441,7 +441,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: currency
           in: query
           description: Currency of statistics
@@ -461,7 +461,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/StatsGraphResponse"
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
               example:
                 historicalDates:
                   - '2022-05-05'
@@ -481,7 +481,7 @@ paths:
   "/v0.1/data/collections/{collection}/gmv":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get historical statistics about collection gross merchandise value
       operationId: getGmv
       parameters:
@@ -490,7 +490,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: currency
           in: query
           description: Currency of statistics
@@ -517,7 +517,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/StatsGraphResponse"
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
               example:
                 historicalDates:
                   - '2022-05-05'
@@ -537,7 +537,7 @@ paths:
   "/v0.1/data/collections/{collection}/floorPrice":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get historical statistics about collection item floor price
       operationId: getFloorPrice
       parameters:
@@ -546,7 +546,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: currency
           in: query
           description: Currency of statistics
@@ -566,7 +566,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/StatsGraphResponse"
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
               example:
                 historicalDates:
                   - '2022-05-05'
@@ -586,7 +586,7 @@ paths:
   "/v0.1/data/collections/{collection}/buyers":
     get:
       tags:
-        - statistics-controller
+        - data-controller
       description: Get historical statistics about collection buyers
       operationId: getBuyers
       parameters:
@@ -595,7 +595,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/CollectionPattern"
+            "$ref": "#/components/schemas/OlapCollectionPattern"
         - name: filters
           in: query
           description: Filters of statistics
@@ -608,7 +608,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/StatsGraphResponse"
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
               example:
                 historicalDates:
                   - '2022-05-08'
@@ -627,12 +627,20 @@ paths:
                 type: string
 components:
   schemas:
+    OlapBlockchain:
+      type: string
+      enum:
+        - ETHEREUM
+        - FLOW
+        - TEZOS
+        - POLYGON
+        - SOLANA
 
-    CollectionPattern:
+    OlapCollectionPattern:
       pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|SOLANA):.*$"
       type: string
 
-    CurrencyType:
+    OlapCurrencyType:
       type: string
       description: Currency
       enum:
@@ -642,27 +650,28 @@ components:
         - FLOW
         - MATIC
         - SOL
-    CurrencyAmount:
+
+    OlapCurrencyAmount:
       required:
         - currency
         - value
       type: object
       properties:
         currency:
-          "$ref": "#/components/schemas/CurrencyType"
+          "$ref": "#/components/schemas/OlapCurrencyType"
         value:
           type: number
           description: Amount of currency
           format: float
 
-    CurrencyAmountWithChange:
+    OlapCurrencyAmountWithChange:
       required:
         - currency
         - value
       type: object
       properties:
         currency:
-          "$ref": "#/components/schemas/CurrencyType"
+          "$ref": "#/components/schemas/OlapCurrencyType"
         value:
           type: number
           description: Amount of currency
@@ -672,7 +681,7 @@ components:
           description: Percentage of change
           format: float
 
-    IntegerNumberWithChange:
+    OlapIntegerNumberWithChange:
       required:
         - value
       type: object
@@ -686,7 +695,7 @@ components:
           description: Percentage of change
           format: float
 
-    TrendingCollectionEntry:
+    OlapTrendingCollectionEntry:
       required:
         - id
         - numberOfSales
@@ -698,15 +707,15 @@ components:
           type: string
           description: Identifier of collection
         numberOfSales:
-          "$ref": "#/components/schemas/IntegerNumberWithChange"
+          "$ref": "#/components/schemas/OlapIntegerNumberWithChange"
         volumeUsd:
-          "$ref": "#/components/schemas/CurrencyAmountWithChange"
+          "$ref": "#/components/schemas/OlapCurrencyAmountWithChange"
         volumeNative:
-          "$ref": "#/components/schemas/CurrencyAmount"
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
         floorPrice:
-          "$ref": "#/components/schemas/CurrencyAmount"
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
 
-    UserLeaderboardEntry:
+    OlapUserLeaderboardEntry:
       required:
         - id
         - volumeNative
@@ -717,23 +726,23 @@ components:
           type: string
           description: Identifier of user
         volumeUsd:
-          "$ref": "#/components/schemas/CurrencyAmount"
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
         volumeNative:
-          "$ref": "#/components/schemas/CurrencyAmount"
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
 
-    UserType:
+    OlapUserType:
       type: string
       enum:
         - sellers
         - buyers
 
-    PlatformSource:
+    OlapPlatformSource:
       type: string
       enum:
         - RARIBLE
         - OPEN_SEA
 
-    CollectionLeaderboardEntry:
+    OlapCollectionLeaderboardEntry:
       required:
         - id
         - ownersCount
@@ -746,11 +755,11 @@ components:
           type: string
           description: Identifier of collection
         volumeUsd:
-          "$ref": "#/components/schemas/CurrencyAmountWithChange"
+          "$ref": "#/components/schemas/OlapCurrencyAmountWithChange"
         volumeNative:
-          "$ref": "#/components/schemas/CurrencyAmount"
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
         floorPrice:
-          "$ref": "#/components/schemas/CurrencyAmount"
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
         totalItemSupply:
           type: integer
           format: int32
@@ -758,7 +767,7 @@ components:
           type: integer
           format: int32
 
-    StatsGraphResponse:
+    OlapStatsGraphResponse:
       required:
         - historicalDates
         - historicalValues
@@ -782,7 +791,7 @@ components:
           description: Current value
           format: float
 
-    GeneralStatsResponse:
+    OlapGeneralStatsResponse:
       required:
         - highestSale
         - items
@@ -815,7 +824,7 @@ components:
           description: Volume of collection sales
           format: float
 
-    PricesResponse:
+    OlapPricesResponse:
       required:
         - avgPrices
         - dates
