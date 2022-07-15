@@ -229,12 +229,12 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v1/items/search:
+  /v1/items/:
     post:
       tags:
         - item-controller
       description: "Returns all items that match the search criteria"
-      operationId: itemSearch
+      operationId: searchItems
       requestBody:
         content:
           application/json:
@@ -905,29 +905,21 @@ components:
           $ref: "#/components/schemas/SearchDate"
         lastUpdatedAt:
           $ref: "#/components/schemas/SearchDate"
-        meta:
+        text:
           default: null
-          description: "An object describing the parameters for searching for items by meta-information"
-          type: object
-          properties:
-            name:
-              default: null
-              description: "Item name"
-              type: array
-              items:
-                type: string
-            description:
-              default: null
-              description: "Item description"
-              type: array
-              items:
-                type: string
-            attribute:
-              default: null
-              description: "Item attributes"
-              type: array
-              items:
-                $ref: "#/components/schemas/MetaAttribute"
+          description: "The search string parameter"
+          type: string
+        textSearchOptions:
+          default: null
+          description: "For full-text search in items, you can search by: name, description, attributes. 
+                 Leave this field blank to search across all parameters."
+          example: "null, [name, description, ], []"
+          type: array
+          items:
+            default: null
+            description: "Available values: name, description, attributes"
+            example: "name, description, attributes"
+            type: string
         metaContent:
           default: null
           description: "An object describing the parameters for searching for items by meta content"
