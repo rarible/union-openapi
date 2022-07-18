@@ -258,17 +258,17 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/ownerships/byIds:
+  /v0.1/ownerships/:
     post:
       tags:
         - ownership-controller
-      description: "Returns Ownerships by list of ids"
-      operationId: getOwnershipsByIds
+      description: "Returns all ownerships that match the search criteria"
+      operationId: searchOwnerships
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OwnershipIds"
+              $ref: "#/components/schemas/OwnershipSearchForm"
         required: true
       responses:
         "200":
@@ -279,6 +279,8 @@ paths:
                 $ref: "#/components/schemas/Ownerships"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
         '500':
           $ref: "#/components/responses/ServerError"
 
@@ -1146,42 +1148,27 @@ components:
           $ref: "#/components/schemas/Blockchain"
         itemId:
           $ref: "#/components/schemas/ItemId"
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
         collection:
           $ref: "#/components/schemas/CollectionId"
-        tokenId:
-          $ref: "#/components/schemas/BigInteger"
         owner:
           $ref: "#/components/schemas/Address"
-        value:
-          $ref: "#/components/schemas/BigInteger"
         source:
           $ref: "#/components/schemas/OwnershipSource"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        lazyValue:
+          $ref: "#/components/schemas/BigInteger"
         createdAt:
           type: string
           format: "date-time"
         lastUpdatedAt:
           type: string
           format: "date-time"
-        creators:
-          type: array
-          deprecated: true
-          description: "Creators of the target item"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/Creator"
-        lazyValue:
-          $ref: "#/components/schemas/BigInteger"
-        pending:
-          type: array
-          description: "Pending information about the item"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/ItemHistory"
         auction:
           $ref: "#/components/schemas/Auction"
         bestSellOrder:
+          $ref: "#/components/schemas/Order"
+        bestBidOrder:
           $ref: "#/components/schemas/Order"
       required:
         - id
@@ -1190,7 +1177,48 @@ components:
         - value
         - createdAt
         - lazyValue
-        - pending
+
+    OwnershipSearchForm:
+      type: object
+      properties:
+        nextPage:
+          default: null
+          description: "Token to get the next page of results"
+          type: string
+        blockchain:
+          default: [ ]
+          description: "Allows you to limit the search to selected blockchains"
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        itemId:
+          default: [ ]
+          description: "Allows you to limit your search to selected itemIDs"
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemId"
+        collection:
+          default: [ ]
+          description: "Allows you to limit the search to selected collections"
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        source:
+          default: [ ]
+          description: "Allows you to restrict your search to selected origins of ownerships.
+          Source indicates how the ownership was created"
+          example: "MINT | PURCHASE | TRANSFER"
+          type: array
+          items:
+            $ref: "#/components/schemas/OwnershipSource"
+        value:
+          $ref: "#/components/schemas/SearchBigInteger"
+        lazyValue:
+          $ref: "#/components/schemas/SearchBigInteger"
+        createdAt:
+          $ref: "#/components/schemas/SearchDate"
+        lastUpdateAt:
+          $ref: "#/components/schemas/SearchDate"
 
     OwnershipSource:
       type: string
