@@ -372,14 +372,14 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  ######################## Activity API ########################
+  ######################## Event API ########################
 
-  /v0.1/activities/sync:
+  /v1/events/sync:
     get:
       tags:
-        - activity-controller
-      description: "Returns all activities sorted by database update date"
-      operationId: syncActivities
+        - event-controller
+      description: "Returns all events sorted by database update date"
+      operationId: syncEvents
       parameters:
         - name: "blockchain"
           in: query
@@ -402,7 +402,7 @@ paths:
         - name: "type"
           in: query
           required: false
-          description: "Filtering by activity type"
+          description: "Filtering by events type"
           schema:
             "$ref": "#/components/schemas/SyncType"
       responses:
@@ -411,13 +411,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Activities"
+                $ref: "#/components/schemas/Events"
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
 
-  ####################### Collection API #######################
+  /v1/events:
+    post:
+      tags:
+        - event-controller
+      description: "Returns all events that match the search criteria"
+      operationId: searchEvents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventSearchForm"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Items"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/EntityNotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+####################### Collection API #######################
 
   /v1/collections/{id}:
     get:
@@ -1845,13 +1870,13 @@ components:
       required:
         - bids
 
-    #################### Activity - Union ####################
+    #################### Event - Union ####################
 
-    ActivityId:
+    EventId:
       type: string
       example: "${blockchain}:${id}"
 
-    ActivitySort:
+    EventSort:
       type: string
       enum:
         - LATEST_FIRST
@@ -1864,7 +1889,7 @@ components:
         - NFT
         - AUCTION
 
-    ActivityType:
+    EventType:
       type: string
       enum:
         - TRANSFER
@@ -1882,7 +1907,7 @@ components:
         - AUCTION_STARTED
         - AUCTION_ENDED
 
-    UserActivityType:
+    UserEventType:
       type: string
       enum:
         - TRANSFER_FROM
@@ -1903,43 +1928,78 @@ components:
         - AUCTION_STARTED
         - AUCTION_ENDED
 
-    Activity:
+    EventSearchForm:
+      type: object
+      properties:
+        nextPage:
+          default: null
+          description: "Token to get the next page of results"
+          type: string
+        type:
+          default: [TRANSFER_FROM, TRANSFER_TO, MINT, BURN, MAKE_BID, GET_BID, LIST, BUY, SELL, CANCEL_LIST, CANCEL_BID,
+                    AUCTION_BID, AUCTION_CREATED, AUCTION_CANCEL, AUCTION_FINISHED, AUCTION_STARTED, AUCTION_ENDED]
+          description: "Array of events"
+          type: array
+          items:
+            $ref: "#/components/schemas/UserEventType"
+        user:
+          default: null
+          description: "Array of users"
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        collection:
+          default: null
+          description: "Array of collections"
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        item:
+          default: null
+          description: "Array of items"
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemId"
+        createdAt:
+          $ref: "#/components/schemas/SearchDate"
+        lastUpdateAt:
+          $ref: "#/components/schemas/SearchDate"
+
+    Event:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/ActivityId"
+          $ref: "#/components/schemas/EventId"
         date:
           type: string
           format: "date-time"
         lastUpdatedAt:
           type: string
           format: "date-time"
-        nextPage:
-          type: string
         reverted:
           type: boolean
       oneOf:
-        - $ref: "#/components/schemas/MintActivity"
-        - $ref: "#/components/schemas/BurnActivity"
-        - $ref: "#/components/schemas/TransferActivity"
-        - $ref: "#/components/schemas/OrderMatchActivity"
-        - $ref: "#/components/schemas/OrderBidActivity"
-        - $ref: "#/components/schemas/OrderListActivity"
-        - $ref: "#/components/schemas/OrderCancelBidActivity"
-        - $ref: "#/components/schemas/OrderCancelListActivity"
-        - $ref: "#/components/schemas/AuctionOpenActivity"
-        - $ref: "#/components/schemas/AuctionBidActivity"
-        - $ref: "#/components/schemas/AuctionFinishActivity"
-        - $ref: "#/components/schemas/AuctionCancelActivity"
-        - $ref: "#/components/schemas/AuctionStartActivity"
-        - $ref: "#/components/schemas/AuctionEndActivity"
-        - $ref: "#/components/schemas/L2DepositActivity"
-        - $ref: "#/components/schemas/L2WithdrawalActivity"
+        - $ref: "#/components/schemas/MintEvent"
+        - $ref: "#/components/schemas/BurnEvent"
+        - $ref: "#/components/schemas/TransferEvent"
+        - $ref: "#/components/schemas/OrderMatchEvent"
+        - $ref: "#/components/schemas/OrderBidEvent"
+        - $ref: "#/components/schemas/OrderListEvent"
+        - $ref: "#/components/schemas/OrderCancelBidEvent"
+        - $ref: "#/components/schemas/OrderCancelListAEvent"
+        - $ref: "#/components/schemas/AuctionOpenEvent"
+        - $ref: "#/components/schemas/AuctionBidEvent"
+        - $ref: "#/components/schemas/AuctionFinishEvent"
+        - $ref: "#/components/schemas/AuctionCancelEvent"
+        - $ref: "#/components/schemas/AuctionStartEvent"
+        - $ref: "#/components/schemas/AuctionEndEvent"
+        - $ref: "#/components/schemas/L2DepositEvent"
+        - $ref: "#/components/schemas/L2WithdrawalEvent"
       required:
         - id
         - date
 
-    MintActivity:
+    MintEvent:
       type: object
       properties:
         "@type":
@@ -1948,10 +2008,8 @@ components:
             - MINT
         owner:
           $ref: "#/components/schemas/Address"
-        contract: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/BigInteger"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         itemId:
           $ref: "#/components/schemas/ItemId"
         value:
@@ -1959,14 +2017,14 @@ components:
         transactionHash:
           type: string
         blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
+          $ref: "#/components/schemas/EventBlockchainInfo"
       required:
         - "@type"
         - owner
         - value
         - transactionHash
 
-    BurnActivity:
+    BurnEvent:
       type: object
       properties:
         "@type":
@@ -1975,10 +2033,8 @@ components:
             - BURN
         owner:
           $ref: "#/components/schemas/Address"
-        contract: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/BigInteger"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         itemId:
           $ref: "#/components/schemas/ItemId"
         value:
@@ -1986,14 +2042,14 @@ components:
         transactionHash:
           type: string
         blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
+          $ref: "#/components/schemas/EventBlockchainInfo"
       required:
         - "@type"
         - owner
         - value
         - transactionHash
 
-    TransferActivity:
+    TransferEvent:
       type: object
       properties:
         "@type":
@@ -2004,10 +2060,8 @@ components:
           $ref: "#/components/schemas/Address"
         owner:
           $ref: "#/components/schemas/Address"
-        contract: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/BigInteger"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         itemId:
           $ref: "#/components/schemas/ItemId"
         value:
@@ -2017,7 +2071,7 @@ components:
         transactionHash:
           type: string
         blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
+          $ref: "#/components/schemas/EventBlockchainInfo"
       required:
         - "@type"
         - from
@@ -2025,7 +2079,7 @@ components:
         - value
         - transactionHash
 
-    OrderActivitySource:
+    OrderEventSource:
       type: string
       enum:
         - RARIBLE
@@ -2035,7 +2089,7 @@ components:
         - HEN
         - OBJKT
 
-    OrderActivityMatchSide:
+    OrderEventMatchSide:
       type: object
       properties:
         maker:
@@ -2048,7 +2102,7 @@ components:
         - maker
         - asset
 
-    OrderMatchActivity:
+    OrderMatchEvent:
       type: object
       properties:
         "@type":
@@ -2056,11 +2110,11 @@ components:
           enum:
             - MATCH
         source:
-          $ref: "#/components/schemas/OrderActivitySource"
+          $ref: "#/components/schemas/OrderEventSource"
         transactionHash:
           type: string
         blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
+          $ref: "#/components/schemas/EventBlockchainInfo"
       required:
         - source
         - transactionHash
@@ -2070,16 +2124,16 @@ components:
 
     OrderMatchSwap:
       type: object
-      required: [left, right]
+      required: [make, take]
       properties:
         "@type":
           type: string
           enum:
             - SWAP
-        left:
-          $ref: "#/components/schemas/OrderActivityMatchSide"
-        right:
-          $ref: "#/components/schemas/OrderActivityMatchSide"
+        make:
+          $ref: "#/components/schemas/OrderEventMatchSide"
+        take:
+          $ref: "#/components/schemas/OrderEventMatchSide"
 
     OrderMatchSell:
       type: object
@@ -2088,17 +2142,17 @@ components:
           type: string
           enum:
             - SELL
-        nft:
+        make:
           $ref: "#/components/schemas/Asset"
-        payment:
+        take:
           $ref: "#/components/schemas/Asset"
-        buyer:
+        maker:
           $ref: "#/components/schemas/Address"
-        seller:
+        taker:
           $ref: "#/components/schemas/Address"
-        buyerOrderHash:
+        makerOrderHash:
           type: string
-        sellerOrderHash:
+        takerOrderHash:
           type: string
         price:
           $ref: "#/components/schemas/BigDecimal"
@@ -2112,14 +2166,14 @@ components:
             - SELL
             - ACCEPT_BID
       required:
-        - nft
-        - payment
+        - make
+        - take
+        - maker
+        - taker
         - price
         - type
-        - buyer
-        - seller
 
-    OrderBidActivity:
+    OrderBidEvent:
       type: object
       properties:
         "@type":
@@ -2139,7 +2193,7 @@ components:
         priceUsd:
           $ref: "#/components/schemas/BigDecimal"
         source:
-          $ref: "#/components/schemas/OrderActivitySource"
+          $ref: "#/components/schemas/OrderEventSource"
       required:
         - "@type"
         - hash
@@ -2148,7 +2202,7 @@ components:
         - take
         - price
 
-    OrderListActivity:
+    OrderListEvent:
       type: object
       properties:
         "@type":
@@ -2168,7 +2222,7 @@ components:
         priceUsd:
           $ref: "#/components/schemas/BigDecimal"
         source:
-          $ref: "#/components/schemas/OrderActivitySource"
+          $ref: "#/components/schemas/OrderEventSource"
       required:
         - "@type"
         - hash
@@ -2177,7 +2231,7 @@ components:
         - take
         - price
 
-    OrderCancelBidActivity:
+    OrderCancelBidEvent:
       type: object
       properties:
         "@type":
@@ -2193,11 +2247,11 @@ components:
         take:
           $ref: "#/components/schemas/AssetType"
         source:
-          $ref: "#/components/schemas/OrderActivitySource"
+          $ref: "#/components/schemas/OrderEventSource"
         transactionHash:
           type: string
         blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
+          $ref: "#/components/schemas/EventBlockchainInfo"
       required:
         - "@type"
         - hash
@@ -2206,7 +2260,7 @@ components:
         - take
         - transactionHash
 
-    OrderCancelListActivity:
+    OrderCancelListEvent:
       type: object
       properties:
         "@type":
@@ -2222,11 +2276,11 @@ components:
         take:
           $ref: "#/components/schemas/AssetType"
         source:
-          $ref: "#/components/schemas/OrderActivitySource"
+          $ref: "#/components/schemas/OrderEventSource"
         transactionHash:
           type: string
         blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
+          $ref: "#/components/schemas/EventBlockchainInfo"
       required:
         - "@type"
         - hash
@@ -2235,12 +2289,12 @@ components:
         - take
         - transactionHash
 
-    AuctionActivitySource:
+    AuctionEventSource:
       type: string
       enum:
         - RARIBLE
 
-    AuctionOpenActivity:
+    AuctionOpenEvent:
       type: object
       required:
         - "@type"
@@ -2256,7 +2310,7 @@ components:
         transactionHash:
           type: string
 
-    AuctionBidActivity:
+    AuctionBidEvent:
       type: object
       required:
         - "@type"
@@ -2275,7 +2329,7 @@ components:
         transactionHash:
           type: string
 
-    AuctionFinishActivity:
+    AuctionFinishEvent:
       type: object
       required:
         - "@type"
@@ -2291,7 +2345,7 @@ components:
         transactionHash:
           type: string
 
-    AuctionCancelActivity:
+    AuctionCancelEvent:
       type: object
       required:
         - "@type"
@@ -2307,7 +2361,7 @@ components:
         transactionHash:
           type: string
 
-    AuctionStartActivity:
+    AuctionStartEvent:
       type: object
       required:
         - "@type"
@@ -2320,7 +2374,7 @@ components:
         auction:
           $ref: "#/components/schemas/Auction"
 
-    AuctionEndActivity:
+    AuctionEndEvent:
       type: object
       required:
         - "@type"
@@ -2333,7 +2387,7 @@ components:
         auction:
           $ref: "#/components/schemas/Auction"
 
-    L2DepositActivity:
+    L2DepositEvent:
       type: object
       required:
         - "@type"
@@ -2354,7 +2408,7 @@ components:
         value:
           $ref: "#/components/schemas/BigInteger"
 
-    L2WithdrawalActivity:
+    L2WithdrawalEvent:
       type: object
       required:
         - "@type"
@@ -2375,20 +2429,20 @@ components:
         value:
           $ref: "#/components/schemas/BigInteger"
 
-    Activities:
+    Events:
       type: object
       properties:
         nextPage:
           type: string
           description: "Token to get the next page of results"
-        activities:
+        events:
           type: array
           default: [ ]
-          description: "List of found activities"
+          description: "List of found events"
           items:
-            $ref: "#/components/schemas/Activity"
+            $ref: "#/components/schemas/Event"
       required:
-        - activities
+        - events
 
     CollectionId:
       type: string
@@ -2561,7 +2615,7 @@ components:
               items:
                 type: string
 
-    ActivityBlockchainInfo:
+    EventBlockchainInfo:
       type: object
       deprecated: true
       properties:
