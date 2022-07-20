@@ -1,3 +1,4 @@
 {
-  "CollectionPattern": "kotlin.String"
+  "CollectionPattern": "kotlin.String",
+  "OlapCollectionPattern": "kotlin.String"
 }

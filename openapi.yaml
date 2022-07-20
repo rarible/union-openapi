@@ -884,7 +884,9 @@ paths:
           required: true
           description: "The maker of the order"
           schema:
-            $ref: "#/components/schemas/UnionAddress"
+            type: array
+            items:
+              $ref: "#/components/schemas/UnionAddress"
         - name: "origin"
           in: query
           required: false
@@ -1053,7 +1055,9 @@ paths:
           required: true
           description: "The maker of the bid"
           schema:
-            $ref: "#/components/schemas/UnionAddress"
+            type: array
+            items:
+              $ref: "#/components/schemas/UnionAddress"
         - name: "blockchains"
           in: query
           required: false
