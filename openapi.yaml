@@ -426,6 +426,7 @@ paths:
 
   /v0.1/items/all:
     get:
+      deprecated: true
       tags:
         - item-controller
       description: "Returns all items"
