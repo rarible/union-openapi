@@ -892,11 +892,7 @@ components:
             items:
               $ref: "#/components/schemas/SearchBigInteger"
         creator:
-          default: []
-          description: "Item creator's address"
-          type: array
-          items:
-            $ref: "#/components/schemas/Address"
+          $ref: "#/components/schemas/Address"
         lazySupply:
           $ref: "#/components/schemas/SearchBigInteger"
         supply:
@@ -906,20 +902,12 @@ components:
         lastUpdatedAt:
           $ref: "#/components/schemas/SearchDate"
         text:
-          default: null
-          description: "The search string parameter"
+          description: "The search string parameter, search by name anf description of the item"
           type: string
-        textSearchOptions:
-          default: null
-          description: "For full-text search in items, you can search by: name, description, attributes. 
-                 Leave this field blank to search across all parameters."
-          example: "null, [name, description, ], []"
+        trait:
           type: array
           items:
-            default: null
-            description: "Available values: name, description, attributes"
-            example: "name, description, attributes"
-            type: string
+            $ref: "#/components/schemas/ItemsTrait"
         metaContent:
           default: null
           description: "An object describing the parameters for searching for items by meta content"
@@ -950,6 +938,16 @@ components:
               $ref: "#/components/schemas/SearchBigInteger"
             priceUsd:
               $ref: "#/components/schemas/SearchBigDecimal"
+
+    ItemsTrait:
+      type: object
+      properties:
+        key:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
 
     ItemLastSale:
       type: object
