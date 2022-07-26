@@ -4039,9 +4039,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/StatisticsValue"
+        changePercent:
+          $ref: "#/components/schemas/BigDecimal"
       required:
         - values
         - period
+        - changePercent
 
     CollectionStatistics:
       type: object
@@ -4049,6 +4052,17 @@ components:
         ownersCount:
           type: integer
           format: int64
+        itemsCount:
+          type: integer
+          format: int64
+        highestSale:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatisticsValue"
+        totalVolumes:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatisticsValue"
         volumes:
           type: array
           items:
@@ -4056,7 +4070,7 @@ components:
         floorPrices:
           type: array
           items:
-            $ref: "#/components/schemas/StatisticsPeriodValue"
+            $ref: "#/components/schemas/StatisticsValue"
       required:
         - ownersCount
         - volumes
