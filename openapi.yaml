@@ -4012,6 +4012,62 @@ components:
       required:
         - activities
 
+    StatisticsPeriod:
+      type: string
+      enum:
+        - DAY
+        - WEEK
+        - MONTH
+
+    StatisticsCurrency:
+      type: string
+      enum:
+        - NATIVE
+        - USD
+
+    StatisticsValue:
+      type: object
+      properties:
+        value:
+          $ref: "#/components/schemas/BigDecimal"
+        currency:
+          $ref: "#/components/schemas/StatisticsCurrency"
+      required:
+        - value
+        - currency
+
+    StatisticsPeriodValue:
+      type: object
+      properties:
+        period:
+          $ref: "#/components/schemas/Period"
+        values:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatisticsValue"
+      required:
+        - values
+        - period
+
+    CollectionStatistics:
+      type: object
+      properties:
+        ownersCount:
+          type: number
+          format: int64
+        volumes:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatisticsPeriodValue"
+        floorPrices:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatisticsPeriodValue"
+      required:
+        - ownersCount
+        - volumes
+        - floorPrices
+
     CollectionId:
       type: string
       description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
@@ -4072,6 +4128,8 @@ components:
             $ref: "#/components/schemas/OriginOrders"
         self:
           type: boolean
+        statistics:
+          $ref: "#/components/schemas/CollectionStatistics"
       required:
         - id
         - blockchain
