@@ -4026,7 +4026,7 @@ components:
         - value
         - currency
 
-    StatisticsPeriodValue:
+    StatisticsPeriod:
       type: object
       properties:
         period:
@@ -4049,10 +4049,10 @@ components:
     CollectionStatistics:
       type: object
       properties:
-        ownersCount:
+        ownerCount:
           type: integer
           format: int64
-        itemsCount:
+        itemCount:
           type: integer
           format: int64
         highestSale:
@@ -4066,14 +4066,14 @@ components:
         volumes:
           type: array
           items:
-            $ref: "#/components/schemas/StatisticsPeriodValue"
+            $ref: "#/components/schemas/StatisticsPeriod"
         floorPrices:
           type: array
           items:
             $ref: "#/components/schemas/StatisticsValue"
       required:
-        - ownersCount
-        - itemsCount
+        - ownerCount
+        - itemCount
         - highestSale
         - totalVolumes
         - volumes
