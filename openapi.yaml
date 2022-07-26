@@ -4073,6 +4073,9 @@ components:
             $ref: "#/components/schemas/StatisticsValue"
       required:
         - ownersCount
+        - itemsCount
+        - highestSale
+        - totalVolumes
         - volumes
         - floorPrices
 
