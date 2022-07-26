@@ -4012,26 +4012,16 @@ components:
       required:
         - activities
 
-    StatisticsPeriod:
-      type: string
-      enum:
-        - DAY
-        - WEEK
-        - MONTH
-
-    StatisticsCurrency:
-      type: string
-      enum:
-        - NATIVE
-        - USD
-
     StatisticsValue:
       type: object
       properties:
         value:
           $ref: "#/components/schemas/BigDecimal"
         currency:
-          $ref: "#/components/schemas/StatisticsCurrency"
+          type: string
+          enum:
+            - NATIVE
+            - USD
       required:
         - value
         - currency
@@ -4040,7 +4030,11 @@ components:
       type: object
       properties:
         period:
-          $ref: "#/components/schemas/Period"
+          type: string
+          enum:
+            - DAY
+            - WEEK
+            - MONTH
         values:
           type: array
           items:
@@ -4053,7 +4047,7 @@ components:
       type: object
       properties:
         ownersCount:
-          type: number
+          type: integer
           format: int64
         volumes:
           type: array
