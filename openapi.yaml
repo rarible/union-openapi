@@ -4014,17 +4014,15 @@ components:
 
     StatisticsValue:
       type: object
+      description: value - native currency value
       properties:
         value:
           $ref: "#/components/schemas/BigDecimal"
-        currency:
-          type: string
-          enum:
-            - NATIVE
-            - USD
+        valueUsd:
+          $ref: "#/components/schemas/BigDecimal"
       required:
         - value
-        - currency
+        - valueUsd
 
     StatisticsPeriod:
       type: object
@@ -4035,10 +4033,8 @@ components:
             - DAY
             - WEEK
             - MONTH
-        values:
-          type: array
-          items:
-            $ref: "#/components/schemas/StatisticsValue"
+        value:
+          $ref: "#/components/schemas/StatisticsValue"
         changePercent:
           $ref: "#/components/schemas/BigDecimal"
       required:
@@ -4055,29 +4051,23 @@ components:
         itemCount:
           type: integer
           format: int64
-        highestSales:
-          type: array
-          items:
-            $ref: "#/components/schemas/StatisticsValue"
-        totalVolumes:
-          type: array
-          items:
-            $ref: "#/components/schemas/StatisticsValue"
+        highestSale:
+          $ref: "#/components/schemas/StatisticsValue"
+        totalVolume:
+          $ref: "#/components/schemas/StatisticsValue"
         volumes:
           type: array
           items:
             $ref: "#/components/schemas/StatisticsPeriod"
-        floorPrices:
-          type: array
-          items:
-            $ref: "#/components/schemas/StatisticsValue"
+        floorPrice:
+          $ref: "#/components/schemas/StatisticsValue"
       required:
         - ownerCount
         - itemCount
         - highestSale
-        - totalVolumes
+        - totalVolume
         - volumes
-        - floorPrices
+        - floorPrice
 
     CollectionId:
       type: string
