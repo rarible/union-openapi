@@ -4038,7 +4038,7 @@ components:
         changePercent:
           $ref: "#/components/schemas/BigDecimal"
       required:
-        - values
+        - value
         - period
         - changePercent
 
