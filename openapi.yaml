@@ -4055,7 +4055,7 @@ components:
         itemCount:
           type: integer
           format: int64
-        highestSale:
+        highestSales:
           type: array
           items:
             $ref: "#/components/schemas/StatisticsValue"
