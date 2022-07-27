@@ -2043,7 +2043,6 @@ components:
         - FLOW
         - TEZOS
         - SOLANA
-        - IMMUTABLEX
 
     Payout:
       type: object
