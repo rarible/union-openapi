@@ -4063,10 +4063,8 @@ components:
       required:
         - ownerCount
         - itemCount
-        - highestSale
         - totalVolume
         - volumes
-        - floorPrice
 
     CollectionId:
       type: string
