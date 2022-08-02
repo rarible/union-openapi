@@ -4039,7 +4039,6 @@ components:
       required:
         - value
         - period
-        - changePercent
 
     CollectionStatistics:
       type: object
