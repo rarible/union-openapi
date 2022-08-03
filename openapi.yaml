@@ -294,6 +294,7 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -338,6 +339,7 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -375,6 +377,7 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -412,6 +415,7 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -472,6 +476,7 @@ paths:
           schema:
             type: integer
             format: "int64"
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -1613,13 +1618,7 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - name: "newSearchEngine"
-          in: query
-          required: false
-          description: "Enforce new search engine usage"
-          deprecated: true
-          schema:
-            type: boolean
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -1677,13 +1676,7 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - name: "newSearchEngine"
-          in: query
-          required: false
-          description: "Enforce new search engine usage"
-          deprecated: true
-          schema:
-            type: boolean
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -1743,13 +1736,7 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - name: "newSearchEngine"
-          in: query
-          required: false
-          description: "Enforce new search engine usage"
-          deprecated: true
-          schema:
-            type: boolean
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -1859,13 +1846,7 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - name: "newSearchEngine"
-          in: query
-          required: false
-          description: "Enforce new search engine usage"
-          deprecated: true
-          schema:
-            type: boolean
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -5167,6 +5148,23 @@ components:
       type: string
       description: "Blockchain address in Union format `${blockchainGroup}:${token}`"
       example: "${userId}"
+
+
+    SearchEngine:
+      type: string
+      enum:
+        - LEGACY
+        - V1
+
+  parameters:
+    searchEngine:
+      name: "searchEngine"
+      in: query
+      required: false
+      deprecated: true
+      description: "Search engine to use for search"
+      schema:
+        $ref: "#/components/schemas/SearchEngine"
 
   #======================== Responses ============================#
 
