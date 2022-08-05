@@ -254,7 +254,60 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
-  ####################### Ownership API #######################
+  /v1/items/byOwners:
+    post:
+      tags:
+        - item-controller
+      description: "Returns all items that match the search criteria, searchable by owner"
+      operationId: searchItemByhOwners
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ItemByOwnersSearchForm"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Items"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/EntityNotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /v1/items/{itemId}/owners:
+    get:
+      tags:
+        - item-controller
+      description: "Returns an item with a list of its owners"
+      operationId: getItemWithOwners
+      parameters:
+        - name: "itemId"
+          in: path
+          required: true
+          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
+          schema:
+            $ref: "#/components/schemas/ItemId"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Item"
+                  - $ref: "#/components/schemas/ItemOwners"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+
+      ####################### Ownership API #######################
 
   /v0.1/ownerships/{ownershipId}:
     get:
@@ -923,6 +976,62 @@ components:
                 value:
                   $ref: "#/components/schemas/SearchBigDecimal"
 
+    ItemByOwnersSearchForm:
+      type: object
+      properties:
+        cursor:
+          default: null
+          description: "Combined continuation token to paginate activities search result"
+          type: string
+        blockchains:
+          default: []
+          description: "Type of the blockchain network"
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        owners:
+          default: []
+          description: "Owners addresses, has format `${blockchainType}:${address}`"
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        collections:
+          default: []
+          description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        mintedAt:
+          $ref: "#/components/schemas/SearchDate"
+        lastUpdatedAt:
+          $ref: "#/components/schemas/SearchDate"
+        text:
+          description: "The search string parameter, search by name anf description of the item"
+          type: string
+        trait:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemsTrait"
+        sale:
+          default: null
+          description: "An object that describes the parameters for searching for items based on information about sell orders"
+          type: object
+          properties:
+            totalStock:
+              $ref: "#/components/schemas/SearchBigInteger"
+            sellers:
+              $ref: "#/components/schemas/SearchBigInteger"
+            priceUsd:
+              $ref: "#/components/schemas/SearchBigDecimal"
+            price:
+              default: null
+              description: "An object that allows you to search for orders in a given currency"
+              type: object
+              properties:
+                currency:
+                  $ref: "#/components/schemas/CurrencyId"
+                value:
+                  $ref: "#/components/schemas/SearchBigDecimal"
 
     ItemsTrait:
       type: object
@@ -988,6 +1097,20 @@ components:
             $ref: "#/components/schemas/Item"
       required:
         - items
+
+    ItemOwner:
+      type: object
+      properties:
+        owner:
+          $ref: "#/components/schemas/Address"
+        quantity:
+          $ref: "#/components/schemas/BigInteger"
+
+    ItemOwners:
+      type: object
+      properties:
+        itemOwners:
+          $ref: "#/components/schemas/ItemOwner"
 
     ItemsWithOwnership:
       type: object
