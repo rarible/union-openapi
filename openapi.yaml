@@ -3635,6 +3635,8 @@ components:
         - IMMUTABLEX
         - HEN
         - OBJKT
+        - X2Y2
+        - LOOKSRARE
 
     OrderActivityMatchSide:
       type: object
@@ -4588,8 +4590,7 @@ components:
         side:
           type: integer
         orderId:
-          type: integer
-          format: int64
+          $ref: "#/components/schemas/BigInteger"
       required:
         - "@type"
         - itemHash
