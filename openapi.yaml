@@ -2006,6 +2006,7 @@ components:
         - HEN
         - OBJKT
         - OTHER
+        - X2Y2
 
     Blockchain:
       type: string
@@ -3132,6 +3133,7 @@ components:
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
         - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
+        - "$ref": "#/components/schemas/EthX2Y2OrderDataV1"
 
     Orders:
       type: object
@@ -4569,6 +4571,32 @@ components:
             - ETH_BASIC_SEAPORT_DATA_V1
       required:
         - "@type"
+
+    EthX2Y2OrderDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_X2Y2_ORDER_DATA_V1
+        itemHash:
+          type: string
+        isCollectionOffer:
+          type: boolean
+        isBundle:
+          type: boolean
+        side:
+          type: integer
+        orderId:
+          type: integer
+          format: int64
+      required:
+        - "@type"
+        - itemHash
+        - isCollectionOffer
+        - isBundle
+        - side
+        - orderId
 
     PendingOrder:
       type: object
