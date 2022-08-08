@@ -3128,12 +3128,14 @@ components:
         - "$ref": "#/components/schemas/EthOrderOpenSeaV1DataV1"
         - "$ref": "#/components/schemas/EthOrderSeaportDataV1"
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
+        - "$ref": "#/components/schemas/EthX2Y2OrderDataV1"
+        - "$ref": "#/components/schemas/EthLooksRareOrderDataV1"
+        - "$ref": "#/components/schemas/EthLooksRareOrderDataV1"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV2"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
         - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
-        - "$ref": "#/components/schemas/EthX2Y2OrderDataV1"
 
     Orders:
       type: object
@@ -4598,6 +4600,28 @@ components:
         - isBundle
         - side
         - orderId
+
+    EthLooksRareOrderDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_LOOKSRARE_ORDER_DATA_V1
+        minPercentageToAsk:
+          type: integer
+        strategy:
+          $ref: "#/components/schemas/UnionAddress"
+        nonce:
+          type: integer
+          format: int64
+        params:
+          type: string
+      required:
+        - "@type"
+        - minPercentageToAsk
+        - strategy
+        - nonce
 
     PendingOrder:
       type: object
