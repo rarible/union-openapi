@@ -888,6 +888,8 @@ components:
     OlapUserLeaderboardEntry:
       required:
         - id
+        - items
+        - transactions
         - volumeNative
         - volumeUsd
       type: object
@@ -896,9 +898,17 @@ components:
           type: string
           description: Identifier of user
         volumeUsd:
-          "$ref": "#/components/schemas/OlapCurrencyAmount"
+          "$ref": '#/components/schemas/OlapCurrencyAmount'
         volumeNative:
-          "$ref": "#/components/schemas/OlapCurrencyAmount"
+          "$ref": '#/components/schemas/OlapCurrencyAmount'
+        items:
+          type: integer
+          description: (non-unique) amount of traded items
+          format: int64
+        transactions:
+          type: integer
+          description: Amount of transactions were made
+          format: int64
 
     OlapUserType:
       type: string
