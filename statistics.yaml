@@ -27,12 +27,6 @@ paths:
           schema:
             type: string
             default: "WEEK"
-        - name: filters
-          in: query
-          description: Filter of trending statistics
-          required: false
-          schema:
-            type: string
         - name: limit
           in: query
           description: Limit of records in trending statistics
@@ -64,12 +58,47 @@ paths:
                   floorPrice:
                     currency: ETH
                     value: 0.5749
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/rarible/statistics":
+    get:
+      tags:
+        - data-controller
+      description: Get overall rarible statistics
+      operationId: getRaribleStats
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapRaribleStatisticsResponse"
+              example:
+                sold: 434191371
+                minted: 150477545
+                listed: 145290
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/leaderboards/{entity}":
     get:
       tags:
@@ -102,12 +131,6 @@ paths:
           schema:
             type: string
             default: WEEK
-        - name: filters
-          in: query
-          description: Filter of leaderboard
-          required: false
-          schema:
-            type: string
         - name: limit
           in: query
           description: Limit of records in leaderboard
@@ -132,12 +155,18 @@ paths:
                   volumeNative:
                     currency: MATIC
                     value: 27343817.491841666
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/leaderboards/collections":
     get:
       tags:
@@ -158,12 +187,6 @@ paths:
           schema:
             type: string
             default: WEEK
-        - name: filters
-          in: query
-          description: Filter of leaderboard
-          required: false
-          schema:
-            type: string
         - name: limit
           in: query
           description: Limit of records in leaderboard
@@ -194,13 +217,18 @@ paths:
                     value: 1.55
                   totalItemSupply: 10
                   ownersCount: 10
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
-
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/collections/{collection}/transactions":
     get:
       tags:
@@ -237,12 +265,24 @@ paths:
                   - 2566
                   - 285
                 currentValue: 260
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/collections/{collection}/stats":
     get:
       tags:
@@ -277,13 +317,24 @@ paths:
                 items: 10020
                 owners: 6472
                 volume: 41913.50477591493
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
-
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/collections/{collection}/sellers":
     get:
       tags:
@@ -320,13 +371,24 @@ paths:
                   - 5487
                   - 895
                 currentValue: 1767
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
-
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/collections/{collection}/prices":
     get:
       tags:
@@ -381,12 +443,24 @@ paths:
                   - 10934.527094503102
                   - 7876.5886882554005
                   - 1164.1458323599143
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/collections/{collection}/owners":
     get:
       tags:
@@ -423,12 +497,24 @@ paths:
                   - 6381
                   - 6363
                 currentValue: 6476
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/collections/{collection}/marketcap":
     get:
       tags:
@@ -472,13 +558,25 @@ paths:
                   - 16683.68
                   - 19038
                 currentValue: 14529
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
-  "/v0.1/data/collections/{collection}/gmv":
+                "$ref": "#/components/schemas/OlapError"
+  /v0.1/collections/{collection}/gmv:
     get:
       tags:
         - data-controller
@@ -528,12 +626,24 @@ paths:
                   - 7876.5886882554005
                   - 1164.1458323599143
                 currentValue: 498.19370351666873
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/collections/{collection}/floorPrice":
     get:
       tags:
@@ -577,12 +687,24 @@ paths:
                   - 1.69
                   - 1.9
                 currentValue: 1.45
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/collections/{collection}/buyers":
     get:
       tags:
@@ -619,12 +741,24 @@ paths:
                   - 791
                   - 1619
                 currentValue: 1767
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
         '500':
           description: Internal Server Error
           content:
-            "*/*":
+            application/json:
               schema:
-                type: string
+                "$ref": "#/components/schemas/OlapError"
 components:
   schemas:
     OlapBlockchain:
@@ -714,10 +848,48 @@ components:
           "$ref": "#/components/schemas/OlapCurrencyAmount"
         floorPrice:
           "$ref": "#/components/schemas/OlapCurrencyAmount"
+    OlapError:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code
+          enum:
+            - INVALID_INPUT
+            - NOT_FOUND
+            - UNKNOWN
+        message:
+          type: string
+          description: Message
+
+    OlapRaribleStatisticsResponse:
+      required:
+        - listed
+        - minted
+        - sold
+      type: object
+      properties:
+        minted:
+          type: integer
+          description: Amount of minted items
+          format: int64
+        sold:
+          type: integer
+          description: Amount of items sold on rarible
+          format: int64
+        listed:
+          type: integer
+          description: Amount of items listed on rarible
+          format: int64
 
     OlapUserLeaderboardEntry:
       required:
         - id
+        - items
+        - transactions
         - volumeNative
         - volumeUsd
       type: object
@@ -726,9 +898,17 @@ components:
           type: string
           description: Identifier of user
         volumeUsd:
-          "$ref": "#/components/schemas/OlapCurrencyAmount"
+          "$ref": '#/components/schemas/OlapCurrencyAmount'
         volumeNative:
-          "$ref": "#/components/schemas/OlapCurrencyAmount"
+          "$ref": '#/components/schemas/OlapCurrencyAmount'
+        items:
+          type: integer
+          description: (non-unique) amount of traded items
+          format: int64
+        transactions:
+          type: integer
+          description: Amount of transactions were made
+          format: int64
 
     OlapUserType:
       type: string
@@ -745,6 +925,7 @@ components:
     OlapCollectionLeaderboardEntry:
       required:
         - id
+        - listed
         - ownersCount
         - totalItemSupply
         - volumeNative
@@ -760,6 +941,9 @@ components:
           "$ref": "#/components/schemas/OlapCurrencyAmount"
         floorPrice:
           "$ref": "#/components/schemas/OlapCurrencyAmount"
+        listed:
+          type: integer
+          format: int32
         totalItemSupply:
           type: integer
           format: int32
@@ -795,6 +979,7 @@ components:
       required:
         - highestSale
         - items
+        - listed
         - owners
         - volume
       type: object
@@ -811,6 +996,10 @@ components:
           type: number
           description: Market cap of collection
           format: float
+        listed:
+          type: integer
+          description: Count of listed items
+          format: int32
         items:
           type: integer
           description: Count of collection items
