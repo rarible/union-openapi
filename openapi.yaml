@@ -229,137 +229,6 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v1/items:
-    post:
-      tags:
-        - item-controller
-      description: "Returns all items that match the search criteria"
-      operationId: searchItems
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ItemSearchForm"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Items"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/EntityNotFound"
-        "500":
-          $ref: "#/components/responses/ServerError"
-
-  /v1/items/byOwners:
-    post:
-      tags:
-        - item-controller
-      description: "Returns all items that match the search criteria, searchable by owner"
-      operationId: searchItemByhOwners
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ItemByOwnersSearchForm"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Items"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          $ref: "#/components/responses/EntityNotFound"
-        "500":
-          $ref: "#/components/responses/ServerError"
-
-  /v1/items/{itemId}/owners:
-    get:
-      tags:
-        - item-controller
-      description: "Returns an item with a list of its owners"
-      operationId: getItemWithOwners
-      parameters:
-        - name: "itemId"
-          in: path
-          required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/ItemId"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Item"
-                  - $ref: "#/components/schemas/ItemOwners"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-
-      ####################### Ownership API #######################
-
-  /v0.1/ownerships/{ownershipId}:
-    get:
-      tags:
-        - ownership-controller
-      description: "Returns ownership by id"
-      operationId: getOwnershipById
-      parameters:
-        - name: "ownershipId"
-          in: path
-          required: true
-          description: "Ownership Id in format: '${blockchain}:${token}:${tokenId}:${owner}'"
-          schema:
-            $ref: "#/components/schemas/OwnershipId"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Ownership"
-        '404':
-          $ref: "#/components/responses/EntityNotFound"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/ownerships/byIds:
-    post:
-      tags:
-        - ownership-controller
-      description: "Returns Ownerships by list of ids"
-      operationId: getOwnershipsByIds
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OwnershipIds"
-        required: true
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Ownerships"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   ######################## Order API ########################
 
   /v0.1/orders/{id}:
@@ -1379,42 +1248,27 @@ components:
           $ref: "#/components/schemas/Blockchain"
         itemId:
           $ref: "#/components/schemas/ItemId"
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
         collection:
           $ref: "#/components/schemas/CollectionId"
-        tokenId:
-          $ref: "#/components/schemas/BigInteger"
         owner:
           $ref: "#/components/schemas/Address"
-        value:
-          $ref: "#/components/schemas/BigInteger"
         source:
           $ref: "#/components/schemas/OwnershipSource"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        lazyValue:
+          $ref: "#/components/schemas/BigInteger"
         createdAt:
           type: string
           format: "date-time"
         lastUpdatedAt:
           type: string
           format: "date-time"
-        creators:
-          type: array
-          deprecated: true
-          description: "Creators of the target item"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/Creator"
-        lazyValue:
-          $ref: "#/components/schemas/BigInteger"
-        pending:
-          type: array
-          description: "Pending information about the item"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/ItemHistory"
         auction:
           $ref: "#/components/schemas/Auction"
         bestSellOrder:
+          $ref: "#/components/schemas/Order"
+        bestBidOrder:
           $ref: "#/components/schemas/Order"
       required:
         - id
@@ -1423,7 +1277,6 @@ components:
         - value
         - createdAt
         - lazyValue
-        - pending
 
     OwnershipSource:
       type: string
