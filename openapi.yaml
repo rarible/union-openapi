@@ -2518,25 +2518,25 @@ components:
           default: null
           description: "Combined continuation token to paginate activities search result"
           type: string
-        blockchain:
+        blockchains:
           default: []
           description: "Allows you to limit the search to selected blockchains"
           type: array
           items:
             $ref: "#/components/schemas/Blockchain"
-        type:
+        types:
           default: []
           description: "Allows you to find collections by type"
           type: array
           items:
             $ref: "#/components/schemas/CollectionType"
-        owner:
+        owners:
           default: []
           description: "Allows you to find collections owned by specific addresses"
           type: array
           items:
             $ref: "#/components/schemas/Address"
-        minter:
+        minters:
           default: []
           description: "Allows you to find private collections where specific minter can mint tokens"
           type: array
