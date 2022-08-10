@@ -205,10 +205,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "cursor"
+        - name: "nextPage"
           in: query
           required: false
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
           schema:
             type: string
         - name: "size"
@@ -426,10 +426,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
+        - name: "nextPage"
           in: query
           required: false
-          description: "Continuation token from the previous response"
+          description: "Token to get the next page of results"
           schema:
             type: string
         - name: "size"
@@ -465,10 +465,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
+        - name: "nextPage"
           in: query
           required: false
-          description: "Continuation token from the previous response"
+          description: "Token to get the next page of results"
           schema:
             type: string
         - name: "size"
@@ -497,7 +497,7 @@ paths:
 
   ####################### Collection API #######################
 
-  /v0.1/collections/{collection}:
+  /v1/collections/{id}:
     get:
       tags:
         - collection-controller
@@ -524,7 +524,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/collections/{collection}/refreshMeta":
+  "/v1/collections/{id}/refreshMeta":
     delete:
       tags:
         - collection-controller
@@ -545,7 +545,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/collections/sync:
+  /v1/collections:
     get:
       tags:
         - collection-controller
@@ -558,10 +558,10 @@ paths:
           description: "Type of the blockchain network"
           schema:
             $ref: "#/components/schemas/Blockchain"
-        - name: "continuation"
+        - name: "nextPage"
           in: query
           required: false
-          description: "Continuation token from the previous response"
+          description: "Token to get the next page of results"
           schema:
             type: string
         - name: "size"
@@ -581,6 +581,31 @@ paths:
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v1/collections/search:
+    post:
+      tags:
+        - collection-controller
+      description: "Returns all collections that match the search criteria"
+      operationId: searchCollections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionSearchForm"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collections"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/EntityNotFound"
+        "500":
           $ref: "#/components/responses/ServerError"
 
 components:
@@ -1086,9 +1111,9 @@ components:
           type: integer
           format: int64
           description: "Number of items were found by request"
-        cursor:
+        nextPage:
           type: string
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
         items:
           type: array
           description: "List of found items"
@@ -1120,9 +1145,9 @@ components:
           type: integer
           format: int64
           description: "Number of items were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate items search result"
+          description: "Token to get the next page of results"
         items:
           type: array
           description: "List of found items"
@@ -1200,9 +1225,9 @@ components:
     Traits:
       type: object
       properties:
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate traits search result"
+          description: "Token to get the next page of results"
         traits:
           type: array
           description: "List of found traits"
@@ -1290,9 +1315,9 @@ components:
     ExtendedTraitProperties:
       type: object
       properties:
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate result"
+          description: "Token to get the next page of results"
         traits:
           type: array
           description: "List of ExtendedTraitProperty"
@@ -1511,9 +1536,9 @@ components:
           type: integer
           format: int64
           description: "Number of ownerships were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate Ownerships search result"
+          description: "Token to get the next page of results"
         ownerships:
           type: array
           default: [ ]
@@ -1575,9 +1600,9 @@ components:
           type: integer
           format: int32
           description: "Number of entities returned"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate ownerships search result"
+          description: "Token to get the next page of results"
         filter:
           $ref: "#/components/schemas/OwnershipSearchFilter"
 
@@ -1726,9 +1751,9 @@ components:
     Orders:
       type: object
       properties:
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate orders search result"
+          description: "Token to get the next page of results"
         orders:
           type: array
           description: "List of found orders"
@@ -1996,9 +2021,9 @@ components:
           type: integer
           format: int64
           description: "Number of auctions were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate auctions search result"
+          description: "Token to get the next page of results"
         auctions:
           type: array
           description: "List of found auctions"
@@ -2016,9 +2041,9 @@ components:
           type: integer
           format: int64
           description: "Number of auction bids were found by request"
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate auction bids search result"
+          description: "Token to get the next page of results"
         bids:
           type: array
           description: "List of found auction bids"
@@ -2097,7 +2122,7 @@ components:
         lastUpdatedAt:
           type: string
           format: "date-time"
-        cursor:
+        nextPage:
           type: string
         reverted:
           type: boolean
@@ -2561,12 +2586,9 @@ components:
     Activities:
       type: object
       properties:
-        continuation:
+        nextPage:
           type: string
-          description: "Continuation token to paginate activities search result"
-        cursor:
-          type: string
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
         activities:
           type: array
           default: [ ]
@@ -2593,14 +2615,7 @@ components:
         chain:
           type: string
         type:
-          type: string
-          enum:
-            - SINGLE
-            - MULTIPLE
-        name:
-          type: string
-        symbol:
-          type: string
+          $ref: "#/components/schemas/CollectionType"
         owner:
           $ref: "#/components/schemas/Address"
         minters:
@@ -2621,6 +2636,12 @@ components:
         - type
         - features
 
+    CollectionType:
+      type: string
+      enum:
+        - SINGLE
+        - MULTIPLE
+
     Collections:
       type: object
       properties:
@@ -2628,10 +2649,10 @@ components:
           deprecated: true
           type: integer
           format: int64
-          description: "Number of ownerships were found by request"
-        continuation:
+          description: "Number of collections were found by request"
+        nextPage:
           type: string
-          description: "Continuation token to paginate collections search result"
+          description: "Token to get the next page of results"
         collections:
           default: [ ]
           type: array
@@ -2649,6 +2670,9 @@ components:
         name:
           type: string
           description: "Name of the collection"
+        symbol:
+          type: string
+          description: "An abbreviated name for NFTs in this collection"
         description:
           type: string
           description: "Description of the collection"
@@ -2691,6 +2715,59 @@ components:
         feeRecipient:
           description: "Where seller fees will be paid to"
           "$ref": "#/components/schemas/Address"
+
+    CollectionSearchForm:
+      type: object
+      properties:
+        nextPage:
+          default: null
+          description: "Token to get the next page of results"
+          type: string
+        blockchain:
+          default: []
+          description: "Allows you to limit the search to selected blockchains"
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        type:
+          default: []
+          description: "Allows you to find collections by type"
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionType"
+        owner:
+          default: []
+          description: "Allows you to find collections owned by specific addresses"
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        minter:
+          default: []
+          description: "Allows you to find private collections where specific minter can mint tokens"
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        meta:
+          type: object
+          properties:
+            name:
+              default: []
+              description: "Allows you to search for collections by name, partial occurrence is possible, case insensitive"
+              type: array
+              items:
+                type: string
+            symbol:
+              default: []
+              description: "Allows you to search for collections by symbol, partial occurrence is possible, case insensitive"
+              type: array
+              items:
+                type: string
+            description:
+              default: []
+              description: "Allows you to search for collections by description, partial occurrence is possible, case insensitive"
+              type: array
+              items:
+                type: string
 
     ActivityBlockchainInfo:
       type: object
