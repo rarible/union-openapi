@@ -866,9 +866,9 @@ components:
     ItemSearchForm:
       type: object
       properties:
-        cursor:
+        nextPage:
           default: null
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
           type: string
         blockchains:
           default: []
@@ -923,9 +923,9 @@ components:
     ItemByOwnersSearchForm:
       type: object
       properties:
-        cursor:
+        nextPage:
           default: null
-          description: "Combined continuation token to paginate activities search result"
+          description: "Token to get the next page of results"
           type: string
         blockchains:
           default: []
