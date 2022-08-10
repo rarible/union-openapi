@@ -321,7 +321,7 @@ paths:
 
   ######################## Activity API ########################
 
-  /v0.1/activities/sync:
+  /v1/activities/sync:
     get:
       tags:
         - activity-controller
@@ -349,7 +349,7 @@ paths:
         - name: "type"
           in: query
           required: false
-          description: "Filtering by activity type"
+          description: "Filtering by activities type"
           schema:
             "$ref": "#/components/schemas/SyncType"
       responses:
@@ -364,7 +364,32 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  ####################### Collection API #######################
+  /v1/activities:
+    post:
+      tags:
+        - activity-controller
+      description: "Returns all activities that match the search criteria"
+      operationId: searchActivities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivitySearchForm"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Items"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/EntityNotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+####################### Collection API #######################
 
   /v1/collections/{id}:
     get:
@@ -759,8 +784,6 @@ components:
           $ref: "#/components/schemas/Blockchain"
         collection:
           $ref: "#/components/schemas/CollectionId"
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         creators:
@@ -771,12 +794,6 @@ components:
             $ref: "#/components/schemas/Creator"
         lazySupply:
           $ref: "#/components/schemas/BigInteger"
-        pending:
-          type: array
-          description: "Pending information about the item"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/ItemTransfer"
         mintedAt:
           type: string
           format: date-time
@@ -820,6 +837,130 @@ components:
         - deleted
         - sellers
         - auctions
+
+    ItemSearchForm:
+      type: object
+      properties:
+        cursor:
+          default: null
+          description: "Combined continuation token to paginate activities search result"
+          type: string
+        blockchains:
+          default: []
+          description: "Type of the blockchain network"
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        collections:
+          default: []
+          description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        creator:
+          $ref: "#/components/schemas/Address"
+        lazySupply:
+          $ref: "#/components/schemas/SearchBigInteger"
+        supply:
+          $ref: "#/components/schemas/SearchBigInteger"
+        mintedAt:
+          $ref: "#/components/schemas/SearchDate"
+        lastUpdatedAt:
+          $ref: "#/components/schemas/SearchDate"
+        text:
+          description: "The search string parameter, search by name anf description of the item"
+          type: string
+        trait:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemsTrait"
+        sale:
+          default: null
+          description: "An object that describes the parameters for searching for items based on information about sell orders"
+          type: object
+          properties:
+            totalStock:
+              $ref: "#/components/schemas/SearchBigInteger"
+            sellers:
+              $ref: "#/components/schemas/SearchBigInteger"
+            priceUsd:
+              $ref: "#/components/schemas/SearchBigDecimal"
+            price:
+              default: null
+              description: "An object that allows you to search for orders in a given currency"
+              type: object
+              properties:
+                currency:
+                  $ref: "#/components/schemas/CurrencyId"
+                value:
+                  $ref: "#/components/schemas/SearchBigDecimal"
+
+    ItemByOwnersSearchForm:
+      type: object
+      properties:
+        cursor:
+          default: null
+          description: "Combined continuation token to paginate activities search result"
+          type: string
+        blockchains:
+          default: []
+          description: "Type of the blockchain network"
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        owners:
+          default: []
+          description: "Owners addresses, has format `${blockchainType}:${address}`"
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        collections:
+          default: []
+          description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        mintedAt:
+          $ref: "#/components/schemas/SearchDate"
+        lastUpdatedAt:
+          $ref: "#/components/schemas/SearchDate"
+        text:
+          description: "The search string parameter, search by name anf description of the item"
+          type: string
+        trait:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemsTrait"
+        sale:
+          default: null
+          description: "An object that describes the parameters for searching for items based on information about sell orders"
+          type: object
+          properties:
+            totalStock:
+              $ref: "#/components/schemas/SearchBigInteger"
+            sellers:
+              $ref: "#/components/schemas/SearchBigInteger"
+            priceUsd:
+              $ref: "#/components/schemas/SearchBigDecimal"
+            price:
+              default: null
+              description: "An object that allows you to search for orders in a given currency"
+              type: object
+              properties:
+                currency:
+                  $ref: "#/components/schemas/CurrencyId"
+                value:
+                  $ref: "#/components/schemas/SearchBigDecimal"
+
+    ItemsTrait:
+      type: object
+      properties:
+        key:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
 
     ItemLastSale:
       type: object
@@ -876,6 +1017,20 @@ components:
       required:
         - items
 
+    ItemOwner:
+      type: object
+      properties:
+        owner:
+          $ref: "#/components/schemas/Address"
+        quantity:
+          $ref: "#/components/schemas/BigInteger"
+
+    ItemOwners:
+      type: object
+      properties:
+        itemOwners:
+          $ref: "#/components/schemas/ItemOwner"
+
     ItemsWithOwnership:
       type: object
       properties:
@@ -896,20 +1051,20 @@ components:
       required:
         - items
 
-    CollectionEvent:
+    CollectionActivity:
       type: object
       properties:
         collectionId:
           $ref: "#/components/schemas/CollectionId"
-        eventId:
+        activityId:
           type: string
       required:
-        - eventId
+        - activityId
         - collectionId
       oneOf:
-        - $ref: "#/components/schemas/CollectionUpdateEvent"
+        - $ref: "#/components/schemas/CollectionUpdateActivity"
 
-    CollectionUpdateEvent:
+    CollectionUpdateActivity:
       type: object
       properties:
         "@type":
@@ -922,21 +1077,21 @@ components:
         - "@type"
         - collection
 
-    ItemEvent:
+    ItemActivity:
       type: object
       properties:
         itemId:
           $ref: "#/components/schemas/ItemId"
-        eventId:
+        activityId:
           type: string
       required:
-        - eventId
+        - activityId
         - itemId
       oneOf:
-        - $ref: "#/components/schemas/ItemUpdateEvent"
-        - $ref: "#/components/schemas/ItemDeleteEvent"
+        - $ref: "#/components/schemas/ItemUpdateActivity"
+        - $ref: "#/components/schemas/ItemDeleteActivity"
 
-    ItemUpdateEvent:
+    ItemUpdateActivity:
       type: object
       properties:
         "@type":
@@ -949,7 +1104,7 @@ components:
         - "@type"
         - item
 
-    ItemDeleteEvent:
+    ItemDeleteActivity:
       type: object
       properties:
         "@type":
@@ -1271,21 +1426,21 @@ components:
       required:
         - ownerships
 
-    OwnershipEvent:
+    OwnershipActivity:
       type: object
       properties:
         ownershipId:
           $ref: "#/components/schemas/OwnershipId"
-        eventId:
+        activityId:
           type: string
       required:
         - ownershipId
-        - eventId
+        - activityId
       oneOf:
-        - $ref: "#/components/schemas/OwnershipUpdateEvent"
-        - $ref: "#/components/schemas/OwnershipDeleteEvent"
+        - $ref: "#/components/schemas/OwnershipUpdateActivity"
+        - $ref: "#/components/schemas/OwnershipDeleteActivity"
 
-    OwnershipUpdateEvent:
+    OwnershipUpdateActivity:
       type: object
       properties:
         "@type":
@@ -1298,7 +1453,7 @@ components:
         - "@type"
         - ownership
 
-    OwnershipDeleteEvent:
+    OwnershipDeleteActivity:
       type: object
       properties:
         "@type":
@@ -1486,20 +1641,20 @@ components:
       required:
         - orders
 
-    OrderEvent:
+    OrderActivity:
       type: object
       properties:
         orderId:
           "$ref": "#/components/schemas/OrderId"
-        eventId:
+        activityId:
           type: string
       required:
         - orderId
-        - eventId
+        - activityId
       oneOf:
-        - "$ref": "#/components/schemas/OrderUpdateEvent"
+        - "$ref": "#/components/schemas/OrderUpdateActivity"
 
-    OrderUpdateEvent:
+    OrderUpdateActivity:
       type: object
       properties:
         "@type":
@@ -1816,8 +1971,7 @@ components:
     UserActivityType:
       type: string
       enum:
-        - TRANSFER_FROM
-        - TRANSFER_TO
+        - TRANSFER
         - MINT
         - BURN
         - MAKE_BID
@@ -1834,6 +1988,43 @@ components:
         - AUCTION_STARTED
         - AUCTION_ENDED
 
+    ActivitySearchForm:
+      type: object
+      properties:
+        nextPage:
+          default: null
+          description: "Token to get the next page of results"
+          type: string
+        types:
+          default: [MINT, TRANSFER, BURN, MAKE_BID, GET_BID, LIST, BUY, SELL, CANCEL_LIST, CANCEL_BID,
+                    AUCTION_BID, AUCTION_CREATED, AUCTION_CANCEL, AUCTION_FINISHED, AUCTION_STARTED, AUCTION_ENDED]
+          description: "Array of activities"
+          type: array
+          items:
+            $ref: "#/components/schemas/UserActivityType"
+        users:
+          default: null
+          description: "Array of users"
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        collections:
+          default: null
+          description: "Array of collections"
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionId"
+        items:
+          default: null
+          description: "Array of items"
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemId"
+        createdAt:
+          $ref: "#/components/schemas/SearchDate"
+        lastUpdateAt:
+          $ref: "#/components/schemas/SearchDate"
+
     Activity:
       type: object
       properties:
@@ -1845,8 +2036,6 @@ components:
         lastUpdatedAt:
           type: string
           format: "date-time"
-        nextPage:
-          type: string
         reverted:
           type: boolean
       oneOf:
@@ -1879,10 +2068,8 @@ components:
             - MINT
         owner:
           $ref: "#/components/schemas/Address"
-        contract: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/BigInteger"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         itemId:
           $ref: "#/components/schemas/ItemId"
         value:
@@ -1906,10 +2093,8 @@ components:
             - BURN
         owner:
           $ref: "#/components/schemas/Address"
-        contract: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/BigInteger"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         itemId:
           $ref: "#/components/schemas/ItemId"
         value:
@@ -1935,10 +2120,8 @@ components:
           $ref: "#/components/schemas/Address"
         owner:
           $ref: "#/components/schemas/Address"
-        contract: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/ContractAddress"
-        tokenId: # Deprecated, replaced by itemId
-          $ref: "#/components/schemas/BigInteger"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         itemId:
           $ref: "#/components/schemas/ItemId"
         value:
@@ -2001,15 +2184,15 @@ components:
 
     OrderMatchSwap:
       type: object
-      required: [left, right]
+      required: [make, take]
       properties:
         "@type":
           type: string
           enum:
             - SWAP
-        left:
+        make:
           $ref: "#/components/schemas/OrderActivityMatchSide"
-        right:
+        take:
           $ref: "#/components/schemas/OrderActivityMatchSide"
 
     OrderMatchSell:
@@ -2019,17 +2202,17 @@ components:
           type: string
           enum:
             - SELL
-        nft:
+        make:
           $ref: "#/components/schemas/Asset"
-        payment:
+        take:
           $ref: "#/components/schemas/Asset"
-        buyer:
+        maker:
           $ref: "#/components/schemas/Address"
-        seller:
+        taker:
           $ref: "#/components/schemas/Address"
-        buyerOrderHash:
+        makerOrderHash:
           type: string
-        sellerOrderHash:
+        takerOrderHash:
           type: string
         price:
           $ref: "#/components/schemas/BigDecimal"
@@ -2043,12 +2226,12 @@ components:
             - SELL
             - ACCEPT_BID
       required:
-        - nft
-        - payment
+        - make
+        - take
+        - maker
+        - taker
         - price
         - type
-        - buyer
-        - seller
 
     OrderBidActivity:
       type: object
@@ -3431,14 +3614,14 @@ components:
         - "@type"
         - id
 
-    SubscriptionEvent:
+    SubscriptionActivity:
       type: object
       oneOf:
-        - $ref: "#/components/schemas/FakeSubscriptionEvent"
-        - $ref: "#/components/schemas/ItemSubscriptionEvent"
-        - $ref: "#/components/schemas/OwnershipSubscriptionEvent"
+        - $ref: "#/components/schemas/FakeSubscriptionActivity"
+        - $ref: "#/components/schemas/ItemSubscriptionActivity"
+        - $ref: "#/components/schemas/OwnershipSubscriptionActivity"
 
-    FakeSubscriptionEvent:
+    FakeSubscriptionActivity:
       type: object
       properties:
         "@type":
@@ -3448,7 +3631,7 @@ components:
       required:
         - "@type"
 
-    ItemSubscriptionEvent:
+    ItemSubscriptionActivity:
       type: object
       properties:
         "@type":
@@ -3456,12 +3639,12 @@ components:
           enum:
             - ITEM
         value:
-          $ref: "#/components/schemas/ItemEvent"
+          $ref: "#/components/schemas/ItemActivity"
       required:
         - "@type"
         - value
 
-    OwnershipSubscriptionEvent:
+    OwnershipSubscriptionActivity:
       type: object
       properties:
         "@type":
@@ -3469,7 +3652,7 @@ components:
           enum:
             - OWNERSHIP
         value:
-          $ref: "#/components/schemas/OwnershipEvent"
+          $ref: "#/components/schemas/OwnershipActivity"
       required:
         - "@type"
         - value
