@@ -440,6 +440,31 @@ paths:
           $ref: "#/components/responses/ServerError"
 
   /v1/collections:
+    post:
+      tags:
+        - collection-controller
+      description: "Returns all collections that match the search criteria"
+      operationId: searchCollections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionSearchForm"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collections"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/EntityNotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /v1/collections/sync:
     get:
       tags:
         - collection-controller
@@ -2629,51 +2654,33 @@ components:
           default: null
           description: "Token to get the next page of results"
           type: string
-        blockchain:
+        blockchains:
           default: []
           description: "Allows you to limit the search to selected blockchains"
           type: array
           items:
             $ref: "#/components/schemas/Blockchain"
-        type:
+        types:
           default: []
           description: "Allows you to find collections by type"
           type: array
           items:
             $ref: "#/components/schemas/CollectionType"
-        owner:
+        owners:
           default: []
           description: "Allows you to find collections owned by specific addresses"
           type: array
           items:
             $ref: "#/components/schemas/Address"
-        minter:
+        minters:
           default: []
           description: "Allows you to find private collections where specific minter can mint tokens"
           type: array
           items:
             $ref: "#/components/schemas/Address"
-        meta:
-          type: object
-          properties:
-            name:
-              default: []
-              description: "Allows you to search for collections by name, partial occurrence is possible, case insensitive"
-              type: array
-              items:
-                type: string
-            symbol:
-              default: []
-              description: "Allows you to search for collections by symbol, partial occurrence is possible, case insensitive"
-              type: array
-              items:
-                type: string
-            description:
-              default: []
-              description: "Allows you to search for collections by description, partial occurrence is possible, case insensitive"
-              type: array
-              items:
-                type: string
+        text:
+          description: "The search string parameter, search by name, symbol and description of the collection"
+          type: string
 
     ActivityBlockchainInfo:
       type: object
