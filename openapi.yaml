@@ -810,6 +810,7 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/OrderStatus"
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -920,6 +921,7 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/OrderStatus"
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -984,6 +986,7 @@ paths:
           schema:
             minimum: 1
             type: integer
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -1037,6 +1040,7 @@ paths:
             minimum: 1
             type: integer
             format: int32
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -1120,6 +1124,7 @@ paths:
             minimum: 1
             type: integer
             format: int32
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
@@ -1199,6 +1204,7 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
+        - $ref: "#/components/parameters/searchEngine"
       responses:
         "200":
           description: "OK"
