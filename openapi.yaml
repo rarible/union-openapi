@@ -2206,6 +2206,8 @@ components:
         size:
           type: integer
           format: int64
+        available:
+          type: boolean
       required:
         - url
         - representation
