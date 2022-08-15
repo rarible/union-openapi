@@ -494,7 +494,7 @@ paths:
       tags:
         - item-controller
       operationId: queryTraits
-      deprecated: true
+      description: "**[Not yet implemented]**"
       parameters:
         - name: keys
           description: Trait keys
@@ -528,9 +528,8 @@ paths:
     get:
       tags:
         - item-controller
-      description: "Returns combination of Item attribute key with list of values"
+      description: "**[Not yet implemented]** Returns combination of Item attribute key with list of values"
       operationId:  searchTraits
-      deprecated: true
       parameters:
         - name: filter
           description: filter
@@ -562,8 +561,8 @@ paths:
     post:
       tags:
         - item-controller
+      description: "**[Not yet implemented]**"
       operationId: queryTraitsWithRarity
-      deprecated: true
       requestBody:
         content:
           application/json:
@@ -582,7 +581,7 @@ paths:
     post:
       tags:
         - item-controller
-      description: "Complex search for items"
+      description: "**[Not yet implemented]** Complex search for items."
       operationId: searchItems
       requestBody:
         content:
