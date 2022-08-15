@@ -2989,6 +2989,8 @@ components:
           description: "Continuation token to paginate items search result"
         filter:
           $ref: "#/components/schemas/ItemsSearchFilter"
+        sort:
+          $ref: "#/components/schemas/ItemsSearchSort"
 
 
     ItemsSearchFilter:
@@ -3034,6 +3036,41 @@ components:
         lastUpdatedAtTo:
           type: string
           format: date-time
+        sellPriceFrom:
+          type: number
+          format: double
+        sellPriceTo:
+          type: number
+          format: double
+        sellCurrency:
+          type: string
+        sellPlatforms:
+          type: array
+          items:
+            $ref: "#/components/schemas/Platform"
+        bidPriceFrom:
+          type: number
+          format: double
+        bidPriceTo:
+          type: number
+          format: double
+        bidCurrency:
+          type: string
+        bidPlatforms:
+          type: array
+          items:
+            $ref: "#/components/schemas/Platform"
+
+
+    ItemsSearchSort:
+      type: string
+      enum:
+        - LATEST
+        - EARLIEST
+        - HIGHEST_SELL
+        - LOWEST_SELL
+        - HIGHEST_BID
+        - LOWEST_BID
 
     #################### Order - Union ####################
 
