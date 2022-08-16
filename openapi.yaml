@@ -855,7 +855,6 @@ components:
         - blockchain
         - creators
         - lazySupply
-        - pending
         - mintedAt
         - lastUpdatedAt
         - supply
@@ -1343,7 +1342,6 @@ components:
         - createdAt
         - creators
         - lazyValue
-        - pending
 
     ItemHistory:
       type: object
@@ -1611,12 +1609,6 @@ components:
           type: string
         signature:
           type: string
-        pending:
-          type: array
-          description: "Pending information about the order"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/PendingOrder"
         data:
           $ref: "#/components/schemas/OrderData"
       required:
@@ -1882,10 +1874,6 @@ components:
           $ref: "#/components/schemas/BigDecimal"
         buyPriceUsd:
           $ref: "#/components/schemas/BigDecimal"
-        pending:
-          type: array
-          items:
-            $ref: "#/components/schemas/AuctionHistory"
         status:
           $ref: "#/components/schemas/AuctionStatus"
         ongoing:
@@ -3062,70 +3050,6 @@ components:
           type: string
           enum:
             - ETH_BASIC_SEAPORT_DATA_V1
-      required:
-        - "@type"
-
-    PendingOrder:
-      type: object
-      required:
-        - id
-        - date
-      properties:
-        id:
-          $ref: "#/components/schemas/OrderId"
-        make:
-          $ref: "#/components/schemas/Asset"
-        take:
-          $ref: "#/components/schemas/Asset"
-        date:
-          type: string
-          format: date-time
-        maker:
-          $ref: "#/components/schemas/Address"
-      oneOf:
-        - $ref: "#/components/schemas/PendingOrderCancel"
-        - $ref: "#/components/schemas/PendingOrderMatch"
-        - $ref: "#/components/schemas/OnChainOrder"
-
-    PendingOrderMatch:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ORDER_SIDE_MATCH
-        side:
-          type: string
-          enum:
-            - LEFT
-            - RIGHT
-        fill:
-          $ref: "#/components/schemas/BigDecimal"
-        taker:
-          $ref: "#/components/schemas/Address"
-        counterHash:
-          type: string
-        makeUsd:
-          $ref: "#/components/schemas/BigDecimal"
-        takeUsd:
-          $ref: "#/components/schemas/BigDecimal"
-        makePriceUsd:
-          $ref: "#/components/schemas/BigDecimal"
-        takePriceUsd:
-          $ref: "#/components/schemas/BigDecimal"
-      required:
-        - "@type"
-        - fill
-
-    PendingOrderCancel:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - CANCEL
-        owner:
-          $ref: "#/components/schemas/Address"
       required:
         - "@type"
 
