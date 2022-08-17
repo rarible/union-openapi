@@ -319,7 +319,33 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  ######################## Activity API ########################
+
+  /v1/orders/search:
+    post:
+      tags:
+        - order-controller
+      description: "Returns all orders that match the search criteria"
+      operationId: searchCollections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSearchForm"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/EntityNotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+      ######################## Activity API ########################
 
   /v1/activities/sync:
     get:
@@ -1544,6 +1570,76 @@ components:
 
     #################### Order - Union ####################
 
+    OrderSearchForm:
+      type: object
+      properties:
+        nextPage:
+          default: null
+          description: "Token to get the next page of results"
+          type: string
+        blockchains:
+          default: [ ]
+          description: "Allows you to limit the search to selected blockchains"
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        types:
+          default: null
+          description: "Allows you to limit the search to selected order types"
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderType"
+        platforms:
+          default: null
+          description: "Allows you to limit the search to selected platforms"
+          type: array
+          items:
+            $ref: "#/components/schemas/Platform"
+        origins:
+          default: null
+          description: "Allows you to limit the search to selected origins"
+          type: array
+          items:
+            $ref: "#/components/schemas/Platform"
+        statuses:
+          default: null
+          description: "Allows you to limit the search to selected statuses"
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderStatus"
+        collections:
+          default: null
+          description: "Allows you to limit the search to selected collections"
+          type: array
+          items:
+            $ref: "#/components/schemas/Collection"
+        itemIds:
+          default: null
+          description: "Allows you to limit the search to selected itemIds"
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemId"
+        makers:
+          default: null
+          description: "Allows you to limit the search to selected makers"
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        startAt:
+          $ref: "#/components/schemas/SearchDate"
+        endAt:
+          $ref: "#/components/schemas/SearchDate"
+        currencies:
+          default: null
+          description: "Allows you to limit the search to selected currencies"
+          type: array
+          items:
+            $ref: "#/components/schemas/ContractAddress"
+        prices:
+          $ref: "#/components/schemas/SearchBigDecimal"
+        pricesUSD:
+          $ref: "#/components/schemas/SearchBigDecimal"
+
     OrderId:
       type: string
       example: "${orderId}"
@@ -1562,6 +1658,8 @@ components:
     Order:
       type: object
       properties:
+        type:
+          $ref: "#/components/schemas/OrderType"
         id:
           $ref: "#/components/schemas/OrderId"
         fill:
@@ -1576,7 +1674,7 @@ components:
         endedAt:
           type: string
           format: "date-time"
-        makeStock:
+        nftStock:
           $ref: "#/components/schemas/BigDecimal"
         cancelled:
           type: "boolean"
@@ -1589,21 +1687,17 @@ components:
         dbUpdatedAt:
           type: string
           format: "date-time"
-        makePrice:
+        currency:
+          $ref: "#/components/schemas/ContractAddress"
+        price:
           $ref: "#/components/schemas/BigDecimal"
-        takePrice:
-          $ref: "#/components/schemas/BigDecimal"
-        makePriceUsd:
-          $ref: "#/components/schemas/BigDecimal"
-        takePriceUsd:
+        priceUsd:
           $ref: "#/components/schemas/BigDecimal"
         maker:
           $ref: "#/components/schemas/Address"
         taker:
           $ref: "#/components/schemas/Address"
-        make:
-          $ref: "#/components/schemas/Asset"
-        take:
+        nft:
           $ref: "#/components/schemas/Asset"
         salt:
           type: string
@@ -1616,16 +1710,23 @@ components:
         - platform
         - status
         - fill
-        - makeStock
+        - nftStock
         - cancelled
         - createdAt
         - lastUpdatedAt
         - type
         - maker
-        - make
-        - take
+        - nft
+        - currency
+        - price
         - salt
         - data
+
+    OrderType:
+      type: string
+      enum:
+        - BID
+        - SELL
 
     OrderData:
       type: object
