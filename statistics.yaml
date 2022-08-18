@@ -167,11 +167,82 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/leaderboards/collections/mints":
+    get:
+      tags:
+        - data-controller
+      description: Collections leaderboard with mint activity
+      operationId: getCollectionMintsLeaderboard
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: period
+          in: query
+          description: Time period of leaderboard
+          required: false
+          schema:
+            type: string
+            default: WEEK
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: string
+            default: '10'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OlapCollectionMintsLeaderboardEntry'
+              example:
+                - id: ETHEREUM:0x7e89a5e47cfdafd547ae8b2bc89590e0608941ae
+                  minted: 1077
+                  totalItemSupply: 1992
+                  floorPrice:
+                    currency: ETH
+                    value: 0.0021
+                - id: ETHEREUM:0x5e6dd7b71bff0f893cef2045819bb6095bd17e80
+                  minted: 607
+                  totalItemSupply: 607
+                  floorPrice: null
+                - id: ETHEREUM:0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85
+                  minted: 178
+                  totalItemSupply: 1984031
+                  floorPrice:
+                    currency: ETH
+                    value: 5.295908E-22
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+              example:
+                code: INVALID_INPUT
+                message: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+              example:
+                code: UNKNOWN
+                message: Unknown error
   "/v0.1/data/leaderboards/collections":
     get:
       tags:
         - data-controller
-      description: Get leaderboard of collections
+      description: Collections leaderboard with trade activity
       operationId: getCollectionLeaderboard
       parameters:
         - name: blockchain
@@ -204,19 +275,21 @@ paths:
                 items:
                   "$ref": "#/components/schemas/OlapCollectionLeaderboardEntry"
               example:
-                - id: ETHEREUM:0x160c404b2b49cbc3240055ceaee026df1e8497a0
+                - id: ETHEREUM:0xe8f88d16f24255fcfab25959705d724406d67d9d
                   volumeUsd:
                     currency: USD
-                    value: 1607998.304789745
-                    changePercent: 69.12237444684479
+                    value: 45325.07
+                    changePercent: -51.196335
                   volumeNative:
                     currency: ETH
-                    value: 782.5400412839579
+                    value: 23.95
+                  itemsBought: 1
                   floorPrice:
                     currency: ETH
-                    value: 1.55
-                  totalItemSupply: 10
-                  ownersCount: 10
+                    value: 24.0
+                  listed: 33
+                  totalItemSupply: 250
+                  ownersCount: 187
         '400':
           description: Bad Request
           content:
@@ -925,6 +998,7 @@ components:
     OlapCollectionLeaderboardEntry:
       required:
         - id
+        - itemsBought
         - listed
         - ownersCount
         - totalItemSupply
@@ -939,6 +1013,9 @@ components:
           "$ref": "#/components/schemas/OlapCurrencyAmountWithChange"
         volumeNative:
           "$ref": "#/components/schemas/OlapCurrencyAmount"
+        itemsBought:
+          type: integer
+          format: int32
         floorPrice:
           "$ref": "#/components/schemas/OlapCurrencyAmount"
         listed:
@@ -950,6 +1027,25 @@ components:
         ownersCount:
           type: integer
           format: int32
+
+    OlapCollectionMintsLeaderboardEntry:
+      required:
+        - id
+        - minted
+        - totalItemSupply
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of collection
+        minted:
+          type: integer
+          format: int64
+        totalItemSupply:
+          type: integer
+          format: int64
+        floorPrice:
+          $ref: '#/components/schemas/OlapCurrencyAmount'
 
     OlapStatsGraphResponse:
       required:
@@ -1003,7 +1099,6 @@ components:
         items:
           type: integer
           description: Count of collection items
-          format: int32
         owners:
           type: integer
           description: Count of collection items owners
