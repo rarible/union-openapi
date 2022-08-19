@@ -22,18 +22,18 @@ paths:
             "$ref": "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
-          description: Time period of trending statistics
+          description: "Time period of trending statistics. Default: WEEK"
           required: false
           schema:
-            type: string
-            default: "WEEK"
+            "$ref": "#/components/schemas/OlapPeriod"
         - name: limit
           in: query
           description: Limit of records in trending statistics
           required: false
           schema:
-            type: string
-            default: '10'
+            type: integer
+            format: int32
+            default: 10
       responses:
         '200':
           description: OK
@@ -126,18 +126,18 @@ paths:
             "$ref": "#/components/schemas/OlapPlatformSource"
         - name: period
           in: query
-          description: Time period of leaderboard
+          description: "Time period of leaderboard. Default: WEEK"
           required: false
           schema:
-            type: string
-            default: WEEK
+            $ref: '#/components/schemas/OlapPeriod'
         - name: limit
           in: query
           description: Limit of records in leaderboard
           required: false
           schema:
-            type: string
-            default: '10'
+            type: integer
+            format: int32
+            default: 10
       responses:
         '200':
           description: OK
@@ -182,7 +182,7 @@ paths:
             "$ref": "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
-          description: Time period of leaderboard
+          description: "Time period of leaderboard. Possible values: [DAY, WEEK, MONTH, 6H, 1H]. Stands for last day, last week, last month, last 6 hours, last 1 hour"
           required: false
           schema:
             type: string
@@ -198,8 +198,9 @@ paths:
           description: Limit of records in leaderboard
           required: false
           schema:
-            type: string
-            default: '10'
+            type: integer
+            format: int32
+            default: 10
         - name: offset
           in: query
           description: Offset of records in leaderboard
@@ -267,7 +268,7 @@ paths:
             "$ref": "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
-          description: Time period of leaderboard
+          description: "Time period of leaderboard. Possible values: [DAY, WEEK, MONTH, 6H, 1H]. Stands for last day, last week, last month, last 6 hours, last 1 hour"
           required: false
           schema:
             type: string
@@ -277,14 +278,15 @@ paths:
           description: Leaderboard sorting
           required: false
           schema:
-            $ref: '#/components/schemas/OlapTradesLeaderboardSort'
+            "$ref": "#/components/schemas/OlapTradesLeaderboardSort"
         - name: limit
           in: query
           description: Limit of records in leaderboard
           required: false
           schema:
-            type: string
-            default: '10'
+            type: integer
+            format: int32
+            default: 10
         - name: offset
           in: query
           description: Offset of records in leaderboard
@@ -402,8 +404,7 @@ paths:
           description: Currency of statistics
           required: false
           schema:
-            type: string
-            default: USD
+            "$ref": "#/components/schemas/OlapCurrencyType"
       responses:
         '200':
           description: OK
@@ -508,8 +509,7 @@ paths:
           description: Currency of statistics
           required: false
           schema:
-            type: string
-            default: USD
+            "$ref": "#/components/schemas/OlapCurrencyType"
         - name: filters
           in: query
           description: Filters of statistics
@@ -634,8 +634,7 @@ paths:
           description: Currency of statistics
           required: false
           schema:
-            type: string
-            default: USD
+            "$ref": "#/components/schemas/OlapCurrencyType"
         - name: filters
           in: query
           description: Filters of statistics
@@ -695,15 +694,13 @@ paths:
           description: Currency of statistics
           required: false
           schema:
-            type: string
-            default: USD
+            "$ref": "#/components/schemas/OlapCurrencyType"
         - name: period
           in: query
-          description: Time period of statistics
+          description: "Time period of statistics. Default: DAY"
           required: false
           schema:
-            type: string
-            default: DAY
+            "$ref": "#/components/schemas/OlapPeriod"
         - name: filters
           in: query
           description: Filters of statistics
@@ -763,8 +760,7 @@ paths:
           description: Currency of statistics
           required: false
           schema:
-            type: string
-            default: USD
+            "$ref": "#/components/schemas/OlapCurrencyType"
         - name: filters
           in: query
           description: Filters of statistics
@@ -876,9 +872,16 @@ components:
       pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|SOLANA|IMMUTABLEX):.*$"
       type: string
 
+    OlapPeriod:
+      type: string
+      enum:
+        - DAY
+        - WEEK
+        - MONTH
+
     OlapCurrencyType:
       type: string
-      description: Currency
+      default: USD
       enum:
         - USD
         - ETH
@@ -1146,6 +1149,7 @@ components:
         items:
           type: integer
           description: Count of collection items
+          format: int32
         owners:
           type: integer
           description: Count of collection items owners
