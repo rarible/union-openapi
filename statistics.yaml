@@ -187,6 +187,12 @@ paths:
           schema:
             type: string
             default: WEEK
+        - name: sort
+          in: query
+          description: Leaderboard sorting
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapMintsLeaderboardSort'
         - name: limit
           in: query
           description: Limit of records in leaderboard
@@ -194,6 +200,14 @@ paths:
           schema:
             type: string
             default: '10'
+        - name: offset
+          in: query
+          description: Offset of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
       responses:
         '200':
           description: OK
@@ -258,6 +272,12 @@ paths:
           schema:
             type: string
             default: WEEK
+        - name: sort
+          in: query
+          description: Leaderboard sorting
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapTradesLeaderboardSort'
         - name: limit
           in: query
           description: Limit of records in leaderboard
@@ -265,6 +285,14 @@ paths:
           schema:
             type: string
             default: '10'
+        - name: offset
+          in: query
+          description: Offset of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
       responses:
         '200':
           description: OK
@@ -995,6 +1023,15 @@ components:
         - RARIBLE
         - OPEN_SEA
 
+    OlapTradesLeaderboardSort:
+      type: string
+      default: VOLUME_DESC
+      enum:
+        - VOLUME_USD_ASC
+        - VOLUME_USD_DESC
+        - COLLECTION_ASC
+        - COLLECTION_DESC
+
     OlapCollectionLeaderboardEntry:
       required:
         - id
@@ -1027,6 +1064,15 @@ components:
         ownersCount:
           type: integer
           format: int32
+
+    OlapMintsLeaderboardSort:
+      type: string
+      default: MINTED_DESC
+      enum:
+        - MINTED_ASC
+        - MINTED_DESC
+        - COLLECTION_ASC
+        - COLLECTION_DESC
 
     OlapCollectionMintsLeaderboardEntry:
       required:
