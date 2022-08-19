@@ -1025,7 +1025,7 @@ components:
 
     OlapTradesLeaderboardSort:
       type: string
-      default: VOLUME_DESC
+      default: VOLUME_USD_DESC
       enum:
         - VOLUME_USD_ASC
         - VOLUME_USD_DESC
