@@ -42,6 +42,12 @@
             <artifactId>jackson-module-kotlin</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- ================== Other ==================== -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
