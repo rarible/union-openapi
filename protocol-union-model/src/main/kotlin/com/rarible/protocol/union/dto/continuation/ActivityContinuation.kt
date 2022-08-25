@@ -47,4 +47,26 @@ object ActivityContinuation {
             )
         }
     }
+
+    object ByLastUpdatedDesc :
+        ContinuationFactory<ActivityDto, DateContinuation> {
+        override fun getContinuation(entity: ActivityDto): DateContinuation {
+            return DateContinuation(
+                entity.date,
+                entity.id.value,
+                false
+            )
+        }
+    }
+
+    object ByLastUpdatedAsc :
+        ContinuationFactory<ActivityDto, DateContinuation> {
+        override fun getContinuation(entity: ActivityDto): DateContinuation {
+            return DateContinuation(
+                entity.date,
+                entity.id.value,
+                true
+            )
+        }
+    }
 }
