@@ -11,7 +11,9 @@ paths:
     get:
       tags:
         - data-controller
-      description: Get trending collections
+      description: |
+        Trending collection list. Sorted by special score, calculated in the following way: 
+        gmv * (<amount of transaction change percentage comparing to previous period> - 1) / 10000
       operationId: getTrendingCollection
       parameters:
         - name: blockchain
@@ -74,7 +76,9 @@ paths:
     get:
       tags:
         - data-controller
-      description: Get overall rarible statistics
+      description: |
+        Rarible-related statistics. Amount of items listed and sold on rarible platform and amount of minted items over 
+        all blockchains and all supported marketplaces
       operationId: getRaribleStats
       responses:
         '200':
@@ -103,7 +107,7 @@ paths:
     get:
       tags:
         - data-controller
-      description: Get leaderboard of users
+      description: Users (top buyers/sellers) leaderboard. Calculated as traded worth for the period.
       operationId: getUserLeaderboard
       parameters:
         - name: entity
@@ -171,7 +175,7 @@ paths:
     get:
       tags:
         - data-controller
-      description: Collections leaderboard with mint activity
+      description: Collections leaderboard based on mint activity
       operationId: getCollectionMintsLeaderboard
       parameters:
         - name: blockchain
@@ -182,11 +186,10 @@ paths:
             "$ref": "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
-          description: "Time period of leaderboard. Possible values: [DAY, WEEK, MONTH, 6H, 1H]. Stands for last day, last week, last month, last 6 hours, last 1 hour"
+          description: Time period of leaderboard
           required: false
           schema:
-            type: string
-            default: WEEK
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
         - name: sort
           in: query
           description: Leaderboard sorting
@@ -268,11 +271,10 @@ paths:
             "$ref": "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
-          description: "Time period of leaderboard. Possible values: [DAY, WEEK, MONTH, 6H, 1H]. Stands for last day, last week, last month, last 6 hours, last 1 hour"
+          description: Time period of leaderboard
           required: false
           schema:
-            type: string
-            default: WEEK
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
         - name: sort
           in: query
           description: Leaderboard sorting
@@ -917,7 +919,7 @@ components:
           format: float
         changePercent:
           type: number
-          description: Percentage of change
+          description: Change in percent. Calculated as <current period value> / <previous period value> - 1
           format: float
 
     OlapIntegerNumberWithChange:
@@ -931,7 +933,7 @@ components:
           format: int64
         changePercent:
           type: number
-          description: Percentage of change
+          description: Change in percent. Calculated as <current period value> / <previous period value> - 1
           format: float
 
     OlapTrendingCollectionEntry:
@@ -979,7 +981,7 @@ components:
       properties:
         minted:
           type: integer
-          description: Amount of minted items
+          description: Amount of minted items (all supported blockchains, all marketplaces)
           format: int64
         sold:
           type: integer
@@ -1069,6 +1071,16 @@ components:
           type: integer
           format: int32
 
+    OlapLeaderboardPeriod:
+      type: string
+      default: WEEK
+      enum:
+        - DAY
+        - WEEK
+        - MONTH
+        - 6H
+        - 1H
+
     OlapMintsLeaderboardSort:
       type: string
       default: MINTED_DESC
@@ -1090,9 +1102,11 @@ components:
           description: Identifier of collection
         minted:
           type: integer
+          description: Amount of unique minted nfts for selected period (ERC-1155 and ERC-721 counted once)
           format: int64
         totalItemSupply:
           type: integer
+          description: Total supply of all nfts in collection (ERC-1155 sums all quantities and ERC-721 nfts counted once)
           format: int64
         floorPrice:
           $ref: '#/components/schemas/OlapCurrencyAmount'
@@ -1132,31 +1146,31 @@ components:
       properties:
         highestSale:
           type: number
-          description: Price of the highest sale of collection item
+          description: Highest worth transaction in collection
           format: float
         floorPrice:
           type: number
-          description: Floor price of collection item
+          description: Minimal price of nft in this collection available on rarible
           format: float
         marketCap:
           type: number
-          description: Market cap of collection
+          description: Market cap of collection (floor price * total item supply)
           format: float
         listed:
           type: integer
-          description: Count of listed items
+          description: Amount of currently listed items
           format: int32
         items:
           type: integer
-          description: Count of collection items
+          description: Total item supply of all nfts in the collection
           format: int32
         owners:
           type: integer
-          description: Count of collection items owners
+          description: Current amount of unique owners who hold nfts of this collection
           format: int32
         volume:
           type: number
-          description: Volume of collection sales
+          description: Total worth of all transactions were made with nfts in this collection
           format: float
 
     OlapPricesResponse:
@@ -1176,29 +1190,29 @@ components:
             description: Dates of historical statistics
         avgPrices:
           type: array
-          description: Collection items average prices of historical statistics
+          description: Average prices of nfts in this collection for every date
           items:
             type: number
-            description: Collection items average prices of historical statistics
+            description: Average price of nfts in this collection for specific date
             format: float
         medianPrices:
           type: array
-          description: Collection items median prices of historical statistics
+          description: Median prices of nfts in this collection for every date
           items:
             type: number
-            description: Collection items median prices of historical statistics
+            description: Median price of nfts in this collection for specific date
             format: float
         minPrices:
           type: array
-          description: Collection items min prices of historical statistics
+          description: Minimum prices of nfts in this collection for every date
           items:
             type: number
-            description: Collection items min prices of historical statistics
+            description: Minimum price of nfts in this collection for specific date
             format: float
         sumPrices:
           type: array
-          description: Collection items sum prices of historical statistics
+          description: Volumes for the collection for every date
           items:
             type: number
-            description: Collection items sum prices of historical statistics
+            description: Collection volume for specific date
             format: float
