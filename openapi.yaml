@@ -2013,6 +2013,7 @@ components:
         - OTHER
         - X2Y2
         - LOOKSRARE
+        - SUDOSWAP
 
     Blockchain:
       type: string
@@ -2312,6 +2313,17 @@ components:
       required:
         - origin
 
+    AmmOrders:
+      type: object
+      properties:
+        ids:
+          type: array
+          description: "List of the automated market maker order id"
+          items:
+            $ref: "#/components/schemas/OrderId"
+      required:
+        - ids
+
     #################### Item - Union ####################
 
     ItemId:
@@ -2380,6 +2392,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/OriginOrders"
+        ammOrders:
+          type: array
+          items:
+            $ref: "#/components/schemas/AmmOrders"
         auctions:
           type: array
           default: [ ]
@@ -3175,7 +3191,7 @@ components:
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
         - "$ref": "#/components/schemas/EthX2Y2OrderDataV1"
         - "$ref": "#/components/schemas/EthLooksRareOrderDataV1"
-        - "$ref": "#/components/schemas/EthLooksRareOrderDataV1"
+        - "$ref": "#/components/schemas/EthSudoSwapAmmDataV1"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV2"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
@@ -3684,6 +3700,7 @@ components:
         - OBJKT
         - X2Y2
         - LOOKSRARE
+        - SUDOSWAP
 
     OrderActivityMatchSide:
       type: object
@@ -4667,6 +4684,19 @@ components:
         - minPercentageToAsk
         - strategy
         - nonce
+
+    EthSudoSwapAmmDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_SUDOSWAP_AMM_DATA_V1
+        contract:
+          $ref: "#/components/schemas/UnionAddress"
+      required:
+        - "@type"
+        - contract
 
     PendingOrder:
       type: object
