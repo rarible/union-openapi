@@ -3701,6 +3701,8 @@ components:
         - X2Y2
         - LOOKSRARE
         - SUDOSWAP
+        - TEIA
+        - VERSUM
 
     OrderActivityMatchSide:
       type: object
