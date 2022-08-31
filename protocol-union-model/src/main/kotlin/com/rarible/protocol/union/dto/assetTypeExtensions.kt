@@ -52,6 +52,11 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCurrency = false,
             collectionId = toCollectionId(contract, contract.value)
         )
+        is EthAmmNftAssetTypeDto -> AssetTypeExtension(
+            isNft = true,
+            isCurrency = false,
+            collectionId = toCollectionId(contract, contract.value)
+        )
 
         //---- FLOW
         is FlowAssetTypeFtDto -> AssetTypeExtension(

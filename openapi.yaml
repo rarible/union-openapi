@@ -4687,6 +4687,20 @@ components:
         - strategy
         - nonce
 
+    SudoSwapPoolType:
+      type: string
+      enum:
+        - TOKEN
+        - NFT
+        - TRADE
+
+    SudoSwapCurveType:
+      type: string
+      enum:
+        - LINEAR
+        - EXPONENTIAL
+        - UNKNOWN
+
     EthSudoSwapAmmDataV1:
       type: object
       properties:
@@ -4694,11 +4708,32 @@ components:
           type: string
           enum:
             - ETH_SUDOSWAP_AMM_DATA_V1
-        contract:
+        poolAddress:
           $ref: "#/components/schemas/UnionAddress"
+        bondingCurve:
+          $ref: "#/components/schemas/UnionAddress"
+        curveType:
+          $ref: "#/components/schemas/SudoSwapCurveType"
+        assetRecipient:
+          $ref: "#/components/schemas/UnionAddress"
+        poolType:
+          $ref: "#/components/schemas/SudoSwapPoolType"
+        delta:
+          $ref: "#/components/schemas/BigInteger"
+        fee:
+          $ref: "#/components/schemas/BigInteger"
+        feeDecimal:
+          type: integer
       required:
         - "@type"
-        - contract
+        - poolAddress
+        - bondingCurve
+        - curveType
+        - assetRecipient
+        - poolType
+        - delta
+        - fee
+        - feeDecimal
 
     PendingOrder:
       type: object
@@ -4721,6 +4756,7 @@ components:
         - $ref: "#/components/schemas/PendingOrderCancel"
         - $ref: "#/components/schemas/PendingOrderMatch"
         - $ref: "#/components/schemas/OnChainOrder"
+        - $ref: "#/components/schemas/OnChainAmmOrder"
 
     PendingOrderMatch:
       type: object
@@ -4774,6 +4810,16 @@ components:
       required:
         - "@type"
 
+    OnChainAmmOrder:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ON_CHAIN_AMM_ORDER
+      required:
+        - "@type"
+
     Asset:
       type: object
       properties:
@@ -4803,6 +4849,7 @@ components:
         - $ref: "#/components/schemas/EthCryptoPunksAssetType"
         - $ref: "#/components/schemas/EthGenerativeArtAssetType"
         - $ref: "#/components/schemas/EthCollectionAssetType"
+        - $ref: "#/components/schemas/EthAmmNftAssetType"
         - $ref: "#/components/schemas/SolanaNftAssetType"
         - $ref: "#/components/schemas/SolanaFtAssetType"
         - $ref: "#/components/schemas/SolanaSolAssetType"
@@ -5065,6 +5112,19 @@ components:
           type: string
           enum:
             - "COLLECTION"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+      required:
+        - "@type"
+        - contract
+
+    EthAmmNftAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "AMM_NFT"
         contract:
           $ref: "#/components/schemas/ContractAddress"
       required:
