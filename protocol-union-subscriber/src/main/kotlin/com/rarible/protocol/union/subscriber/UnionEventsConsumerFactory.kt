@@ -24,7 +24,11 @@ class UnionEventsConsumerFactory(
             valueClass = ItemEventDto::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = UnionEventTopicProvider.getItemTopic(environment),
-            bootstrapServers = brokerReplicaSet
+            bootstrapServers = brokerReplicaSet,
+            properties = mapOf(
+                "session.timeout.ms" to "30000",
+                "heartbeat.interval.ms" to "10000"
+            )
         )
     }
 
@@ -35,7 +39,11 @@ class UnionEventsConsumerFactory(
             valueClass = OwnershipEventDto::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = UnionEventTopicProvider.getOwnershipTopic(environment),
-            bootstrapServers = brokerReplicaSet
+            bootstrapServers = brokerReplicaSet,
+            properties = mapOf(
+                "session.timeout.ms" to "30000",
+                "heartbeat.interval.ms" to "10000"
+            )
         )
     }
 
@@ -46,7 +54,11 @@ class UnionEventsConsumerFactory(
             valueClass = OrderEventDto::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = UnionEventTopicProvider.getOrderTopic(environment),
-            bootstrapServers = brokerReplicaSet
+            bootstrapServers = brokerReplicaSet,
+            properties = mapOf(
+                "session.timeout.ms" to "30000",
+                "heartbeat.interval.ms" to "10000"
+            )
         )
     }
 
@@ -57,7 +69,11 @@ class UnionEventsConsumerFactory(
             valueClass = CollectionEventDto::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = UnionEventTopicProvider.getCollectionTopic(environment),
-            bootstrapServers = brokerReplicaSet
+            bootstrapServers = brokerReplicaSet,
+            properties = mapOf(
+                "session.timeout.ms" to "30000",
+                "heartbeat.interval.ms" to "10000"
+            )
         )
     }
 
@@ -75,5 +91,4 @@ class UnionEventsConsumerFactory(
             )
         )
     }
-
 }
