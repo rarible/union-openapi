@@ -870,9 +870,10 @@ components:
         - TEZOS
         - POLYGON
         - SOLANA
+        - IMMUTABLEX
 
     OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|SOLANA):.*$"
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|SOLANA|IMMUTABLEX):.*$"
       type: string
 
     OlapCurrencyType:
