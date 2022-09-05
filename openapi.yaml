@@ -294,7 +294,13 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -339,7 +345,13 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -377,7 +389,13 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -415,7 +433,13 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -476,7 +500,13 @@ paths:
           schema:
             type: integer
             format: "int64"
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -809,7 +839,13 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/OrderStatus"
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -920,7 +956,13 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/OrderStatus"
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -985,7 +1027,13 @@ paths:
           schema:
             minimum: 1
             type: integer
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1039,7 +1087,13 @@ paths:
             minimum: 1
             type: integer
             format: int32
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1123,7 +1177,13 @@ paths:
             minimum: 1
             type: integer
             format: int32
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1203,7 +1263,13 @@ paths:
           description: "The number of items to return"
           schema:
             type: integer
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1623,7 +1689,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1681,7 +1753,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1741,7 +1819,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1851,7 +1935,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -5345,16 +5435,6 @@ components:
       enum:
         - LEGACY
         - V1
-
-  parameters:
-    searchEngine:
-      name: "searchEngine"
-      in: query
-      required: false
-      deprecated: true
-      description: "Search engine to use for search"
-      schema:
-        $ref: "#/components/schemas/SearchEngine"
 
   #======================== Responses ============================#
 
