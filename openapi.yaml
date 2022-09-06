@@ -2393,8 +2393,6 @@ components:
           items:
             $ref: "#/components/schemas/OriginOrders"
         ammOrders:
-          type: array
-          items:
             $ref: "#/components/schemas/AmmOrders"
         auctions:
           type: array
