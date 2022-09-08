@@ -2100,10 +2100,13 @@ components:
         - IMMUTABLEX
         - HEN
         - OBJKT
+        - VERSUM
+        - TEIA
         - OTHER
         - X2Y2
         - LOOKSRARE
         - SUDOSWAP
+        - FXHASH
 
     Blockchain:
       type: string
@@ -3280,8 +3283,8 @@ components:
         - "$ref": "#/components/schemas/EthX2Y2OrderDataV1"
         - "$ref": "#/components/schemas/EthLooksRareOrderDataV1"
         - "$ref": "#/components/schemas/EthSudoSwapAmmDataV1"
-        - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV1"
-        - "$ref": "#/components/schemas/TezosOrderDataRaribleV2DataV2"
+        - "$ref": "#/components/schemas/TezosOrderDataLegacy"
+        - "$ref": "#/components/schemas/TezosOrderDataV2"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
         - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
@@ -3791,6 +3794,7 @@ components:
         - SUDOSWAP
         - TEIA
         - VERSUM
+        - FXHASH
 
     OrderActivityMatchSide:
       type: object
@@ -4427,7 +4431,7 @@ components:
         - fee
         - "@type"
 
-    TezosOrderDataRaribleV2DataV1:
+    TezosOrderDataLegacy:
       type: object
       properties:
         "@type":
@@ -4453,13 +4457,9 @@ components:
         - payouts
         - originFees
 
-    TezosOrderDataRaribleV2DataV2:
+    TezosOrderDataV2:
       type: object
       properties:
-        "@type":
-          type: string
-          enum:
-            - TEZOS_RARIBLE_V3
         payouts:
           type: array
           default: [ ]
@@ -4470,14 +4470,82 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/Payout"
-        makerEdpk:
-          type: string
-        takerEdpk:
-          type: string
       required:
-        - "@type"
         - payouts
         - originFees
+      oneOf:
+        - $ref: "#/components/schemas/TezosOrderDataRaribleV2DataV2"
+        - $ref: "#/components/schemas/TezosOrderDataHen"
+        - $ref: "#/components/schemas/TezosOrderDataVersumV1"
+        - $ref: "#/components/schemas/TezosOrderDataTeiaV1"
+        - $ref: "#/components/schemas/TezosOrderDataObjktV1"
+        - $ref: "#/components/schemas/TezosOrderDataObjktV2"
+        - $ref: "#/components/schemas/TezosOrderDataFxhashV1"
+        - $ref: "#/components/schemas/TezosOrderDataFxhashV2"
+
+    TezosOrderDataRaribleV2DataV2:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_RARIBLE_V3
+
+    TezosOrderDataHen:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_HEN
+
+    TezosOrderDataVersumV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_VERSUM_V1
+
+    TezosOrderDataTeiaV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_TEIA_V1
+
+    TezosOrderDataObjktV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_OBJKT_V1
+
+    TezosOrderDataObjktV2:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_OBJKT_V2
+
+    TezosOrderDataFxhashV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_FXHASH_V1
+
+    TezosOrderDataFxhashV2:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TEZOS_FXHASH_V2
 
     EthOrderDataRaribleV2DataV1:
       type: object
