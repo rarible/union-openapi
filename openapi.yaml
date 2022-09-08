@@ -3764,6 +3764,8 @@ components:
           enum:
             - SELL
             - ACCEPT_BID
+        marketplaceMarker:
+          type: string
       required:
         - nft
         - payment
@@ -3793,6 +3795,8 @@ components:
           $ref: "#/components/schemas/BigDecimal"
         source:
           $ref: "#/components/schemas/OrderActivitySource"
+        marketplaceMarker:
+          type: string
       required:
         - "@type"
         - hash
