@@ -2948,6 +2948,8 @@ components:
           description: "Continuation token to paginate ownerships search result"
         filter:
           $ref: "#/components/schemas/OwnershipSearchFilter"
+        sort:
+          $ref: "#/components/schemas/OwnershipSearchSort"
 
     OwnershipSearchFilter:
       type: object
@@ -2983,6 +2985,14 @@ components:
         afterDate:
           type: string
           format: date-time
+
+    OwnershipSearchSort:
+      type: string
+      enum:
+        - LATEST
+        - EARLIEST
+        - HIGHEST_SELL
+        - LOWEST_SELL
 
     ItemsSearchRequest:
       type: object
