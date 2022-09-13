@@ -3078,6 +3078,18 @@ components:
         afterDate:
           type: string
           format: date-time
+        sellPriceFrom:
+          type: number
+          format: double
+        sellPriceTo:
+          type: number
+          format: double
+        sellCurrency:
+          type: string
+        sellPlatforms:
+          type: array
+          items:
+            $ref: "#/components/schemas/Platform"
 
     OwnershipSearchSort:
       type: string
