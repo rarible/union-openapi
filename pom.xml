@@ -34,7 +34,7 @@
     <version>${revision}</version>
 
     <properties>
-        <revision>1.35.5</revision>
+        <revision>1.35.6</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
         <rarible.codegen.server.version>1.2.2</rarible.codegen.server.version>
@@ -43,7 +43,7 @@
 
         <codegen.package>com.rarible.protocol.union.dto</codegen.package>
 
-        <rarible.core.version>2.4.22</rarible.core.version>
+        <rarible.core.version>2.4.24</rarible.core.version>
     </properties>
 
     <dependencyManagement>
