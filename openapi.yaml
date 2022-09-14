@@ -3790,6 +3790,8 @@ components:
             - ACCEPT_BID
         marketplaceMarker:
           type: string
+        counterMarketplaceMarker:
+          type: string
       required:
         - nft
         - payment
