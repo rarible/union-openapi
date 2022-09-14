@@ -5,5 +5,7 @@ enum class OlapLeaderboardPeriodDto {
     WEEK,
     MONTH,
     `6H`,
-    `1H`
+    `1H`,
+    `30M`,
+    `5M`
 }
