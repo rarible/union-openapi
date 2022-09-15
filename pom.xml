@@ -43,7 +43,7 @@
 
         <codegen.package>com.rarible.protocol.union.dto</codegen.package>
 
-        <rarible.core.version>2.4.22</rarible.core.version>
+        <rarible.core.version>2.4.24</rarible.core.version>
     </properties>
 
     <dependencyManagement>
