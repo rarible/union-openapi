@@ -1,4 +1,3 @@
 {
-  "OlapCollectionPattern": "kotlin.String",
-  "OlapLeaderboardPeriod": "com.rarible.protocol.union.dto.OlapLeaderboardPeriodDto"
+  "OlapCollectionPattern": "kotlin.String"
 }

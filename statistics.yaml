@@ -1037,6 +1037,12 @@ components:
         - VOLUME_USD_DESC
         - COLLECTION_ASC
         - COLLECTION_DESC
+      description: >
+        Sort order:
+          * `VOLUME_USD_ASC` - sort by usd collection volume, ascending order
+          * `VOLUME_USD_DESC` - sort by usd collection volume, descending order
+          * `COLLECTION_ASC` - sort by collection id, ascending order
+          * `COLLECTION_DESC` - sort by collection id, descending order
 
     OlapCollectionLeaderboardEntry:
       required:
@@ -1078,10 +1084,19 @@ components:
         - DAY
         - WEEK
         - MONTH
-        - 6H
-        - 1H
-        - 30M
-        - 5M
+        - H6
+        - H1
+        - MIN30
+        - MIN5
+      description: >
+        Period:
+          * `DAY` - Last 1 day
+          * `WEEK` - Last 7 days
+          * `MONTH` - Last 30 days
+          * `H6` - Last 6 hours
+          * `H1` - Last 1 hour
+          * `MIN30` - Last 30 minutes
+          * `MIN5` - Last 5 minutes
 
     OlapMintsLeaderboardSort:
       type: string
@@ -1091,6 +1106,12 @@ components:
         - MINTED_DESC
         - COLLECTION_ASC
         - COLLECTION_DESC
+      description: >
+        Sort order:
+          * `MINTED_ASC` - 'minted' amount, ascending order
+          * `MINTED_DESC` - 'minted' amount, descending order
+          * `COLLECTION_ASC` - sort by collection id, ascending order
+          * `COLLECTION_DESC` - sort by collection id, descending order
 
     OlapCollectionMintsLeaderboardEntry:
       required:
