@@ -275,6 +275,20 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: minFloorPriceNative
+          in: query
+          description: Show collections which floor price (native currency) more or equal than specified value
+          required: false
+          schema:
+            type: number
+            format: float
+        - name: maxFloorPriceNative
+          in: query
+          description: Show collections which floor price (native currency) less or equal than specified value
+          required: false
+          schema:
+            type: number
+            format: float
         - name: sort
           in: query
           description: Leaderboard sorting
