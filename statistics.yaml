@@ -24,7 +24,7 @@ paths:
             "$ref": "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
-          description: "Time period of trending statistics. Default: WEEK"
+          description: "Time period of trending statistics. Default: D7"
           required: false
           schema:
             "$ref": "#/components/schemas/OlapPeriod"
@@ -130,7 +130,7 @@ paths:
             "$ref": "#/components/schemas/OlapPlatformSource"
         - name: period
           in: query
-          description: "Time period of leaderboard. Default: WEEK"
+          description: "Time period of leaderboard. Default: D7"
           required: false
           schema:
             $ref: '#/components/schemas/OlapPeriod'
@@ -713,7 +713,7 @@ paths:
             "$ref": "#/components/schemas/OlapCurrencyType"
         - name: period
           in: query
-          description: "Time period of statistics. Default: DAY"
+          description: "Time period of statistics. Default: D1"
           required: false
           schema:
             "$ref": "#/components/schemas/OlapPeriod"
@@ -891,9 +891,14 @@ components:
     OlapPeriod:
       type: string
       enum:
-        - DAY
-        - WEEK
-        - MONTH
+        - D1
+        - D7
+        - D30
+      description: >
+        Period:
+          * `D1` - Last 1 day
+          * `D7` - Last 7 days
+          * `D30` - Last 30 days
 
     OlapCurrencyType:
       type: string
@@ -1093,20 +1098,20 @@ components:
 
     OlapLeaderboardPeriod:
       type: string
-      default: WEEK
+      default: D7
       enum:
-        - DAY
-        - WEEK
-        - MONTH
+        - D1
+        - D7
+        - D30
         - H6
         - H1
         - MIN30
         - MIN5
       description: >
         Period:
-          * `DAY` - Last 1 day
-          * `WEEK` - Last 7 days
-          * `MONTH` - Last 30 days
+          * `D1` - Last 1 day
+          * `D7` - Last 7 days
+          * `D30` - Last 30 days
           * `H6` - Last 6 hours
           * `H1` - Last 1 hour
           * `MIN30` - Last 30 minutes
