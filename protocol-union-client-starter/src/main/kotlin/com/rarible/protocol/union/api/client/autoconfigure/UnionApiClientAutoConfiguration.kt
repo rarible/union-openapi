@@ -38,8 +38,12 @@ class UnionApiClientAutoConfiguration(
 
     @Bean
     @ConditionalOnMissingBean(UnionApiClientFactory::class)
-    fun unionApiClientFactory(unionApiServiceUriProvider: UnionApiServiceUriProvider): UnionApiClientFactory {
-        val customizer = CompositeWebClientCustomizer(listOf(DefaultUnionWebClientCustomizer(), webClientCustomizer))
+    fun unionApiClientFactory(
+        @Value("\${rarible.core.client.name:}") clientName: String,
+        unionApiServiceUriProvider: UnionApiServiceUriProvider
+    ): UnionApiClientFactory {
+        val customizers = listOf(DefaultUnionWebClientCustomizer(clientName), webClientCustomizer)
+        val customizer = CompositeWebClientCustomizer(customizers)
         return UnionApiClientFactory(unionApiServiceUriProvider, customizer)
     }
 }
