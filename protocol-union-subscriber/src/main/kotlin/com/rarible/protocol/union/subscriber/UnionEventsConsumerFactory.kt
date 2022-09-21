@@ -26,8 +26,8 @@ class UnionEventsConsumerFactory(
             defaultTopic = UnionEventTopicProvider.getItemTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = mapOf(
-                "session.timeout.ms" to "30000",
-                "heartbeat.interval.ms" to "10000"
+                "session.timeout.ms" to "60000",
+                "heartbeat.interval.ms" to "3000"
             )
         )
     }
@@ -41,8 +41,8 @@ class UnionEventsConsumerFactory(
             defaultTopic = UnionEventTopicProvider.getOwnershipTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = mapOf(
-                "session.timeout.ms" to "30000",
-                "heartbeat.interval.ms" to "10000"
+                "session.timeout.ms" to "60000",
+                "heartbeat.interval.ms" to "3000"
             )
         )
     }
@@ -56,8 +56,8 @@ class UnionEventsConsumerFactory(
             defaultTopic = UnionEventTopicProvider.getOrderTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = mapOf(
-                "session.timeout.ms" to "30000",
-                "heartbeat.interval.ms" to "10000"
+                "session.timeout.ms" to "60000",
+                "heartbeat.interval.ms" to "3000"
             )
         )
     }
@@ -71,8 +71,8 @@ class UnionEventsConsumerFactory(
             defaultTopic = UnionEventTopicProvider.getCollectionTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = mapOf(
-                "session.timeout.ms" to "30000",
-                "heartbeat.interval.ms" to "10000"
+                "session.timeout.ms" to "60000",
+                "heartbeat.interval.ms" to "3000"
             )
         )
     }
@@ -86,8 +86,8 @@ class UnionEventsConsumerFactory(
             defaultTopic = UnionEventTopicProvider.getActivityTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = mapOf(
-                "session.timeout.ms" to "30000",
-                "heartbeat.interval.ms" to "10000"
+                "session.timeout.ms" to "60000",
+                "heartbeat.interval.ms" to "3000"
             )
         )
     }
