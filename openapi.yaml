@@ -4262,6 +4262,12 @@ components:
             - TEZOS_MT
             - SOLANA
             - IMMUTABLEX
+        status:
+          type: string
+          enum:
+            - PENDING
+            - ERROR
+            - CONFIRMED
         name:
           type: string
         symbol:
