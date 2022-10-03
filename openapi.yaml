@@ -1708,6 +1708,87 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/activities/byUsers:
+    post:
+      tags:
+        - activity-controller
+      description: "Returns activities by users"
+      operationId: getActivitiesByUsers
+      parameters:
+        - name: "type"
+          in: query
+          required: true
+          description: "Activity type"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/UserActivityType"
+        - name: "blockchains"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
+        - name: "from"
+          in: query
+          required: false
+          description: "Lower time border of data"
+          schema:
+            type: string
+            format: "date-time"
+        - name: "to"
+          in: query
+          required: false
+          description: "Upper time border of data"
+          schema:
+            type: string
+            format: "date-time"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "cursor"
+          in: query
+          required: false
+          description: "Combined continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sorting by data update time"
+          schema:
+            "$ref": "#/components/schemas/ActivitySort"
+        - $ref: "#/components/parameters/searchEngine"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                "$ref": "#/components/schemas/UnionAddress"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/activities/byItem:
     get:
       tags:
