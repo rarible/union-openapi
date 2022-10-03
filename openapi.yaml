@@ -1768,7 +1768,13 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - $ref: "#/components/parameters/searchEngine"
+        - name: "searchEngine"
+          in: query
+          required: false
+          deprecated: true
+          description: "Search engine to use for search"
+          schema:
+            $ref: "#/components/schemas/SearchEngine"
       requestBody:
         content:
           application/json:
