@@ -5455,6 +5455,8 @@ components:
             - ORDERS
         platform:
           "$ref": "#/components/schemas/Platform"
+        orderType:
+          "$ref": "#/components/schemas/OrderType"
       required:
         - "@type"
 
@@ -5469,6 +5471,8 @@ components:
           $ref: "#/components/schemas/CollectionId"
         platform:
           "$ref": "#/components/schemas/Platform"
+        orderType:
+          "$ref": "#/components/schemas/OrderType"
       required:
         - "@type"
         - collectionId
@@ -5484,6 +5488,8 @@ components:
           $ref: "#/components/schemas/ItemId"
         platform:
           "$ref": "#/components/schemas/Platform"
+        orderType:
+          "$ref": "#/components/schemas/OrderType"
       required:
         - "@type"
         - itemId
@@ -5520,6 +5526,7 @@ components:
         - $ref: "#/components/schemas/FakeSubscriptionEvent"
         - $ref: "#/components/schemas/ItemSubscriptionEvent"
         - $ref: "#/components/schemas/OwnershipSubscriptionEvent"
+        - $ref: "#/components/schemas/OrderSubscriptionEvent"
 
     FakeSubscriptionEvent:
       type: object
@@ -5540,6 +5547,19 @@ components:
             - ITEM
         value:
           $ref: "#/components/schemas/ItemEvent"
+      required:
+        - "@type"
+        - value
+
+    OrderSubscriptionEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ORDER
+        value:
+          $ref: "#/components/schemas/OrderEvent"
       required:
         - "@type"
         - value
@@ -5581,6 +5601,12 @@ components:
       enum:
         - LEGACY
         - V1
+
+    OrderType:
+      type: string
+      enum:
+        - BID
+        - SELL
 
   #======================== Responses ============================#
 
