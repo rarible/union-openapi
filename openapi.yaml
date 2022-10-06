@@ -5441,6 +5441,52 @@ components:
       oneOf:
         - $ref: "#/components/schemas/ItemSubscriptionRequest"
         - $ref: "#/components/schemas/OwnershipSubscriptionRequest"
+        - $ref: "#/components/schemas/OrdersSubscriptionRequest"
+        - $ref: "#/components/schemas/OrdersByItemSubscriptionRequest"
+        - $ref: "#/components/schemas/OrdersByCollectionSubscriptionRequest"
+
+
+    OrdersSubscriptionRequest:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ORDERS
+        platform:
+          "$ref": "#/components/schemas/Platform"
+      required:
+        - "@type"
+
+    OrdersByCollectionSubscriptionRequest:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ORDERS_BY_COLLECTION
+        collectionId:
+          $ref: "#/components/schemas/CollectionId"
+        platform:
+          "$ref": "#/components/schemas/Platform"
+      required:
+        - "@type"
+        - collectionId
+
+    OrdersByItemSubscriptionRequest:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ORDERS_BY_ITEM
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        platform:
+          "$ref": "#/components/schemas/Platform"
+      required:
+        - "@type"
+        - itemId
 
     ItemSubscriptionRequest:
       type: object
