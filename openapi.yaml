@@ -1626,6 +1626,7 @@ paths:
       tags:
         - activity-controller
       description: "Returns activities by user"
+      deprecated: true
       operationId: getActivitiesByUser
       parameters:
         - name: "type"
@@ -1714,75 +1715,12 @@ paths:
         - activity-controller
       description: "Returns activities by users"
       operationId: getActivitiesByUsers
-      parameters:
-        - name: "type"
-          in: query
-          required: true
-          description: "Activity type"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/UserActivityType"
-        - name: "blockchains"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: "from"
-          in: query
-          required: false
-          description: "Lower time border of data"
-          schema:
-            type: string
-            format: "date-time"
-        - name: "to"
-          in: query
-          required: false
-          description: "Upper time border of data"
-          schema:
-            type: string
-            format: "date-time"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "cursor"
-          in: query
-          required: false
-          description: "Combined continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-        - name: "sort"
-          in: query
-          required: false
-          description: "Sorting by data update time"
-          schema:
-            "$ref": "#/components/schemas/ActivitySort"
-        - name: "searchEngine"
-          in: query
-          required: false
-          deprecated: true
-          description: "Search engine to use for search"
-          schema:
-            $ref: "#/components/schemas/SearchEngine"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                "$ref": "#/components/schemas/UnionAddress"
-        required: true
+              "$ref": "#/components/schemas/ActivitiesByUsersRequest"
       responses:
         "200":
           description: "OK"
@@ -3710,6 +3648,7 @@ components:
       example: "${blockchain}:${id}"
 
     ActivitySort:
+      description: "Sorting by data update time"
       type: string
       enum:
         - LATEST_FIRST
@@ -4268,6 +4207,48 @@ components:
             $ref: "#/components/schemas/Activity"
       required:
         - activities
+
+    ActivitiesByUsersRequest:
+      type: object
+      required:
+        - types
+        - users
+      properties:
+        types:
+          description: "Activity type"
+          type: array
+          items:
+            $ref: "#/components/schemas/UserActivityType"
+        users:
+          description: "List of the user id"
+          type: array
+          items:
+            $ref: "#/components/schemas/UnionAddress"
+        blockchains:
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        from:
+          description: "Lower time border of data"
+          type: string
+          format: "date-time"
+        to:
+          description: "Upper time border of data"
+          type: string
+          format: "date-time"
+        continuation:
+          description: "Continuation token from the previous response"
+          type: string
+        cursor:
+          description: "Combined continuation token from the previous response"
+          type: string
+        size:
+          description: "The number of items to return"
+          type: integer
+        sort:
+          $ref: "#/components/schemas/ActivitySort"
+        searchEngine:
+          $ref: "#/components/schemas/SearchEngine"
 
     StatisticsValue:
       type: object
