@@ -1776,13 +1776,11 @@ paths:
           schema:
             $ref: "#/components/schemas/SearchEngine"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                "$ref": "#/components/schemas/UnionAddress"
-        required: true
+              "$ref": "#/components/schemas/UserIds"
       responses:
         "200":
           description: "OK"
@@ -2503,6 +2501,19 @@ components:
             $ref: "#/components/schemas/OrderId"
       required:
         - ids
+
+    #################### User - Union ####################
+
+    UserIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          description: "List of the user id"
+          items:
+            $ref: "#/components/schemas/UnionAddress"
 
     #################### Item - Union ####################
 
