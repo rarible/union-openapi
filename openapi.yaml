@@ -3239,6 +3239,9 @@ components:
           $ref: "#/components/schemas/BigDecimal"
         cancelled:
           type: "boolean"
+        optionalRoyalties:
+          type: "boolean"
+          default: false
         createdAt:
           type: string
           format: "date-time"
