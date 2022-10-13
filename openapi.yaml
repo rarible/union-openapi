@@ -4221,6 +4221,10 @@ components:
         itemCount:
           type: integer
           format: int64
+        ownerCountTotal:
+          $ref: "#/components/schemas/BigInteger"
+        itemCountTotal:
+          $ref: "#/components/schemas/BigInteger"
         highestSale:
           $ref: "#/components/schemas/StatisticsValue"
         totalVolume:
@@ -4232,8 +4236,6 @@ components:
         floorPrice:
           $ref: "#/components/schemas/StatisticsValue"
       required:
-        - ownerCount
-        - itemCount
         - totalVolume
         - volumes
 
