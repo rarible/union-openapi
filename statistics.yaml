@@ -269,6 +269,14 @@ paths:
           required: false
           schema:
             "$ref": "#/components/schemas/OlapBlockchain"
+        - name: ids
+          in: query
+          description: Collection ids
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
         - name: period
           in: query
           description: Time period of leaderboard
