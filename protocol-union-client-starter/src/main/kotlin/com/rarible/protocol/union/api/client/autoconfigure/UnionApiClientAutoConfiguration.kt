@@ -28,10 +28,10 @@ class UnionApiClientAutoConfiguration(
     @Bean
     @ConditionalOnMissingBean(UnionApiServiceUriProvider::class)
     fun unionApiServiceUriProvider(
-        @Value("\${rarible.core.client.k8s:false}") k8s: Boolean
+        @Value("\${rarible.core.client.k8s:true}") k8s: Boolean
     ): UnionApiServiceUriProvider {
         return if (k8s)
-            K8sUnionApiServiceUriProvider(applicationEnvironmentInfo.name)
+            K8sUnionApiServiceUriProvider()
         else
             SwarmUnionApiServiceUriProvider(applicationEnvironmentInfo.name)
     }
