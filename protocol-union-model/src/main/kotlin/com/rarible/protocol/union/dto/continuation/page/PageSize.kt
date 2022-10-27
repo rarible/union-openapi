@@ -1,11 +1,13 @@
 package com.rarible.protocol.union.dto.continuation.page
 
+@Deprecated("Moved to union-service")
 data class PageSize(
     val default: Int,
     val max: Int
 ) {
 
     companion object {
+
         // Taken from Ethereum-Indexer API
         val ITEM = PageSize(50, 1000)
         val OWNERSHIP = PageSize(50, 1000)
