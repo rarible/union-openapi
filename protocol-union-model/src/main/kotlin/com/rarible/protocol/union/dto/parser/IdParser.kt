@@ -64,8 +64,8 @@ object IdParser {
     }
 
     fun parseOrderId(value: String): OrderIdDto {
-        val pair = split(value, 2)
-        return OrderIdDto(parseBlockchain(pair[0]), pair[1])
+        val (blockchain, id) = extractBlockchain(value)
+        return OrderIdDto(blockchain, id)
     }
 
     fun parseAuctionId(value: String): AuctionIdDto {

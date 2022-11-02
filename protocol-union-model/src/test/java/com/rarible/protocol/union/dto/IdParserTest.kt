@@ -67,11 +67,12 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse order id - too many parts`() {
+    fun `parse order id with version`() {
         val id = "ETHEREUM:abc:123"
-        assertThrows(BlockchainIdFormatException::class.java) {
-            IdParser.parseOrderId(id)
-        }
+        val orderId = IdParser.parseOrderId(id)
+
+        assertEquals(BlockchainDto.ETHEREUM, orderId.blockchain)
+        assertEquals("abc:123", orderId.value)
     }
 
     @Test
