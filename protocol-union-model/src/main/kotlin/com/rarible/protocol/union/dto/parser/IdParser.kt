@@ -10,7 +10,9 @@ import com.rarible.protocol.union.dto.ContractAddress
 import com.rarible.protocol.union.dto.ItemIdDto
 import com.rarible.protocol.union.dto.OrderIdDto
 import com.rarible.protocol.union.dto.UnionAddress
-import com.rarible.protocol.union.dto.group
+import com.rarible.protocol.union.dto.normalizeAddress
+import com.rarible.protocol.union.dto.normalizeContract
+import com.rarible.protocol.union.dto.normalizeId
 
 object IdParser {
 
@@ -40,42 +42,42 @@ object IdParser {
 
     fun parseContract(value: String): ContractAddress {
         val pair = split(value, 2)
-        return ContractAddress(parseBlockchain(pair[0]), pair[1])
+        val blockchain = parseBlockchain(pair[0])
+        return ContractAddress(blockchain, blockchain.normalizeAddress(pair[1]))
     }
 
     fun parseAddress(value: String): UnionAddress {
         val pair = split(value, 2)
         val blockchainGroup = parseBlockchainGroup(pair[0])
-        val address = if (blockchainGroup == BlockchainGroupDto.ETHEREUM) pair[1].lowercase() else pair[1]
-        return UnionAddress(blockchainGroup, address)
+        return UnionAddress(blockchainGroup, blockchainGroup.normalizeContract(pair[1]))
     }
 
     fun parseItemId(value: String): ItemIdDto {
         // For ItemId there can be ':' in value (token:tokenId for most of the blockchains)
         val (blockchain, id) = extractBlockchain(value)
-        val itemId = if (blockchain.group() == BlockchainGroupDto.ETHEREUM) id.lowercase() else id
-        return ItemIdDto(blockchain, itemId)
+        return ItemIdDto(blockchain, blockchain.normalizeId(id))
     }
 
     fun parseCollectionId(value: String): CollectionIdDto {
         val (blockchain, id) = extractBlockchain(value)
-        val collectionId = if (blockchain.group() == BlockchainGroupDto.ETHEREUM) id.lowercase() else id
-        return CollectionIdDto(blockchain, collectionId)
+        return CollectionIdDto(blockchain, blockchain.normalizeId(id))
     }
 
     fun parseOrderId(value: String): OrderIdDto {
         val pair = split(value, 2)
-        return OrderIdDto(parseBlockchain(pair[0]), pair[1])
+        val blockchain = parseBlockchain(pair[0])
+        return OrderIdDto(blockchain, blockchain.normalizeId(pair[1]))
     }
 
     fun parseAuctionId(value: String): AuctionIdDto {
         val pair = split(value, 2)
-        return AuctionIdDto(parseBlockchain(pair[0]), pair[1])
+        val blockchain = parseBlockchain(pair[0])
+        return AuctionIdDto(blockchain, blockchain.normalizeId(pair[1]))
     }
 
     fun parseActivityId(value: String): ActivityIdDto {
         val (blockchain, id) = extractBlockchain(value)
-        return ActivityIdDto(blockchain, id)
+        return ActivityIdDto(blockchain, blockchain.normalizeId(id))
     }
 
     fun split(value: String, expectedSize: Int): List<String> {
@@ -102,7 +104,7 @@ object IdParser {
 
     fun extractContract(value: ItemIdDto): String? {
         // For ItemId there can be ':' in value (token:tokenId for most of the blockchains)
-        // in some saces (Solana) there is no contract part
+        // in some cases (Solana) there is no contract part
         val id = value.value
         val parts = id.split(DELIMITER)
         return if (parts.size >= 2) parts.first() else null
