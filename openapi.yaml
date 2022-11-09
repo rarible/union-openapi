@@ -524,7 +524,7 @@ paths:
       tags:
         - item-controller
       operationId: queryTraits
-      description: "**[Not yet implemented]**"
+      description: "Returns possible trait values by key"
       parameters:
         - name: keys
           description: Trait keys
@@ -534,6 +534,7 @@ paths:
             type: array
             items:
               type: string
+              example: "${filterTraitKey}"
         - name: collectionIds
           in: query
           required: true
@@ -541,6 +542,7 @@ paths:
             type: array
             items:
               type: string
+              example: "${filterCollections}"
           description: Collections identifiers to which traits belong
       responses:
         '200':
@@ -558,7 +560,7 @@ paths:
     get:
       tags:
         - item-controller
-      description: "**[Not yet implemented]** Returns combination of Item attribute key with list of values"
+      description: "Returns combination of Item attribute key with list of values"
       operationId:  searchTraits
       parameters:
         - name: filter
@@ -567,6 +569,7 @@ paths:
           required: true
           schema:
             type: string
+            example: "${filterTraitKey}"
         - name: collectionIds
           in: query
           required: true
@@ -574,6 +577,7 @@ paths:
             type: array
             items:
               type: string
+              example: "${filterCollections}"
           description: Collections identifiers to which traits belong
       responses:
         '200':
@@ -591,7 +595,7 @@ paths:
     post:
       tags:
         - item-controller
-      description: "**[Not yet implemented]**"
+      description: "Returns the rarity of the trait"
       operationId: queryTraitsWithRarity
       requestBody:
         content:
@@ -611,7 +615,7 @@ paths:
     post:
       tags:
         - item-controller
-      description: "**[Not yet implemented]** Complex search for items."
+      description: "Complex search for items"
       operationId: searchItems
       requestBody:
         content:
@@ -2142,6 +2146,7 @@ components:
         - TEZOS
         - SOLANA
         - IMMUTABLEX
+      example: "${blockchain}"
 
     BlockchainGroup:
       type: string
@@ -2736,6 +2741,7 @@ components:
       properties:
         collectionId:
           type: string
+          example: "${filterCollections}"
         properties:
           type: array
           items:
@@ -2751,8 +2757,10 @@ components:
       properties:
         key:
           type: string
+          example: "${filterTraitKey}"
         value:
           type: string
+          example: "${filterTraitsValue}"
 
     ExtendedTraitProperty:
       title: ExtendedTraitProperty
@@ -3165,14 +3173,17 @@ components:
         deleted:
           type: boolean
           default: false
+          example: "${filterDeleted}"
         names:
           type: array
           items:
             type: string
+            example: "${filterName}"
         descriptions:
           type: array
           items:
             type: string
+            example: "${filterDescription}"
         traits:
           type: array
           items:
@@ -3184,23 +3195,30 @@ components:
         mintedAtFrom:
           type: string
           format: date-time
+          example: "${filterDateAtFrom}"
         mintedAtTo:
           type: string
           format: date-time
+          example: "${filterDateAtTo}"
         lastUpdatedAtFrom:
           type: string
           format: date-time
+          example: "${filterDateAtFrom}"
         lastUpdatedAtTo:
           type: string
           format: date-time
+          example: "${filterDateAtTo}"
         sellPriceFrom:
           type: number
           format: double
+          example: "${filterPriceFrom}"
         sellPriceTo:
           type: number
           format: double
+          example: "${filterPriceTo}"
         sellCurrency:
           type: string
+          example: "${filterCurrency}"
         sellPlatforms:
           type: array
           items:
@@ -3208,15 +3226,19 @@ components:
         bidPriceFrom:
           type: number
           format: double
+          example: "${filterPriceFrom}"
         bidPriceTo:
           type: number
           format: double
+          example: "${filterPriceTo}"
         bidCurrency:
           type: string
+          example: "${filterCurrency}"
         bidPlatforms:
           type: array
           items:
             $ref: "#/components/schemas/Platform"
+
 
 
     ItemsSearchSort:
@@ -4456,7 +4478,6 @@ components:
           format: int32
           description: "Indicates a 1% seller fee"
         feeRecipient:
-          description: "Where seller fees will be paid to"
           "$ref": "#/components/schemas/UnionAddress"
 
     ActivityBlockchainInfo:
