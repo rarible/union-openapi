@@ -21,3 +21,38 @@ fun BlockchainDto.group(): BlockchainGroupDto {
 fun BlockchainGroupDto.subchains(): List<BlockchainDto> {
     return subchains[this]!!
 }
+
+fun BlockchainDto.normalizeContract(contract: String): String {
+    return group().normalize(contract)
+}
+
+fun BlockchainDto.normalizeAddress(address: String): String {
+    return group().normalize(address)
+}
+
+fun BlockchainDto.normalizeId(id: String): String {
+    return group().normalize(id)
+}
+
+fun BlockchainGroupDto.normalizeContract(contract: String): String {
+    return this.normalize(contract)
+}
+
+fun BlockchainGroupDto.normalizeAddress(address: String): String {
+    return this.normalize(address)
+}
+
+fun BlockchainGroupDto.normalizeId(id: String): String {
+    return this.normalize(id)
+}
+
+// ATM there is no difference between normalization of contract/address/ids
+private fun BlockchainGroupDto.normalize(contract: String): String {
+    return when (this) {
+        BlockchainGroupDto.ETHEREUM -> contract.lowercase()
+        // These groups have case-sensitive identifiers
+        BlockchainGroupDto.FLOW,
+        BlockchainGroupDto.TEZOS,
+        BlockchainGroupDto.SOLANA -> contract
+    }
+}

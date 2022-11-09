@@ -5,6 +5,8 @@ import com.rarible.protocol.union.dto.BlockchainIdFormatException
 import com.rarible.protocol.union.dto.OwnershipIdDto
 import com.rarible.protocol.union.dto.UnionAddress
 import com.rarible.protocol.union.dto.group
+import com.rarible.protocol.union.dto.normalizeAddress
+import com.rarible.protocol.union.dto.normalizeId
 
 object OwnershipIdParser {
 
@@ -25,8 +27,8 @@ object OwnershipIdParser {
         val group = blockchain.group()
         return OwnershipIdDto(
             blockchain = blockchain,
-            itemIdValue = itemId,
-            owner = UnionAddress(group, owner)
+            itemIdValue = blockchain.normalizeId(itemId),
+            owner = UnionAddress(group, blockchain.normalizeAddress(owner))
         )
     }
 
