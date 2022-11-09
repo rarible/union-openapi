@@ -27,18 +27,21 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse address ETHEREUM in upper case`() {
-        val idEth = "ETHEREUM:ABC"
-        val addressEth = IdParser.parseAddress(idEth)
+    fun `parse address - case insensitive`() {
+        val address = "ETHEREUM:AbC"
+        val parsed = IdParser.parseAddress(address)
 
-        assertEquals(BlockchainGroupDto.ETHEREUM, addressEth.blockchainGroup)
-        assertEquals("abc", addressEth.value)
+        assertEquals(BlockchainGroupDto.ETHEREUM, parsed.blockchainGroup)
+        assertEquals("abc", parsed.value)
+    }
 
-        val idFlow = "FLOW:ABC"
-        val addressFlow = IdParser.parseAddress(idFlow)
+    @Test
+    fun `parse address - case sensitive`() {
+        val address = "FLOW:aBC"
+        val parsed = IdParser.parseAddress(address)
 
-        assertEquals(BlockchainGroupDto.FLOW, addressFlow.blockchainGroup)
-        assertEquals("ABC", addressFlow.value)
+        assertEquals(BlockchainGroupDto.FLOW, parsed.blockchainGroup)
+        assertEquals("aBC", parsed.value)
     }
 
     @Test
@@ -58,12 +61,39 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse order id`() {
-        val id = "TEZOS:231"
+    fun `parse contract - case insensitive`() {
+        val contract = "IMMUTABLEX:ABC"
+        val parsed = IdParser.parseContract(contract)
+
+        assertEquals(BlockchainDto.IMMUTABLEX, parsed.blockchain)
+        assertEquals("abc", parsed.value)
+    }
+
+    @Test
+    fun `parse contract - case sensitive`() {
+        val contact = "TEZOS:ABc"
+        val parsed = IdParser.parseAddress(contact)
+
+        assertEquals(BlockchainGroupDto.TEZOS, parsed.blockchainGroup)
+        assertEquals("ABc", parsed.value)
+    }
+
+    @Test
+    fun `parse order id - case sensitive`() {
+        val id = "TEZOS:Aa231"
         val orderId = IdParser.parseOrderId(id)
 
         assertEquals(BlockchainDto.TEZOS, orderId.blockchain)
-        assertEquals("231", orderId.value)
+        assertEquals("Aa231", orderId.value)
+    }
+
+    @Test
+    fun `parse order id - case insensitive`() {
+        val id = "POLYGON:Aa231"
+        val orderId = IdParser.parseOrderId(id)
+
+        assertEquals(BlockchainDto.POLYGON, orderId.blockchain)
+        assertEquals("aa231", orderId.value)
     }
 
     @Test
@@ -75,12 +105,21 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse activity id`() {
-        val id = "ETHEREUM:abc"
+    fun `parse activity id - case insensitive`() {
+        val id = "ETHEREUM:aBc"
         val activityId = IdParser.parseActivityId(id)
 
         assertEquals(BlockchainDto.ETHEREUM, activityId.blockchain)
         assertEquals("abc", activityId.value)
+    }
+
+    @Test
+    fun `parse activity id - case sensitive`() {
+        val id = "SOLANA:aBc"
+        val activityId = IdParser.parseActivityId(id)
+
+        assertEquals(BlockchainDto.SOLANA, activityId.blockchain)
+        assertEquals("aBc", activityId.value)
     }
 
     @Test
@@ -93,12 +132,21 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse collection id`() {
-        val id = "POLYGON:111"
+    fun `parse collection id - case insensitive`() {
+        val id = "POLYGON:Aa111"
         val orderId = IdParser.parseCollectionId(id)
 
         assertEquals(BlockchainDto.POLYGON, orderId.blockchain)
-        assertEquals("111", orderId.value)
+        assertEquals("aa111", orderId.value)
+    }
+
+    @Test
+    fun `parse collection id - case sensitive`() {
+        val id = "FLOW:Aa111"
+        val orderId = IdParser.parseCollectionId(id)
+
+        assertEquals(BlockchainDto.FLOW, orderId.blockchain)
+        assertEquals("Aa111", orderId.value)
     }
 
     @Test
@@ -111,18 +159,21 @@ class IdParserTest {
     }
 
     @Test
-    fun `parse collection id - upper case`() {
-        val idPoly = "POLYGON:ABC"
-        val orderIdPoly = IdParser.parseCollectionId(idPoly)
+    fun `parse item id - case insensitive`() {
+        val id = "IMMUTABLEX:aBc:1"
+        val activityId = IdParser.parseItemId(id)
 
-        assertEquals(BlockchainDto.POLYGON, orderIdPoly.blockchain)
-        assertEquals("abc", orderIdPoly.value)
+        assertEquals(BlockchainDto.IMMUTABLEX, activityId.blockchain)
+        assertEquals("abc:1", activityId.value)
+    }
 
-        val idFlow = "FLOW:ABC"
-        val orderIdFlow = IdParser.parseCollectionId(idFlow)
+    @Test
+    fun `parse item id - case sensitive`() {
+        val id = "SOLANA:aBc:1"
+        val activityId = IdParser.parseItemId(id)
 
-        assertEquals(BlockchainDto.FLOW, orderIdFlow.blockchain)
-        assertEquals("ABC", orderIdFlow.value)
+        assertEquals(BlockchainDto.SOLANA, activityId.blockchain)
+        assertEquals("aBc:1", activityId.value)
     }
 
     @Test
