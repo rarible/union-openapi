@@ -7,10 +7,19 @@ import org.junit.jupiter.api.Test
 class OwnershipIdParserTest {
 
     @Test
-    fun `parse full`() {
-        val value = "SOLANA:abc123:xyz"
+    fun `parse full - case sensitive`() {
+        val value = "SOLANA:aBc123:xYz"
         val ownershipId = OwnershipIdParser.parseFull(value)
         assertEquals(BlockchainDto.SOLANA, ownershipId.blockchain)
+        assertEquals("aBc123", ownershipId.itemIdValue)
+        assertEquals("xYz", ownershipId.owner.value)
+    }
+
+    @Test
+    fun `parse full - case insensitive`() {
+        val value = "ETHEREUM:aBc123:xYz"
+        val ownershipId = OwnershipIdParser.parseFull(value)
+        assertEquals(BlockchainDto.ETHEREUM, ownershipId.blockchain)
         assertEquals("abc123", ownershipId.itemIdValue)
         assertEquals("xyz", ownershipId.owner.value)
     }
