@@ -1093,7 +1093,7 @@ components:
           type: integer
           format: int32
         floorPrice:
-          "$ref": "#/components/schemas/OlapCurrencyAmount"
+          "$ref": "#/components/schemas/OlapCurrencyAmountWithChange"
         listed:
           type: integer
           format: int32
