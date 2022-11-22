@@ -4629,6 +4629,8 @@ components:
           type: string
           enum:
             - TEZOS_HEN
+        internalOrderId:
+          type: string
 
     TezosOrderDataVersumV1:
       type: object
@@ -4637,6 +4639,8 @@ components:
           type: string
           enum:
             - TEZOS_VERSUM_V1
+        internalOrderId:
+          type: string
 
     TezosOrderDataTeiaV1:
       type: object
@@ -4645,6 +4649,8 @@ components:
           type: string
           enum:
             - TEZOS_TEIA_V1
+        internalOrderId:
+          type: string
 
     TezosOrderDataObjktV1:
       type: object
@@ -4653,6 +4659,8 @@ components:
           type: string
           enum:
             - TEZOS_OBJKT_V1
+        internalOrderId:
+          type: string
 
     TezosOrderDataObjktV2:
       type: object
@@ -4661,6 +4669,8 @@ components:
           type: string
           enum:
             - TEZOS_OBJKT_V2
+        internalOrderId:
+          type: string
 
     TezosOrderDataFxhashV1:
       type: object
@@ -4669,6 +4679,8 @@ components:
           type: string
           enum:
             - TEZOS_FXHASH_V1
+        internalOrderId:
+          type: string
 
     TezosOrderDataFxhashV2:
       type: object
@@ -4677,6 +4689,8 @@ components:
           type: string
           enum:
             - TEZOS_FXHASH_V2
+        internalOrderId:
+          type: string
 
     EthOrderDataRaribleV2DataV1:
       type: object
