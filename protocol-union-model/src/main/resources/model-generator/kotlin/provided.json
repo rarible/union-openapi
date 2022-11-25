@@ -7,5 +7,6 @@
   "ContractAddress": "com.rarible.protocol.union.dto.ContractAddress",
   "OrderId": "com.rarible.protocol.union.dto.OrderIdDto",
   "AuctionId": "com.rarible.protocol.union.dto.AuctionIdDto",
-  "OwnershipId": "com.rarible.protocol.union.dto.OwnershipIdDto"
+  "OwnershipId": "com.rarible.protocol.union.dto.OwnershipIdDto",
+  "OlapCollectionPattern": "kotlin.String"
 }

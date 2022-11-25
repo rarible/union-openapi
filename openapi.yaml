@@ -2117,6 +2117,882 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  ####################### Statistics API #######################
+
+  "/v0.1/data/trending/collections":
+    get:
+      tags:
+        - data-controller
+      description: |
+        Trending collection list. Sorted by special score, calculated in the following way: 
+        gmv * (<amount of transaction change percentage comparing to previous period> - 1) / 10000
+      operationId: getTrendingCollection
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: period
+          in: query
+          description: "Time period of trending statistics. Default: D7"
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapPeriod"
+        - name: limit
+          in: query
+          description: Limit of records in trending statistics
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/OlapTrendingCollectionEntry"
+              example:
+                - id: ETHEREUM:0xd8a5d498ab43ed060cb6629b97a19e3e4276dd9f
+                  numberOfSales:
+                    value: 4847
+                    changePercent: 1785.9922178988327
+                  volumeUsd:
+                    currency: USD
+                    value: 6353514.679736262
+                    changePercent: 2415.324967987071
+                  volumeNative:
+                    currency: ETH
+                    value: 3095.884291383326
+                  floorPrice:
+                    currency: ETH
+                    value: 0.5749
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/rarible/statistics":
+    get:
+      tags:
+        - data-controller
+      description: |
+        Rarible-related statistics. Amount of items listed and sold on rarible platform and amount of minted items over 
+        all blockchains and all supported marketplaces
+      operationId: getRaribleStats
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapRaribleStatisticsResponse"
+              example:
+                sold: 434191371
+                minted: 150477545
+                listed: 145290
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/leaderboards/{entity}":
+    get:
+      tags:
+        - data-controller
+      description: Users (top buyers/sellers) leaderboard. Calculated as traded worth for the period.
+      operationId: getUserLeaderboard
+      parameters:
+        - name: entity
+          in: path
+          description: Type of users in leaderboard
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapUserType"
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: source
+          in: query
+          description: Source
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapPlatformSource"
+        - name: period
+          in: query
+          description: "Time period of leaderboard. Default: D7"
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapPeriod'
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/OlapUserLeaderboardEntry"
+              example:
+                - id: ETHEREUM:0xf1fa9ceb517f67646c9063f315f8b70cf26aa4e8
+                  volumeUsd:
+                    currency: USD
+                    value: 18172788.19333184
+                  volumeNative:
+                    currency: MATIC
+                    value: 27343817.491841666
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/leaderboards/collections/mints":
+    get:
+      tags:
+        - data-controller
+      description: Collections leaderboard based on mint activity
+      operationId: getCollectionMintsLeaderboard
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: period
+          in: query
+          description: Time period of leaderboard
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: sort
+          in: query
+          description: Leaderboard sorting
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapMintsLeaderboardSort'
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: offset
+          in: query
+          description: Offset of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OlapCollectionMintsLeaderboardEntry'
+              example:
+                - id: ETHEREUM:0x7e89a5e47cfdafd547ae8b2bc89590e0608941ae
+                  minted: 1077
+                  totalItemSupply: 1992
+                  floorPrice:
+                    currency: ETH
+                    value: 0.0021
+                - id: ETHEREUM:0x5e6dd7b71bff0f893cef2045819bb6095bd17e80
+                  minted: 607
+                  totalItemSupply: 607
+                  floorPrice: null
+                - id: ETHEREUM:0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85
+                  minted: 178
+                  totalItemSupply: 1984031
+                  floorPrice:
+                    currency: ETH
+                    value: 5.295908E-22
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+              example:
+                code: INVALID_INPUT
+                message: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+              example:
+                code: UNKNOWN
+                message: Unknown error
+  "/v0.1/data/leaderboards/collections":
+    get:
+      tags:
+        - data-controller
+      description: Collections leaderboard with trade activity
+      operationId: getCollectionLeaderboard
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: ids
+          in: query
+          description: Collection ids
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: period
+          in: query
+          description: Time period of leaderboard
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: minFloorPriceNative
+          in: query
+          description: Show collections which floor price (native currency) more or equal than specified value
+          required: false
+          schema:
+            type: number
+            format: float
+        - name: maxFloorPriceNative
+          in: query
+          description: Show collections which floor price (native currency) less or equal than specified value
+          required: false
+          schema:
+            type: number
+            format: float
+        - name: sort
+          in: query
+          description: Leaderboard sorting
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapTradesLeaderboardSort"
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: offset
+          in: query
+          description: Offset of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/OlapCollectionLeaderboardEntry"
+              example:
+                - id: ETHEREUM:0xe8f88d16f24255fcfab25959705d724406d67d9d
+                  volumeUsd:
+                    currency: USD
+                    value: 45325.07
+                    changePercent: -51.196335
+                  volumeNative:
+                    currency: ETH
+                    value: 23.95
+                  itemsBought: 1
+                  floorPrice:
+                    currency: ETH
+                    value: 24.0
+                  listed: 33
+                  totalItemSupply: 250
+                  ownersCount: 187
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/transactions":
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics about collection transactions
+      operationId: getTransactions
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 3602
+                  - 2566
+                  - 285
+                currentValue: 260
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/stats":
+    get:
+      tags:
+        - data-controller
+      description: Get general statistics about collection
+      operationId: getCollectionStats
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapCurrencyType"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapGeneralStatsResponse"
+              example:
+                highestSale: 43.71
+                floorPrice: 1.45
+                marketCap: 14529
+                items: 10020
+                owners: 6472
+                volume: 41913.50477591493
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/sellers":
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics about collection sellers
+      operationId: getSellers
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 2744
+                  - 5487
+                  - 895
+                currentValue: 1767
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/prices":
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics about collection items prices
+      operationId: getPrices
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapCurrencyType"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapPricesResponse"
+              example:
+                dates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                avgPrices:
+                  - 3.0356821472801507
+                  - 3.0695980858360876
+                  - 4.084722218806717
+                medianPrices:
+                  - 2.999
+                  - 3.1
+                  - 4.12
+                minPrices:
+                  - 0.45
+                  - 0.25
+                  - 2.26
+                sumPrices:
+                  - 10934.527094503102
+                  - 7876.5886882554005
+                  - 1164.1458323599143
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/owners":
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics about collection owners
+      operationId: getOwners
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 2215
+                  - 6381
+                  - 6363
+                currentValue: 6476
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/marketcap":
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics about collection market cap
+      operationId: getMarketcap
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapCurrencyType"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 6800
+                  - 16683.68
+                  - 19038
+                currentValue: 14529
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  /v0.1/collections/{collection}/gmv:
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics about collection gross merchandise value
+      operationId: getGmv
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapCurrencyType"
+        - name: period
+          in: query
+          description: "Time period of statistics. Default: D1"
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapPeriod"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 10934.527094503102
+                  - 7876.5886882554005
+                  - 1164.1458323599143
+                currentValue: 498.19370351666873
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/floorPrice":
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics about collection item floor price
+      operationId: getFloorPrice
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: currency
+          in: query
+          description: Currency of statistics
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapCurrencyType"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-05'
+                  - '2022-05-06'
+                  - '2022-05-07'
+                historicalValues:
+                  - 1.7
+                  - 1.69
+                  - 1.9
+                currentValue: 1.45
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/buyers":
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics about collection buyers
+      operationId: getBuyers
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+        - name: filters
+          in: query
+          description: Filters of statistics
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-08'
+                  - '2022-05-09'
+                  - '2022-05-10'
+                historicalValues:
+                  - 524
+                  - 791
+                  - 1619
+                currentValue: 1767
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
 components:
   schemas:
 
@@ -5703,6 +6579,394 @@ components:
       enum:
         - BID
         - SELL
+
+    #################### Olap Types ####################
+
+    OlapBlockchain:
+      type: string
+      enum:
+        - ETHEREUM
+        - FLOW
+        - TEZOS
+        - POLYGON
+        - SOLANA
+        - IMMUTABLEX
+
+    OlapCollectionPattern:
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|SOLANA|IMMUTABLEX):.*$"
+      type: string
+
+    OlapPeriod:
+      type: string
+      enum:
+        - D1
+        - D7
+        - D30
+      description: >
+        Period:
+          * `D1` - Last 1 day
+          * `D7` - Last 7 days
+          * `D30` - Last 30 days
+
+    OlapCurrencyType:
+      type: string
+      default: USD
+      enum:
+        - USD
+        - ETH
+        - XTZ
+        - FLOW
+        - MATIC
+        - SOL
+
+    OlapCurrencyAmount:
+      required:
+        - currency
+        - value
+      type: object
+      properties:
+        currency:
+          "$ref": "#/components/schemas/OlapCurrencyType"
+        value:
+          type: number
+          description: Amount of currency
+          format: float
+
+    OlapCurrencyAmountWithChange:
+      required:
+        - currency
+        - value
+      type: object
+      properties:
+        currency:
+          "$ref": "#/components/schemas/OlapCurrencyType"
+        value:
+          type: number
+          description: Amount of currency
+          format: float
+        changePercent:
+          type: number
+          description: Change in percent. Calculated as <current period value> / <previous period value> - 1
+          format: float
+
+    OlapIntegerNumberWithChange:
+      required:
+        - value
+      type: object
+      properties:
+        value:
+          type: integer
+          description: Value of integer number
+          format: int64
+        changePercent:
+          type: number
+          description: Change in percent. Calculated as <current period value> / <previous period value> - 1
+          format: float
+
+    OlapTrendingCollectionEntry:
+      required:
+        - id
+        - numberOfSales
+        - volumeNative
+        - volumeUsd
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of collection
+        numberOfSales:
+          "$ref": "#/components/schemas/OlapIntegerNumberWithChange"
+        volumeUsd:
+          "$ref": "#/components/schemas/OlapCurrencyAmountWithChange"
+        volumeNative:
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
+        floorPrice:
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
+    OlapError:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code
+          enum:
+            - INVALID_INPUT
+            - NOT_FOUND
+            - UNKNOWN
+        message:
+          type: string
+          description: Message
+
+    OlapRaribleStatisticsResponse:
+      required:
+        - listed
+        - minted
+        - sold
+      type: object
+      properties:
+        minted:
+          type: integer
+          description: Amount of minted items (all supported blockchains, all marketplaces)
+          format: int64
+        sold:
+          type: integer
+          description: Amount of items sold on rarible
+          format: int64
+        listed:
+          type: integer
+          description: Amount of items listed on rarible
+          format: int64
+
+    OlapUserLeaderboardEntry:
+      required:
+        - id
+        - items
+        - transactions
+        - volumeNative
+        - volumeUsd
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of user
+        volumeUsd:
+          "$ref": '#/components/schemas/OlapCurrencyAmount'
+        volumeNative:
+          "$ref": '#/components/schemas/OlapCurrencyAmount'
+        items:
+          type: integer
+          description: (non-unique) amount of traded items
+          format: int64
+        transactions:
+          type: integer
+          description: Amount of transactions were made
+          format: int64
+
+    OlapUserType:
+      type: string
+      enum:
+        - sellers
+        - buyers
+
+    OlapPlatformSource:
+      type: string
+      enum:
+        - RARIBLE
+        - OPEN_SEA
+
+    OlapTradesLeaderboardSort:
+      type: string
+      default: VOLUME_USD_DESC
+      enum:
+        - VOLUME_USD_ASC
+        - VOLUME_USD_DESC
+        - COLLECTION_ASC
+        - COLLECTION_DESC
+      description: >
+        Sort order:
+          * `VOLUME_USD_ASC` - sort by usd collection volume, ascending order
+          * `VOLUME_USD_DESC` - sort by usd collection volume, descending order
+          * `COLLECTION_ASC` - sort by collection id, ascending order
+          * `COLLECTION_DESC` - sort by collection id, descending order
+
+    OlapCollectionLeaderboardEntry:
+      required:
+        - id
+        - itemsBought
+        - listed
+        - ownersCount
+        - totalItemSupply
+        - volumeNative
+        - volumeUsd
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of collection
+        volumeUsd:
+          "$ref": "#/components/schemas/OlapCurrencyAmountWithChange"
+        volumeNative:
+          "$ref": "#/components/schemas/OlapCurrencyAmount"
+        itemsBought:
+          type: integer
+          format: int32
+        floorPrice:
+          "$ref": "#/components/schemas/OlapCurrencyAmountWithChange"
+        listed:
+          type: integer
+          format: int32
+        totalItemSupply:
+          type: integer
+          format: int32
+        ownersCount:
+          type: integer
+          format: int32
+
+    OlapLeaderboardPeriod:
+      type: string
+      default: D7
+      enum:
+        - D1
+        - D7
+        - D30
+        - H6
+        - H1
+        - MIN30
+        - MIN5
+      description: >
+        Period:
+          * `D1` - Last 1 day
+          * `D7` - Last 7 days
+          * `D30` - Last 30 days
+          * `H6` - Last 6 hours
+          * `H1` - Last 1 hour
+          * `MIN30` - Last 30 minutes
+          * `MIN5` - Last 5 minutes
+
+    OlapMintsLeaderboardSort:
+      type: string
+      default: MINTED_DESC
+      enum:
+        - MINTED_ASC
+        - MINTED_DESC
+        - COLLECTION_ASC
+        - COLLECTION_DESC
+      description: >
+        Sort order:
+          * `MINTED_ASC` - 'minted' amount, ascending order
+          * `MINTED_DESC` - 'minted' amount, descending order
+          * `COLLECTION_ASC` - sort by collection id, ascending order
+          * `COLLECTION_DESC` - sort by collection id, descending order
+
+    OlapCollectionMintsLeaderboardEntry:
+      required:
+        - id
+        - minted
+        - totalItemSupply
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of collection
+        minted:
+          type: integer
+          description: Amount of unique minted nfts for selected period (ERC-1155 and ERC-721 counted once)
+          format: int64
+        totalItemSupply:
+          type: integer
+          description: Total supply of all nfts in collection (ERC-1155 sums all quantities and ERC-721 nfts counted once)
+          format: int64
+        floorPrice:
+          $ref: '#/components/schemas/OlapCurrencyAmount'
+
+    OlapStatsGraphResponse:
+      required:
+        - historicalDates
+        - historicalValues
+      type: object
+      properties:
+        historicalDates:
+          type: array
+          description: Dates of historical statistics
+          items:
+            type: string
+            description: Dates of historical statistics
+        historicalValues:
+          type: array
+          description: Values of historical statistics
+          items:
+            type: number
+            description: Values of historical statistics
+            format: float
+        currentValue:
+          type: number
+          description: Current value
+          format: float
+
+    OlapGeneralStatsResponse:
+      required:
+        - highestSale
+        - items
+        - listed
+        - owners
+        - volume
+      type: object
+      properties:
+        highestSale:
+          type: number
+          description: Highest worth transaction in collection
+          format: float
+        floorPrice:
+          type: number
+          description: Minimal price of nft in this collection available on rarible
+          format: float
+        marketCap:
+          type: number
+          description: Market cap of collection (floor price * total item supply)
+          format: float
+        listed:
+          type: integer
+          description: Amount of currently listed items
+          format: int32
+        items:
+          type: integer
+          description: Total item supply of all nfts in the collection
+          format: int32
+        owners:
+          type: integer
+          description: Current amount of unique owners who hold nfts of this collection
+          format: int32
+        volume:
+          type: number
+          description: Total worth of all transactions were made with nfts in this collection
+          format: float
+
+    OlapPricesResponse:
+      required:
+        - avgPrices
+        - dates
+        - medianPrices
+        - minPrices
+        - sumPrices
+      type: object
+      properties:
+        dates:
+          type: array
+          description: Dates of historical statistics
+          items:
+            type: string
+            description: Dates of historical statistics
+        avgPrices:
+          type: array
+          description: Average prices of nfts in this collection for every date
+          items:
+            type: number
+            description: Average price of nfts in this collection for specific date
+            format: float
+        medianPrices:
+          type: array
+          description: Median prices of nfts in this collection for every date
+          items:
+            type: number
+            description: Median price of nfts in this collection for specific date
+            format: float
+        minPrices:
+          type: array
+          description: Minimum prices of nfts in this collection for every date
+          items:
+            type: number
+            description: Minimum price of nfts in this collection for specific date
+            format: float
+        sumPrices:
+          type: array
+          description: Volumes for the collection for every date
+          items:
+            type: number
+            description: Collection volume for specific date
+            format: float
+
 
   #======================== Responses ============================#
 
