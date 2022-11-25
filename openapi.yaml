@@ -4802,8 +4802,6 @@ components:
           type: string
           enum:
             - SELL
-        orderId:
-          $ref: "#/components/schemas/OrderId"
         nft:
           $ref: "#/components/schemas/Asset"
         payment:
