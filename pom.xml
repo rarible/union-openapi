@@ -34,7 +34,7 @@
     <version>${revision}</version>
 
     <properties>
-        <revision>1.40.4</revision>
+        <revision>1.40.5</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
         <rarible.codegen.server.version>1.2.2</rarible.codegen.server.version>
@@ -90,11 +90,6 @@
             <dependency>
                 <groupId>com.rarible.protocol.union</groupId>
                 <artifactId>protocol-union-subscriber-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.rarible.protocol.union</groupId>
-                <artifactId>protocol-union-statistics-openapi</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -160,8 +155,6 @@
         <module>protocol-union-model</module>
         <module>protocol-union-subscriber</module>
         <module>protocol-union-subscriber-starter</module>
-
-        <module>protocol-union-statistics-openapi</module>
 
         <module>test-coverage</module>
     </modules>
