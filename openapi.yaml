@@ -2401,14 +2401,14 @@ paths:
           required: false
           schema:
             type: number
-            format: float
+            format: bigdecimal
         - name: maxFloorPriceNative
           in: query
           description: Show collections which floor price (native currency) less or equal than specified value
           required: false
           schema:
             type: number
-            format: float
+            format: bigdecimal
         - name: sort
           in: query
           description: Leaderboard sorting
@@ -6630,7 +6630,7 @@ components:
         value:
           type: number
           description: Amount of currency
-          format: float
+          format: bigdecimal
 
     OlapCurrencyAmountWithChange:
       required:
@@ -6643,11 +6643,11 @@ components:
         value:
           type: number
           description: Amount of currency
-          format: float
+          format: bigdecimal
         changePercent:
           type: number
           description: Change in percent. Calculated as <current period value> / <previous period value> - 1
-          format: float
+          format: bigdecimal
 
     OlapIntegerNumberWithChange:
       required:
@@ -6661,7 +6661,7 @@ components:
         changePercent:
           type: number
           description: Change in percent. Calculated as <current period value> / <previous period value> - 1
-          format: float
+          format: bigdecimal
 
     OlapTrendingCollectionEntry:
       required:
@@ -6879,11 +6879,11 @@ components:
           items:
             type: number
             description: Values of historical statistics
-            format: float
+            format: bigdecimal
         currentValue:
           type: number
           description: Current value
-          format: float
+          format: bigdecimal
 
     OlapGeneralStatsResponse:
       required:
@@ -6897,15 +6897,15 @@ components:
         highestSale:
           type: number
           description: Highest worth transaction in collection
-          format: float
+          format: bigdecimal
         floorPrice:
           type: number
           description: Minimal price of nft in this collection available on rarible
-          format: float
+          format: bigdecimal
         marketCap:
           type: number
           description: Market cap of collection (floor price * total item supply)
-          format: float
+          format: bigdecimal
         listed:
           type: integer
           description: Amount of currently listed items
@@ -6921,7 +6921,7 @@ components:
         volume:
           type: number
           description: Total worth of all transactions were made with nfts in this collection
-          format: float
+          format: bigdecimal
 
     OlapPricesResponse:
       required:
@@ -6944,28 +6944,28 @@ components:
           items:
             type: number
             description: Average price of nfts in this collection for specific date
-            format: float
+            format: bigdecimal
         medianPrices:
           type: array
           description: Median prices of nfts in this collection for every date
           items:
             type: number
             description: Median price of nfts in this collection for specific date
-            format: float
+            format: bigdecimal
         minPrices:
           type: array
           description: Minimum prices of nfts in this collection for every date
           items:
             type: number
             description: Minimum price of nfts in this collection for specific date
-            format: float
+            format: bigdecimal
         sumPrices:
           type: array
           description: Volumes for the collection for every date
           items:
             type: number
             description: Collection volume for specific date
-            format: float
+            format: bigdecimal
 
 
   #======================== Responses ============================#
