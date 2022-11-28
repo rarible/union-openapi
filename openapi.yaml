@@ -4767,6 +4767,8 @@ components:
           type: string
           enum:
             - MATCH
+        orderId:
+          $ref: "#/components/schemas/OrderId"
         source:
           $ref: "#/components/schemas/OrderActivitySource"
         transactionHash:
@@ -4842,6 +4844,8 @@ components:
           type: string
           enum:
             - BID
+        orderId:
+          $ref: "#/components/schemas/OrderId"
         hash:
           type: string
         maker:
@@ -4873,6 +4877,8 @@ components:
           type: string
           enum:
             - LIST
+        orderId:
+          $ref: "#/components/schemas/OrderId"
         hash:
           type: string
         maker:
@@ -4902,6 +4908,8 @@ components:
           type: string
           enum:
             - CANCEL_BID
+        orderId:
+          $ref: "#/components/schemas/OrderId"
         hash:
           type: string
         maker:
@@ -4931,6 +4939,8 @@ components:
           type: string
           enum:
             - CANCEL_LIST
+        orderId:
+          $ref: "#/components/schemas/OrderId"
         hash:
           type: string
         maker:
