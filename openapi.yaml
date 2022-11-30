@@ -5468,6 +5468,8 @@ components:
           type: string
         takerEdpk:
           type: string
+        legacyData:
+          type: string
       required:
         - "@type"
         - payouts
