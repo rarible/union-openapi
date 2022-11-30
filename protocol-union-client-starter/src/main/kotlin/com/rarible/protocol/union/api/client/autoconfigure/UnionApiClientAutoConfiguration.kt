@@ -31,7 +31,7 @@ class UnionApiClientAutoConfiguration(
         @Value("\${rarible.core.client.k8s:true}") k8s: Boolean
     ): UnionApiServiceUriProvider {
         return if (k8s)
-            K8sUnionApiServiceUriProvider()
+            K8sUnionApiServiceUriProvider(applicationEnvironmentInfo.name)
         else
             SwarmUnionApiServiceUriProvider(applicationEnvironmentInfo.name)
     }
