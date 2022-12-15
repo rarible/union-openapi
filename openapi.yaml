@@ -3410,7 +3410,7 @@ components:
           $ref: "#/components/schemas/ItemLastSale"
         self:
           type: boolean
-        isSuspiciousOnOS:
+        suspicious:
           type: boolean
       required:
         - id
