@@ -3410,6 +3410,8 @@ components:
           $ref: "#/components/schemas/ItemLastSale"
         self:
           type: boolean
+        isSuspiciousOnOS:
+          type: boolean
       required:
         - id
         - blockchain
