@@ -2372,8 +2372,9 @@ paths:
     get:
       tags:
         - data-controller
-      description: Collections leaderboard with trade activity
+      description: Collections leaderboard by trade activity
       operationId: getCollectionLeaderboard
+      deprecated: true
       parameters:
         - name: blockchain
           in: query
@@ -2456,6 +2457,105 @@ paths:
                   listed: 33
                   totalItemSupply: 250
                   ownersCount: 187
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/rankings/collections/volume":
+    get:
+      tags:
+        - data-controller
+      description: Collections leaderboard by trade activity
+      operationId: getCollectionRankingByVolume
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: ids
+          in: query
+          description: Collection ids
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: period
+          in: query
+          description: Time period for aggregation
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: minFloorPriceNative
+          in: query
+          description: Show collections which floor price (native currency) more or equal than specified value
+          required: false
+          schema:
+            type: number
+            format: bigdecimal
+        - name: maxFloorPriceNative
+          in: query
+          description: Show collections which floor price (native currency) less or equal than specified value
+          required: false
+          schema:
+            type: number
+            format: bigdecimal
+        - name: sort
+          in: query
+          description: Collections sorting
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapTradesLeaderboardSort"
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: continuation
+          in: query
+          description: Page reference. Taken from previous response
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapCollectionVolumeRankingResponse"
+              example:
+                continuation: 45325.07_ETHEREUM:0xe8f88d16f24255fcfab25959705d724406d67d9d
+                result:
+                  - id: ETHEREUM:0xe8f88d16f24255fcfab25959705d724406d67d9d
+                    volumeUsd:
+                      currency: USD
+                      value: 45325.07
+                      changePercent: -51.196335
+                    volumeNative:
+                      currency: ETH
+                      value: 23.95
+                    itemsBought: 1
+                    floorPrice:
+                      currency: ETH
+                      value: 24.0
+                      changePercent: -13.5332
+                    listed: 33
+                    totalItemSupply: 250
+                    ownersCount: 187
         '400':
           description: Bad Request
           content:
@@ -6798,6 +6898,16 @@ components:
           * `VOLUME_USD_DESC` - sort by usd collection volume, descending order
           * `COLLECTION_ASC` - sort by collection id, ascending order
           * `COLLECTION_DESC` - sort by collection id, descending order
+
+    OlapCollectionVolumeRankingResponse:
+      type: object
+      properties:
+        continuation:
+          type: string
+        result:
+          type: array
+          items:
+            "$ref": "#/components/schemas/OlapCollectionLeaderboardEntry"
 
     OlapCollectionLeaderboardEntry:
       required:
