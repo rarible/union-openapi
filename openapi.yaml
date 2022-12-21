@@ -2536,7 +2536,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/OlapCollectionRankingResponse"
+                "$ref": "#/components/schemas/OlapCollectionVolumeRankingResponse"
               example:
                 continuation: 45325.07_ETHEREUM:0xe8f88d16f24255fcfab25959705d724406d67d9d
                 result:
@@ -6602,7 +6602,7 @@ components:
           enum:
             - ITEM
         id:
-          $ref: "#/components/schemas/ItemId"
+            $ref: "#/components/schemas/ItemId"
       required:
         - "@type"
         - id
@@ -6615,7 +6615,7 @@ components:
           enum:
             - OWNERSHIP
         id:
-          $ref: "#/components/schemas/OwnershipId"
+            $ref: "#/components/schemas/OwnershipId"
       required:
         - "@type"
         - id
@@ -6899,7 +6899,7 @@ components:
           * `COLLECTION_ASC` - sort by collection id, ascending order
           * `COLLECTION_DESC` - sort by collection id, descending order
 
-    OlapCollectionRankingResponse:
+    OlapCollectionVolumeRankingResponse:
       type: object
       properties:
         continuation:
