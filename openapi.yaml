@@ -2368,6 +2368,73 @@ paths:
               example:
                 code: UNKNOWN
                 message: Unknown error
+  "/v0.1/data/rankings/collections/mints":
+    get:
+      tags:
+        - data-controller
+      description: Collections leaderboard based on mint activity
+      operationId: getCollectionRankingByMints
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: period
+          in: query
+          description: Time period of leaderboard
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: sort
+          in: query
+          description: Leaderboard sorting
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapMintsLeaderboardSort'
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: continuation
+          in: query
+          description: Page reference. Taken from previous response
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapCollectionMintsRankingResponse"
+              example:
+                continuation: 45325.07_ETHEREUM:0xe8f88d16f24255fcfab25959705d724406d67d9d
+                result:
+                  - id: ETHEREUM:0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85
+                    minted: 178
+                    totalItemSupply: 1984031
+                    floorPrice:
+                      currency: ETH
+                      value: 5.295908E-22
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/leaderboards/collections":
     get:
       tags:
@@ -6908,6 +6975,16 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/OlapCollectionLeaderboardEntry"
+
+    OlapCollectionMintsRankingResponse:
+      type: object
+      properties:
+        continuation:
+          type: string
+        result:
+          type: array
+          items:
+            "$ref": "#/components/schemas/OlapCollectionMintsLeaderboardEntry"
 
     OlapCollectionLeaderboardEntry:
       required:
