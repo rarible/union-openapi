@@ -2316,40 +2316,28 @@ paths:
             type: integer
             format: int32
             default: 10
-        - name: offset
+        - name: continuation
           in: query
-          description: Offset of records in leaderboard
+          description: Page reference. Taken from previous response
           required: false
           schema:
-            type: integer
-            format: int32
-            default: 0
+            type: string
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OlapCollectionMintsLeaderboardEntry'
+                "$ref": "#/components/schemas/OlapCollectionMintsRankingResponse"
               example:
-                - id: ETHEREUM:0x7e89a5e47cfdafd547ae8b2bc89590e0608941ae
-                  minted: 1077
-                  totalItemSupply: 1992
-                  floorPrice:
-                    currency: ETH
-                    value: 0.0021
-                - id: ETHEREUM:0x5e6dd7b71bff0f893cef2045819bb6095bd17e80
-                  minted: 607
-                  totalItemSupply: 607
-                  floorPrice: null
-                - id: ETHEREUM:0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85
-                  minted: 178
-                  totalItemSupply: 1984031
-                  floorPrice:
-                    currency: ETH
-                    value: 5.295908E-22
+                continuation: 45325.07_ETHEREUM:0xe8f88d16f24255fcfab25959705d724406d67d9d
+                result:
+                  - id: ETHEREUM:0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85
+                    minted: 178
+                    totalItemSupply: 1984031
+                    floorPrice:
+                      currency: ETH
+                      value: 5.295908E-22
         '400':
           description: Bad Request
           content:
@@ -6908,6 +6896,16 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/OlapCollectionLeaderboardEntry"
+
+    OlapCollectionMintsRankingResponse:
+      type: object
+      properties:
+        continuation:
+          type: string
+        result:
+          type: array
+          items:
+            "$ref": "#/components/schemas/OlapCollectionMintsLeaderboardEntry"
 
     OlapCollectionLeaderboardEntry:
       required:
