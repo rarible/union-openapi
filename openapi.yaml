@@ -7068,11 +7068,11 @@ components:
         minted:
           type: integer
           description: Amount of unique minted nfts for selected period (ERC-1155 and ERC-721 counted once)
-          format: int64
+          format: int32
         maxSupply:
           type: integer
           description: Total supply of all nfts in collection (ERC-1155 sums all quantities and ERC-721 nfts counted once)
-          format: int64
+          format: int32
         lastMint:
           type: string
           format: date-time
