@@ -2979,7 +2979,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapError"
-  /v0.1/collections/{collection}/gmv:
+  /v0.1/data/collections/{collection}/gmv:
     get:
       tags:
         - data-controller
