@@ -4831,6 +4831,8 @@ components:
           $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
+        mintPrice:
+          $ref: "#/components/schemas/BigDecimal"
         transactionHash:
           type: string
         blockchainInfo:
