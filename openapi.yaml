@@ -3210,6 +3210,34 @@ components:
         - account
         - value
 
+    EventTimeMarks:
+      type: object
+      required:
+        - source
+        - marks
+      properties:
+        source:
+          type: string
+          description: "Describes what was the trigger of the event"
+        marks:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/EventTimeMark"
+
+    EventTimeMark:
+      type: object
+      required:
+        - name
+        - date
+      properties:
+        name:
+          type: string
+          description: "Describes 'place' where event has been handled/received"
+        date:
+          type: string
+          format: date-time
+
     #################### Sign - Union ####################
 
     SignatureValidationForm:
@@ -3674,6 +3702,8 @@ components:
           $ref: "#/components/schemas/CollectionId"
         eventId:
           type: string
+        eventTimeMarks:
+          $ref: "#/components/schemas/EventTimeMarks"
       required:
         - eventId
         - collectionId
@@ -3700,6 +3730,8 @@ components:
           $ref: "#/components/schemas/ItemId"
         eventId:
           type: string
+        eventTimeMarks:
+          $ref: "#/components/schemas/EventTimeMarks"
       required:
         - eventId
         - itemId
@@ -4071,6 +4103,8 @@ components:
           $ref: "#/components/schemas/OwnershipId"
         eventId:
           type: string
+        eventTimeMarks:
+          $ref: "#/components/schemas/EventTimeMarks"
       required:
         - ownershipId
         - eventId
@@ -4430,6 +4464,8 @@ components:
           "$ref": "#/components/schemas/OrderId"
         eventId:
           type: string
+        eventTimeMarks:
+          $ref: "#/components/schemas/EventTimeMarks"
       required:
         - orderId
         - eventId
@@ -4917,6 +4953,7 @@ components:
         - TEIA
         - VERSUM
         - FXHASH
+        - BLUR
 
     OrderActivityMatchSide:
       type: object
@@ -6763,7 +6800,6 @@ components:
       type: string
       description: "Blockchain address in Union format `${blockchainGroup}:${token}`"
       example: "${userId}"
-
 
     SearchEngine:
       type: string
