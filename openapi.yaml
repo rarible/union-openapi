@@ -7226,6 +7226,23 @@ components:
             description: Collection volume for specific date
             format: bigdecimal
 
+  #======================== Olap Events ==========================#
+
+    OlapCollectionVolumeChangeEvent:
+      type: object
+      required:
+        - id
+        - period
+        - volume
+      properties:
+        id:
+          $ref: "#/components/schemas/CollectionId"
+        period:
+          $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        volume:
+          type: number
+          format: bigdecimal
+          description: volume in native currency for the given period
 
   #======================== Responses ============================#
 
