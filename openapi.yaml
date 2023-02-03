@@ -7247,6 +7247,19 @@ components:
     OlapCollectionVolumeChangeEvent:
       type: object
       required:
+        - "@type"
+        - data
+      properties:
+        data:
+          $ref: "#/components/schemas/OlapVolumeForPeriodData"
+        "@type":
+          type: string
+          enum:
+            - VOLUME_CHANGE
+
+    OlapCollectionEvent:
+      type: object
+      required:
         - collectionId
         - eventId
         - data
@@ -7257,8 +7270,8 @@ components:
           type: string
         eventTimeMarks:
           $ref: "#/components/schemas/EventTimeMarks"
-        data:
-          $ref: "#/components/schemas/OlapVolumeForPeriodData"
+      oneOf:
+        - $ref: "#/components/schemas/OlapCollectionVolumeChangeEvent"
 
   #======================== Responses ============================#
 
