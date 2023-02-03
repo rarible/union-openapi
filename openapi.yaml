@@ -7228,14 +7228,14 @@ components:
 
   #======================== Olap Events ==========================#
 
-    OlapCollectionVolumeChangeEvent:
+    OlapVolumeForPeriodData:
       type: object
       required:
-        - id
         - period
         - volume
+        - collectionId
       properties:
-        id:
+        collectionId:
           $ref: "#/components/schemas/CollectionId"
         period:
           $ref: '#/components/schemas/OlapLeaderboardPeriod'
@@ -7243,6 +7243,22 @@ components:
           type: number
           format: bigdecimal
           description: volume in native currency for the given period
+
+    OlapCollectionVolumeChangeEvent:
+      type: object
+      required:
+        - collectionId
+        - eventId
+        - data
+      properties:
+        collectionId:
+          $ref: "#/components/schemas/CollectionId"
+        eventId:
+          type: string
+        eventTimeMarks:
+          $ref: "#/components/schemas/EventTimeMarks"
+        data:
+          $ref: "#/components/schemas/OlapVolumeForPeriodData"
 
   #======================== Responses ============================#
 
