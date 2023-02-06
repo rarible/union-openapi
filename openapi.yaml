@@ -7059,7 +7059,6 @@ components:
 
     OlapLeaderboardPeriod:
       type: string
-      default: D7
       enum:
         - D1
         - D7
@@ -7231,9 +7230,9 @@ components:
     OlapVolumeForPeriodData:
       type: object
       required:
-        - period
-        - volume
         - collectionId
+        - volume
+        - date
       properties:
         collectionId:
           $ref: "#/components/schemas/CollectionId"
@@ -7242,7 +7241,11 @@ components:
         volume:
           type: number
           format: bigdecimal
-          description: volume in native currency for the given period
+          description: volume in native currency for the given period, if period is null it is total volume
+        date:
+          type: string
+          format: date-time
+          description: when the value was updated in the olap database
 
     OlapCollectionVolumeChangeEvent:
       type: object
@@ -7251,7 +7254,9 @@ components:
         - data
       properties:
         data:
-          $ref: "#/components/schemas/OlapVolumeForPeriodData"
+          type: array
+          items:
+            $ref: "#/components/schemas/OlapVolumeForPeriodData"
         "@type":
           type: string
           enum:
