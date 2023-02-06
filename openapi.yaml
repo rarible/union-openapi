@@ -7232,7 +7232,7 @@ components:
       required:
         - collectionId
         - volume
-        - date
+        - updatedAt
       properties:
         collectionId:
           $ref: "#/components/schemas/CollectionId"
@@ -7242,7 +7242,7 @@ components:
           type: number
           format: bigdecimal
           description: volume in native currency for the given period, if period is null it is total volume
-        date:
+        updatedAt:
           type: string
           format: date-time
           description: when the value was updated in the olap database
