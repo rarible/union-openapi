@@ -25,5 +25,9 @@ class UnionEventTopicProvider {
         fun getActivityTopic(environment: String): String {
             return "protocol.$environment.union.activity"
         }
+
+        fun getOlapCollectionTopic(environment: String): String {
+            return "protocol.$environment.olap.collection"
+        }
     }
 }
