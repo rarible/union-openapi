@@ -7231,17 +7231,22 @@ components:
       type: object
       required:
         - collectionId
-        - volume
+        - volumeNative
+        - volumeUsd
         - updatedAt
       properties:
         collectionId:
           $ref: "#/components/schemas/CollectionId"
         period:
           $ref: '#/components/schemas/OlapLeaderboardPeriod'
-        volume:
+        volumeNative:
           type: number
           format: bigdecimal
           description: volume in native currency for the given period, if period is null it is total volume
+        volumeUsd:
+          type: number
+          format: bigdecimal
+          description: volume in usd for the given period, if period is null it is total volume
         updatedAt:
           type: string
           format: date-time
