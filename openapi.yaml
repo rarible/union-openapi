@@ -561,7 +561,7 @@ paths:
       tags:
         - item-controller
       description: "Returns combination of Item attribute key with list of values"
-      operationId:  searchTraits
+      operationId: searchTraits
       parameters:
         - name: filter
           description: filter
@@ -3419,6 +3419,7 @@ components:
             - PREVIEW
             - BIG
             - ORIGINAL
+            - PORTRAIT
         mimeType:
           type: string
           example: "image/png"
@@ -5014,7 +5015,7 @@ components:
 
     OrderMatchSwap:
       type: object
-      required: [left, right]
+      required: [ left, right ]
       properties:
         "@type":
           type: string
@@ -6730,7 +6731,7 @@ components:
           enum:
             - ITEM
         id:
-            $ref: "#/components/schemas/ItemId"
+          $ref: "#/components/schemas/ItemId"
       required:
         - "@type"
         - id
@@ -6743,7 +6744,7 @@ components:
           enum:
             - OWNERSHIP
         id:
-            $ref: "#/components/schemas/OwnershipId"
+          $ref: "#/components/schemas/OwnershipId"
       required:
         - "@type"
         - id
