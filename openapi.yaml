@@ -622,6 +622,17 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ItemsSearchRequest"
+            example:
+              size: 10
+              filter:
+                blockchains: [ ETHEREUM ]
+                deleted: false
+                sellPriceFrom: 0
+                sellPriceTo: 100
+                sellCurrency: ETHEREUM:0x0000000000000000000000000000000000000000
+                lastUpdatedAtFrom: 2022-12-01T00:00:00Z
+                lastUpdatedAtTo: 2029-12-01T00:00:00Z
+              sort: EARLIEST
         required: true
       responses:
         '200':
@@ -736,6 +747,17 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/OwnershipSearchRequest"
+            example:
+              size: 10
+              filter:
+                blockchains: [ ETHEREUM ]
+                deleted: false
+                sellPriceFrom: 0
+                sellPriceTo: 100
+                sellCurrency: ETHEREUM:0x0000000000000000000000000000000000000000
+                lastUpdatedAtFrom: 2022-12-01T00:00:00Z
+                lastUpdatedAtTo: 2029-12-01T00:00:00Z
+              sort: EARLIEST
         required: true
       responses:
         "200":
