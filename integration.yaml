@@ -908,6 +908,7 @@ components:
             - PREVIEW
             - BIG
             - ORIGINAL
+            - PORTRAIT
         mimeType:
           type: string
           example: "image/png"
