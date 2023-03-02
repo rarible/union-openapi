@@ -5394,63 +5394,6 @@ components:
         searchEngine:
           $ref: "#/components/schemas/SearchEngine"
 
-    StatisticsValue:
-      type: object
-      description: value - native currency value
-      properties:
-        value:
-          $ref: "#/components/schemas/BigDecimal"
-        valueUsd:
-          $ref: "#/components/schemas/BigDecimal"
-      required:
-        - value
-        - valueUsd
-
-    StatisticsPeriod:
-      type: object
-      properties:
-        period:
-          type: string
-          enum:
-            - DAY
-            - WEEK
-            - MONTH
-        value:
-          $ref: "#/components/schemas/StatisticsValue"
-        changePercent:
-          $ref: "#/components/schemas/BigDecimal"
-      required:
-        - value
-        - period
-        - changePercent
-
-    CollectionStatistics:
-      type: object
-      properties:
-        ownerCount:
-          type: integer
-          format: int64
-        itemCount:
-          type: integer
-          format: int64
-        ownerCountTotal:
-          $ref: "#/components/schemas/BigInteger"
-        itemCountTotal:
-          $ref: "#/components/schemas/BigInteger"
-        highestSale:
-          $ref: "#/components/schemas/StatisticsValue"
-        totalVolume:
-          $ref: "#/components/schemas/StatisticsValue"
-        volumes:
-          type: array
-          items:
-            $ref: "#/components/schemas/StatisticsPeriod"
-        floorPrice:
-          $ref: "#/components/schemas/StatisticsValue"
-      required:
-        - totalVolume
-        - volumes
-
     CollectionId:
       type: string
       description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
@@ -5517,8 +5460,6 @@ components:
             $ref: "#/components/schemas/OriginOrders"
         self:
           type: boolean
-        statistics:
-          $ref: "#/components/schemas/CollectionStatistics"
       required:
         - id
         - blockchain
