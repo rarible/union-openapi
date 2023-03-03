@@ -3181,6 +3181,54 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/collections/{collection}/listed":
+    get:
+      tags:
+        - data-controller
+      description: Get historical statistics of collection listed count
+      operationId: getListed
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapStatsGraphResponse"
+              example:
+                historicalDates:
+                  - '2022-05-08'
+                  - '2022-05-09'
+                  - '2022-05-10'
+                historicalValues:
+                  - 524
+                  - 791
+                  - 1619
+                currentValue: 1767
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
 
 components:
   schemas:
