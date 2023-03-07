@@ -6035,8 +6035,11 @@ components:
         conduitKey:
           type: string
         counter:
+          deprecated: true
           type: integer
           format: int64
+        nonce:
+          $ref: "#/components/schemas/BigInteger"
       required:
         - protocol
         - orderType
@@ -6045,7 +6048,6 @@ components:
         - zone
         - zoneHash
         - conduitKey
-        - counter
       oneOf:
         - "$ref": "#/components/schemas/EthOrderBasicSeaportDataV1"
 
