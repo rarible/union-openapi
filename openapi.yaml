@@ -2241,8 +2241,9 @@ paths:
     get:
       tags:
         - data-controller
-      description: Users (top buyers/sellers) leaderboard. Calculated as traded worth for the period.
+      description: Users (top buyers/sellers) leaderboard. Calculated as traded worth for the period. Deprecated. Please, use getUserRankingByVolume
       operationId: getUserLeaderboard
+      deprecated: true
       parameters:
         - name: entity
           in: path
@@ -2293,6 +2294,75 @@ paths:
                   volumeNative:
                     currency: MATIC
                     value: 27343817.491841666
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  "/v0.1/data/rankings/{entity}/volume":
+    get:
+      tags:
+        - data-controller
+      description: Users (top buyers/sellers) leaderboard. Calculated as traded worth for the period.
+      operationId: getUserRankingByVolume
+      parameters:
+        - name: entity
+          in: path
+          description: Type of users in leaderboard
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapUserType"
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: source
+          in: query
+          description: Source
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapPlatformSource"
+        - name: period
+          in: query
+          description: "Time period of leaderboard. Default: D7"
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapUserVolumeRankingResponse"
+              example:
+                result:
+                  - id: ETHEREUM:0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85
+                    items: 178
+                    transactions: 11
+                    volumeUsd:
+                      currency: USD
+                      value: 1000
+                    volumeNative:
+                      currency: ETH
+                      value: 0.75
         '400':
           description: Bad Request
           content:
@@ -7037,6 +7107,14 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/OlapCollectionMintsLeaderboardEntry"
+
+    OlapUserVolumeRankingResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            "$ref": "#/components/schemas/OlapUserLeaderboardEntry"
 
     OlapCollectionLeaderboardEntry:
       required:
