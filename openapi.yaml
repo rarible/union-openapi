@@ -2635,6 +2635,12 @@ paths:
       description: Collections leaderboard by trade activity
       operationId: getCollectionRankingByVolume
       parameters:
+        - name: source
+          in: query
+          description: Group of platform used for volume calculation and collection ranging.
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapTradesLeaderboardSourceGroup"
         - name: blockchain
           in: query
           description: Blockchain
@@ -7088,6 +7094,16 @@ components:
           * `COLLECTION_ASC` - sort by collection id, ascending order
           * `COLLECTION_DESC` - sort by collection id, descending order
 
+    OlapTradesLeaderboardSourceGroup:
+      type: string
+      enum:
+        - RARIBLE
+        - EXTERNAL
+      description: >
+        Source group:
+          * `RARIBLE` - source group includes rarible sources (rarible.com + all communities)
+          * `EXTERNAL` - source group includes external marketplaces as sources
+
     OlapCollectionVolumeRankingResponse:
       type: object
       properties:
@@ -7317,7 +7333,7 @@ components:
             description: Collection volume for specific date
             format: bigdecimal
 
-  #======================== Olap Events ==========================#
+    #======================== Olap Events ==========================#
 
     OlapVolumeForPeriodData:
       type: object
