@@ -2149,6 +2149,7 @@ paths:
         Trending collection list. Sorted by special score, calculated in the following way: 
         gmv * (<amount of transaction change percentage comparing to previous period> - 1) / 10000
       operationId: getTrendingCollection
+      deprecated: true
       parameters:
         - name: blockchain
           in: query
@@ -2381,6 +2382,7 @@ paths:
         - data-controller
       description: Collections leaderboard based on mint activity
       operationId: getCollectionMintsLeaderboard
+      deprecated: true
       parameters:
         - name: blockchain
           in: query
@@ -2898,6 +2900,7 @@ paths:
         - data-controller
       description: Get historical statistics about collection items prices
       operationId: getPrices
+      deprecated: true
       parameters:
         - name: collection
           in: path
@@ -2969,6 +2972,7 @@ paths:
         - data-controller
       description: Get historical statistics about collection owners
       operationId: getOwners
+      deprecated: true
       parameters:
         - name: collection
           in: path
@@ -3023,6 +3027,7 @@ paths:
         - data-controller
       description: Get historical statistics about collection market cap
       operationId: getMarketcap
+      deprecated: true
       parameters:
         - name: collection
           in: path
