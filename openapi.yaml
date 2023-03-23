@@ -2380,7 +2380,7 @@ paths:
     get:
       tags:
         - data-controller
-      description: Collections leaderboard based on mint activity
+      description: Collections leaderboard based on mint activity. Deprecated. Please, use getCollectionRankingByMints instead.
       operationId: getCollectionMintsLeaderboard
       deprecated: true
       parameters:
