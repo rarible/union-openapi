@@ -2899,7 +2899,7 @@ paths:
     get:
       tags:
         - data-controller
-      description: Get historical statistics about collection items prices
+      description: Get historical statistics about collection items prices. Deprecated. Going to be removed soon.
       operationId: getPrices
       deprecated: true
       parameters:
