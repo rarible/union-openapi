@@ -2147,8 +2147,10 @@ paths:
         - data-controller
       description: |
         Trending collection list. Sorted by special score, calculated in the following way: 
-        gmv * (<amount of transaction change percentage comparing to previous period> - 1) / 10000
+        gmv * (<amount of transaction change percentage comparing to previous period> - 1) / 10000.
+        Deprecated. Going to be removed soon.
       operationId: getTrendingCollection
+      deprecated: true
       parameters:
         - name: blockchain
           in: query
@@ -2241,7 +2243,7 @@ paths:
     get:
       tags:
         - data-controller
-      description: Users (top buyers/sellers) leaderboard. Calculated as traded worth for the period. Deprecated. Please, use getUserRankingByVolume
+      description: Users (top buyers/sellers) leaderboard. Calculated as traded worth for the period. Deprecated. Please, use getUserRankingByVolume instead
       operationId: getUserLeaderboard
       deprecated: true
       parameters:
@@ -2379,8 +2381,9 @@ paths:
     get:
       tags:
         - data-controller
-      description: Collections leaderboard based on mint activity
+      description: Collections leaderboard based on mint activity. Deprecated. Please, use getCollectionRankingByMints instead.
       operationId: getCollectionMintsLeaderboard
+      deprecated: true
       parameters:
         - name: blockchain
           in: query
@@ -2531,7 +2534,7 @@ paths:
     get:
       tags:
         - data-controller
-      description: Collections leaderboard by trade activity
+      description: Collections leaderboard by trade activity. Deprecated. Please use getCollectionRankingByVolume instead
       operationId: getCollectionLeaderboard
       deprecated: true
       parameters:
@@ -2896,8 +2899,9 @@ paths:
     get:
       tags:
         - data-controller
-      description: Get historical statistics about collection items prices
+      description: Get historical statistics about collection items prices. Deprecated. Going to be removed soon.
       operationId: getPrices
+      deprecated: true
       parameters:
         - name: collection
           in: path
@@ -2967,8 +2971,9 @@ paths:
     get:
       tags:
         - data-controller
-      description: Get historical statistics about collection owners
+      description: Get historical statistics about collection owners. Deprecated. Going to be removed soon.
       operationId: getOwners
+      deprecated: true
       parameters:
         - name: collection
           in: path
@@ -3021,8 +3026,9 @@ paths:
     get:
       tags:
         - data-controller
-      description: Get historical statistics about collection market cap
+      description: Get historical statistics about collection market cap. Deprecated. Going to be removed soon.
       operationId: getMarketcap
+      deprecated: true
       parameters:
         - name: collection
           in: path
