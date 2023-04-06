@@ -7181,6 +7181,7 @@ components:
         - H1
         - MIN30
         - MIN5
+        - ALL
       description: >
         Period:
           * `D1` - Last 1 day
@@ -7190,6 +7191,7 @@ components:
           * `H1` - Last 1 hour
           * `MIN30` - Last 30 minutes
           * `MIN5` - Last 5 minutes
+          * `ALL` - For all time
 
     OlapMintsLeaderboardSort:
       type: string
