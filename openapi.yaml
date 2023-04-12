@@ -5526,7 +5526,7 @@ components:
 
     CollectionId:
       type: string
-      description: "Collection Id, has format `${blockchain}:${nativeICollectionId}`"
+      description: "Collection id"
       example: "${collectionId}"
 
     Collection:
@@ -5538,6 +5538,17 @@ components:
           $ref: "#/components/schemas/CollectionId"
         blockchain:
           $ref: "#/components/schemas/Blockchain"
+        structure:
+          type: string
+          enum:
+            - REGULAR
+            - COMPOSITE
+            - PART
+          description: |
+            Collection structure can be described as:
+            - REGULAR: a standalone collection that has a corresponding contract address on the blockchain.
+            - COMPOSITE: an artificial collection that is composed of one or more regular collections or items.
+            - PART: an artificial collection that is a part of a larger regular collection, thus has a parent collection.
         type:
           type: string
           enum:
