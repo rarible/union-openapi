@@ -5538,17 +5538,17 @@ components:
           $ref: "#/components/schemas/CollectionId"
         blockchain:
           $ref: "#/components/schemas/Blockchain"
-        structureKind:
+        structure:
           type: string
           enum:
             - REGULAR
-            - COMPOUND
-            - FRAGMENT
+            - COMPOSITE
+            - PART
           description: |
-            Collection structure kind:
+            Collection structure can be described as:
             - REGULAR: a standalone collection that has a corresponding contract address on the blockchain.
-            - COMPOUND: an artificial collection that is composed of one or more regular collections.
-            - FRAGMENT: an artificial collection that is a fragment of a larger regular collection, thus has a parent collection.
+            - COMPOSITE: an artificial collection that is composed of one or more regular collections or items.
+            - PART: an artificial collection that is a part of a larger regular collection, thus has a parent collection.
         type:
           type: string
           enum:
@@ -5605,7 +5605,6 @@ components:
         - id
         - blockchain
         - name
-        - structureKind
         - type
         - features
 
