@@ -22,4 +22,16 @@ data class ItemIdDto(
     }
 
     override fun toString(): String = "$blockchain:$value"
+
+    object Comparators {
+
+        val LEXICOGRAPHICAL = Comparator<ItemIdDto> { i1, i2 ->
+            val byChain = BlockchainComparators.LEXICOGRAPHICAL.compare(i1.blockchain, i2.blockchain)
+            if (byChain != 0) {
+                byChain
+            } else {
+                i1.value.compareTo(i2.value)
+            }
+        }
+    }
 }
