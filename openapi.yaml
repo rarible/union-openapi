@@ -4588,6 +4588,7 @@ components:
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
         - "$ref": "#/components/schemas/EthX2Y2OrderDataV1"
         - "$ref": "#/components/schemas/EthLooksRareOrderDataV1"
+        - "$ref": "#/components/schemas/EthLooksRareOrderDataV2"
         - "$ref": "#/components/schemas/EthSudoSwapAmmDataV1"
         - "$ref": "#/components/schemas/TezosOrderDataLegacy"
         - "$ref": "#/components/schemas/TezosOrderDataV2"
@@ -6178,6 +6179,55 @@ components:
         - minPercentageToAsk
         - strategy
         - nonce
+
+    EthLooksRareOrderDataV2:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_LOOKSRARE_ORDER_DATA_V2
+        quoteType:
+          type: string
+          enum:
+            - ASK
+            - BID
+        globalNonce:
+          $ref: "#/components/schemas/BigInteger"
+        orderNonce:
+          $ref: "#/components/schemas/BigInteger"
+        subsetNonce:
+          $ref: "#/components/schemas/BigInteger"
+        strategyId:
+          $ref: "#/components/schemas/BigInteger"
+        additionalParameters:
+          type: string
+        merkleRoot:
+          type: string
+        merkleProof:
+          type: array
+          items:
+            $ref: "#/components/schemas/EthLooksRareMerkleProof"
+      required:
+        - "@type"
+        - quoteType
+        - globalNonce
+        - orderNonce
+        - subsetNonce
+        - strategyId
+        - additionalParameters
+
+    EthLooksRareMerkleProof:
+      type: object
+      required:
+        - position
+        - value
+      properties:
+        position:
+          type: integer
+          format: int64
+        value:
+          type: string
 
     SudoSwapPoolType:
       type: string
