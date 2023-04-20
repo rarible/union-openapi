@@ -5012,8 +5012,10 @@ components:
             - MINT
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract: # Deprecated, replaced by itemId
+        contract: # TODO make it required
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
         itemId:
@@ -5041,8 +5043,10 @@ components:
             - BURN
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract: # Deprecated, replaced by itemId
+        contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
         itemId:
@@ -5070,8 +5074,10 @@ components:
           $ref: "#/components/schemas/UnionAddress"
         owner:
           $ref: "#/components/schemas/UnionAddress"
-        contract: # Deprecated, replaced by itemId
+        contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId: # Deprecated, replaced by itemId
           $ref: "#/components/schemas/BigInteger"
         itemId:
@@ -5440,6 +5446,8 @@ components:
           type: string
         itemId:
           $ref: "#/components/schemas/ItemId"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         value:
           $ref: "#/components/schemas/BigInteger"
 
@@ -5461,6 +5469,8 @@ components:
           type: string
         itemId:
           $ref: "#/components/schemas/ItemId"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         value:
           $ref: "#/components/schemas/BigInteger"
 
@@ -6391,6 +6401,8 @@ components:
             - TEZOS_NFT
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
       required:
@@ -6407,6 +6419,8 @@ components:
             - TEZOS_MT
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
       required:
@@ -6423,6 +6437,8 @@ components:
             - FLOW_NFT
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
       required:
@@ -6477,6 +6493,8 @@ components:
             - ERC721
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
       required:
@@ -6493,6 +6511,8 @@ components:
             - ERC721_Lazy
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         uri:
@@ -6531,6 +6551,8 @@ components:
             - ERC1155
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
       required:
@@ -6547,6 +6569,8 @@ components:
             - ERC1155_Lazy
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           $ref: "#/components/schemas/BigInteger"
         uri:
@@ -6588,6 +6612,8 @@ components:
             - "CRYPTO_PUNKS"
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
         tokenId:
           type: integer
       required:
@@ -6604,6 +6630,8 @@ components:
             - "GEN_ART"
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: #TODO ????
+          $ref: "#/components/schemas/CollectionId"
       required:
         - "@type"
         - contract
@@ -6617,6 +6645,8 @@ components:
             - "COLLECTION"
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
       required:
         - "@type"
         - contract
@@ -6630,6 +6660,8 @@ components:
             - "AMM_NFT"
         contract:
           $ref: "#/components/schemas/ContractAddress"
+        collection: # TODO make it required
+          $ref: "#/components/schemas/CollectionId"
       required:
         - "@type"
         - contract
@@ -6641,6 +6673,10 @@ components:
           type: string
           enum:
             - SOLANA_NFT
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
         itemId:
           $ref: "#/components/schemas/ItemId"
       required:

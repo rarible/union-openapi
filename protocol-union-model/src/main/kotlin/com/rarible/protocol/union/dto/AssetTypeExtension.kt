@@ -5,10 +5,9 @@ data class AssetTypeExtension(
     val isNft: Boolean,
     val itemId: ItemIdDto? = null,
     val collectionId: CollectionIdDto? = null,
+    val isCollectionAsset: Boolean,
     private val currencyId: String? = null
 ) {
-
-    val isCollection = collectionId != null
 
     fun currencyAddress(): String {
         if (!isCurrency) {
