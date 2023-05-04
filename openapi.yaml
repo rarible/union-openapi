@@ -1175,6 +1175,14 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/OrderStatus"
+        - name: "currencies"
+          in: query
+          required: false
+          description: "Currencies for bids"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/CurrencyId"
         - name: "start"
           in: query
           required: false
@@ -1263,6 +1271,14 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/OrderStatus"
+        - name: "currencies"
+          in: query
+          required: false
+          description: "Currencies for bids"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/CurrencyId"
         - name: "start"
           in: query
           required: false
