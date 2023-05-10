@@ -5116,6 +5116,11 @@ components:
           $ref: "#/components/schemas/Order"
         bestSellOrder:
           $ref: "#/components/schemas/Order"
+        bestBidOrdersByCurrency:
+          type: array
+          description: Contains best bid order for each currency if exists
+          items:
+            $ref: "#/components/schemas/Order"
         originOrders:
           type: array
           items:
