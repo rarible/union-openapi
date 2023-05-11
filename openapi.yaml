@@ -1694,6 +1694,14 @@ paths:
             type: array
             items:
               "$ref": "#/components/schemas/UnionAddress"
+        - name: "bidCurrencies"
+          in: query
+          required: false
+          description: "Currency for BID and CANCEL_BID activity types"
+          schema:
+            type: array
+            items:
+              "$ref": "#/components/schemas/CurrencyId"
         - name: "from"
           in: query
           required: false
@@ -1796,6 +1804,14 @@ paths:
           description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
           schema:
             $ref: "#/components/schemas/ItemId"
+        - name: "bidCurrencies"
+          in: query
+          required: false
+          description: "Currency for BID and CANCEL_BID activity types"
+          schema:
+            type: array
+            items:
+              "$ref": "#/components/schemas/CurrencyId"
         - name: "continuation"
           in: query
           required: false
@@ -1862,6 +1878,14 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/ContractAddress"
+        - name: "bidCurrencies"
+          in: query
+          required: false
+          description: "Currency for BID and CANCEL_BID activity types"
+          schema:
+            type: array
+            items:
+              "$ref": "#/components/schemas/CurrencyId"
         - name: "continuation"
           in: query
           required: false
@@ -1977,6 +2001,14 @@ paths:
             type: "array"
             items:
               $ref: "#/components/schemas/ActivityType"
+        - name: "bidCurrencies"
+          in: query
+          required: false
+          description: "Currency for BID and CANCEL_BID activity types"
+          schema:
+            type: array
+            items:
+              "$ref": "#/components/schemas/CurrencyId"
         - name: "continuation"
           in: query
           required: false
@@ -5019,6 +5051,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/UnionAddress"
+        bidCurrencies:
+          description: "Currency for BID and CANCEL_BID activity types"
+          type: array
+          items:
+            "$ref": "#/components/schemas/CurrencyId"
         blockchains:
           type: array
           items:
