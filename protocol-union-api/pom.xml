@@ -45,6 +45,7 @@
                 <configuration>
                     <schema>
                         <outputFile>${dir.target.classes}/union.yaml</outputFile>
+                        <inputFile>${project.basedir}/../openapi.yaml</inputFile>
                     </schema>
                     <dependencies>
                         <dependency>
