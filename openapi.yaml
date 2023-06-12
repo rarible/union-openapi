@@ -36,6 +36,39 @@ security:
 
 paths:
 
+  ######################### Domain API #########################
+
+  "/v0.1/domains/resolve":
+    post:
+      tags:
+        - domain-controller
+      description: "Resolve domain"
+      operationId: resolve
+      parameters:
+        - name: blockchain
+          in: query
+          required: true
+          description: "Type of the blockchain network"
+          schema:
+            "$ref": "#/components/schemas/Blockchain"
+        - name: name
+          in: query
+          required: true
+          description: "Name of a domain to resolve"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DomainResolveResult"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################### Sign API #########################
 
   "/v0.1/signature/validate":
@@ -2964,6 +2997,20 @@ components:
         date:
           type: string
           format: date-time
+
+    #################### Domain - Union ####################
+
+    DomainResolveResult:
+        type: object
+        required:
+          - blockchain
+          - registrant
+        properties:
+          blockchain:
+            $ref: "#/components/schemas/Blockchain"
+          registrant:
+            type: string
+            description: "Resolved domain value"
 
     #################### Sign - Union ####################
 
