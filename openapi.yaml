@@ -38,21 +38,15 @@ paths:
 
   ######################### Domain API #########################
 
-  "/v0.1/domains/resolve":
+  "/v0.1/domains/{domain}/resolution":
     post:
       tags:
         - domain-controller
       description: "Resolve domain"
       operationId: resolve
       parameters:
-        - name: blockchain
-          in: query
-          required: true
-          description: "Type of the blockchain network"
-          schema:
-            "$ref": "#/components/schemas/Blockchain"
-        - name: name
-          in: query
+        - name: domain
+          in: path
           required: true
           description: "Name of a domain to resolve"
           schema:
