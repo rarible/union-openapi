@@ -34,6 +34,10 @@ open class UnionApiClientFactory(
         return SignatureControllerApi(createApiClient())
     }
 
+    fun createDomainApiClient(): DomainControllerApi {
+        return DomainControllerApi(createApiClient())
+    }
+
     fun createActivityApiClient(): ActivityControllerApi {
         return ActivityControllerApi(createApiClient())
     }
