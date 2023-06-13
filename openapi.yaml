@@ -60,6 +60,8 @@ paths:
                 $ref: "#/components/schemas/DomainResolveResult"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
         '500':
           $ref: "#/components/responses/ServerError"
 
