@@ -6,6 +6,7 @@ import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.util.LinkedMultiValueMap
 
 /**
@@ -16,10 +17,10 @@ class AdminControllerApi(
 ) {
     suspend fun cancelOrder(id: String): OrderDto {
         val postBody: Any? = null
-        val pathParams = hashMapOf("orderId" to id)
+        val pathParams = hashMapOf(ORDER_ID_PATH to id)
 
         val localVarAccepts = arrayOf(
-            "application/json"
+            MediaType.APPLICATION_JSON_VALUE
         )
         val localVarAccept = apiClient.selectHeaderAccept(localVarAccepts)
         val localVarContentTypes = arrayOf<String>()
@@ -27,7 +28,7 @@ class AdminControllerApi(
         val localVarReturnType: ParameterizedTypeReference<OrderDto> = object : ParameterizedTypeReference<OrderDto>() {}
 
         return apiClient.invokeAPI(
-            "/admin/orders/{orderId}/cancel",
+            CANCEL_ORDER_PATH,
             HttpMethod.POST,
             pathParams.toMap(),
             LinkedMultiValueMap(),
@@ -40,5 +41,10 @@ class AdminControllerApi(
             arrayOf<String>(),
             localVarReturnType
         ).awaitSingle()
+    }
+
+    private companion object {
+        const val ORDER_ID_PATH = "orderId"
+        const val CANCEL_ORDER_PATH = "/admin/orders/{$ORDER_ID_PATH}/cancel"
     }
 }
