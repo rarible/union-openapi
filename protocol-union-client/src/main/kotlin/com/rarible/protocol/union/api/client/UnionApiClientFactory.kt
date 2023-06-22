@@ -46,6 +46,10 @@ open class UnionApiClientFactory(
         return CurrencyControllerApi(createApiClient())
     }
 
+    fun createAdminApiClient(): AdminControllerApi {
+        return AdminControllerApi(createApiClient())
+    }
+
     private fun createApiClient(): ApiClient {
         val jacksonMapper = ApiClient.createDefaultObjectMapper()
             .registerModule(UnionPrimitivesJacksonModule)
