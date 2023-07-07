@@ -2284,6 +2284,35 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/collections/search:
+    post:
+      tags:
+        - collection-controller
+      description: "Complex search for collection"
+      operationId: searchCollection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionsSearchRequest"
+            example:
+              size: 10
+              filter:
+                blockchains: [ ETHEREUM ]
+                text: Apes
+        required: true
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collections"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ####################### Statistics API #######################
 
   "/v0.1/data/rarible/statistics":
@@ -5358,6 +5387,40 @@ components:
           description: "Indicates a 1% seller fee"
         feeRecipient:
           "$ref": "#/components/schemas/UnionAddress"
+
+    CollectionsSearchRequest:
+      type: object
+      description: "Complex search request for collections"
+      required:
+        - size
+        - filter
+      properties:
+        size:
+          minimum: 1
+          maximum: 1000
+          default: 50
+          type: integer
+          format: int32
+          description: "Number of entities returned"
+        continuation:
+          type: string
+          description: "Continuation token to paginate collections search result"
+        filter:
+          $ref: "#/components/schemas/CollectionsSearchFilter"
+
+    CollectionsSearchFilter:
+      type: object
+      description: "Filter for collections search query"
+      properties:
+        blockchains:
+          type: array
+          items:
+            $ref: "#/components/schemas/Blockchain"
+        text:
+          type: string
+          example: "Apes"
+      required:
+        - text
 
     ActivityBlockchainInfo:
       type: object
