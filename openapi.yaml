@@ -3011,6 +3011,7 @@ components:
         - TEZOS
         - SOLANA
         - IMMUTABLEX
+        - MANTLE
       example: "${blockchain}"
 
     BlockchainGroup:
@@ -6751,9 +6752,10 @@ components:
         - POLYGON
         - SOLANA
         - IMMUTABLEX
+        - MANTLE
 
     OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|SOLANA|IMMUTABLEX):.*$"
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|SOLANA|IMMUTABLEX):.*$"
       type: string
 
     OlapPeriod:

@@ -4,7 +4,12 @@ private val subchains = mapOf(
     // First Blockchain specified in the list considered as PRIMARY -
     // it means, there should not be situation like "Polygon is enabled, Ethereum is disabled"
     // We using first blockchain of the group to validate user's signature
-    BlockchainGroupDto.ETHEREUM to listOf(BlockchainDto.ETHEREUM, BlockchainDto.POLYGON, BlockchainDto.IMMUTABLEX),
+    BlockchainGroupDto.ETHEREUM to listOf(
+        BlockchainDto.ETHEREUM,
+        BlockchainDto.POLYGON,
+        BlockchainDto.IMMUTABLEX,
+        BlockchainDto.MANTLE,
+    ),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
     BlockchainGroupDto.SOLANA to listOf(BlockchainDto.SOLANA)
