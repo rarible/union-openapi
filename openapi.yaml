@@ -6780,6 +6780,7 @@ components:
         - FLOW
         - MATIC
         - SOL
+        - MNT
 
     OlapCurrencyAmount:
       required:
