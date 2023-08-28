@@ -55,6 +55,12 @@ object IdParser {
     fun parseItemId(value: String): ItemIdDto {
         // For ItemId there can be ':' in value (token:tokenId for most of the blockchains)
         val (blockchain, id) = extractBlockchain(value)
+        if (blockchain != BlockchainDto.SOLANA) {
+            val parts = id.split(":")
+            if (parts.size != 2 || !parts[1].all { it.isDigit() }) {
+                throw BlockchainIdFormatException("Invalid item id format: $value")
+            }
+        }
         return ItemIdDto(blockchain, blockchain.normalizeId(id))
     }
 
