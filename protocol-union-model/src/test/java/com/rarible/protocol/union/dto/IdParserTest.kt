@@ -168,6 +168,24 @@ class IdParserTest {
     }
 
     @Test
+    fun `parse item id - fake id`() {
+        val id = "ETHEREUM:aBc:-1"
+        val activityId = IdParser.parseItemId(id)
+
+        assertEquals(BlockchainDto.ETHEREUM, activityId.blockchain)
+        assertEquals("abc:-1", activityId.value)
+    }
+
+    @Test
+    fun `parse item id - non digit`() {
+        val id = "ETHEREUM:aBc:abc"
+
+        assertThrows(BlockchainIdFormatException::class.java) {
+            IdParser.parseItemId(id)
+        }
+    }
+
+    @Test
     fun `parse item id - case sensitive`() {
         val id = "SOLANA:aBc:1"
         val activityId = IdParser.parseItemId(id)

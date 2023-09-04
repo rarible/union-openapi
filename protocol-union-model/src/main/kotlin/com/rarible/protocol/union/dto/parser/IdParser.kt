@@ -57,7 +57,7 @@ object IdParser {
         val (blockchain, id) = extractBlockchain(value)
         if (blockchain != BlockchainDto.SOLANA) {
             val parts = id.split(":")
-            if (parts.size != 2 || !parts[1].all { it.isDigit() } || parts[1] != "-1" ) {
+            if (parts.size != 2 || !parts[1].all { it.isDigit() } && parts[1] != "-1") {
                 throw BlockchainIdFormatException("Invalid item id format: $value")
             }
         }
