@@ -2316,37 +2316,6 @@ paths:
 
   ####################### Statistics API #######################
 
-  "/v0.1/data/rarible/statistics":
-    get:
-      tags:
-        - data-controller
-      description: |
-        Rarible-related statistics. Amount of items listed and sold on rarible platform and amount of minted items over 
-        all blockchains and all supported marketplaces
-      operationId: getRaribleStats
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/OlapRaribleStatisticsResponse"
-              example:
-                sold: 434191371
-                minted: 150477545
-                listed: 145290
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/OlapError"
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/OlapError"
   "/v0.1/data/rankings/{entity}/volume":
     get:
       tags:
@@ -6797,26 +6766,6 @@ components:
         message:
           type: string
           description: Message
-
-    OlapRaribleStatisticsResponse:
-      required:
-        - listed
-        - minted
-        - sold
-      type: object
-      properties:
-        minted:
-          type: integer
-          description: Amount of minted items (all supported blockchains, all marketplaces)
-          format: int64
-        sold:
-          type: integer
-          description: Amount of items sold on rarible
-          format: int64
-        listed:
-          type: integer
-          description: Amount of items listed on rarible
-          format: int64
 
     OlapUserLeaderboardEntry:
       required:
