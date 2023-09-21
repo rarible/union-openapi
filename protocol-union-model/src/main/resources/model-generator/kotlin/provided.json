@@ -8,5 +8,7 @@
   "OrderId": "com.rarible.protocol.union.dto.OrderIdDto",
   "AuctionId": "com.rarible.protocol.union.dto.AuctionIdDto",
   "OwnershipId": "com.rarible.protocol.union.dto.OwnershipIdDto",
+  "EventTimeMark": "com.rarible.protocol.union.dto.EventTimeMarkDto",
+  "MetaAttribute": "com.rarible.protocol.union.dto.MetaAttributeDto",
   "OlapCollectionPattern": "kotlin.String"
 }
