@@ -9,4 +9,7 @@ data class UnionAddress(
         return "${blockchainGroup.name}:${value}"
     }
 
+    override fun toString(): String {
+        return fullId()
+    }
 }
