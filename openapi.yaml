@@ -3980,9 +3980,10 @@ components:
           description: "Continuation token to paginate items search result"
         filter:
           $ref: "#/components/schemas/ItemsSearchFilter"
+        traitSort:
+          $ref: "#/components/schemas/TraitSort"
         sort:
           $ref: "#/components/schemas/ItemsSearchSort"
-
 
     ItemsSearchFilter:
       type: object
@@ -4065,8 +4066,6 @@ components:
           items:
             $ref: "#/components/schemas/Platform"
 
-
-
     ItemsSearchSort:
       type: string
       enum:
@@ -4076,6 +4075,38 @@ components:
         - LOWEST_SELL
         - HIGHEST_BID
         - LOWEST_BID
+        - TRAIT
+
+    SortType:
+      title: SortType
+      type: string
+      default: TEXT
+      enum:
+        - TEXT
+        - NUMERIC
+
+    SortOrder:
+      title: SortOrder
+      type: string
+      default: ASC
+      enum:
+        - ASC
+        - DESC
+
+    TraitSort:
+      title: TraitSort
+      type: object
+      description: Used when the search sort is set as TRAIT
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          description: Trait key
+        order:
+          $ref: '#/components/schemas/SortOrder'
+        type:
+          $ref: '#/components/schemas/SortType'
 
     #################### Order - Union ####################
 
