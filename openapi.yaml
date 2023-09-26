@@ -2969,16 +2969,16 @@ components:
     #################### Domain - Union ####################
 
     DomainResolveResult:
-        type: object
-        required:
-          - blockchain
-          - registrant
-        properties:
-          blockchain:
-            $ref: "#/components/schemas/Blockchain"
-          registrant:
-            type: string
-            description: "Resolved domain value"
+      type: object
+      required:
+        - blockchain
+        - registrant
+      properties:
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
+        registrant:
+          type: string
+          description: "Resolved domain value"
 
     #################### Sign - Union ####################
 
@@ -3572,6 +3572,31 @@ components:
           items:
             $ref: '#/components/schemas/TraitProperty'
 
+    TraitRange:
+      title: TraitRange
+      type: object
+      description: Trait value range
+      required:
+        - key
+        - valueRange
+      properties:
+        key:
+          type: string
+          example: "${filterTraitKey}"
+        valueRange:
+          $ref: '#/components/schemas/Range'
+
+    Range:
+      title: Range
+      type: object
+      properties:
+        from:
+          type: number
+          format: float
+        to:
+          type: number
+          format: float
+
     TraitProperty:
       title: TraitProperty
       type: object
@@ -4015,6 +4040,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/TraitProperty"
+        traitRanges:
+          type: array
+          items:
+            $ref: "#/components/schemas/TraitRange"
         creators:
           type: array
           items:
