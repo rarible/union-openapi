@@ -5277,6 +5277,9 @@ components:
             $ref: "#/components/schemas/OriginOrders"
         self:
           type: boolean
+        scam:
+          type: boolean
+          default: false
       required:
         - id
         - blockchain
