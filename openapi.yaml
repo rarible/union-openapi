@@ -292,37 +292,6 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/items/{itemId}/checkRestriction:
-    post:
-      tags:
-        - item-controller
-      description: "Check restrictions for specified user and action with item"
-      operationId: checkItemRestriction
-      parameters:
-        - name: "itemId"
-          in: path
-          required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/ItemId"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RestrictionCheckForm"
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RestrictionCheckResult"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   /v0.1/items/byOwner:
     get:
       tags:
@@ -3102,11 +3071,6 @@ components:
           description: "NFT content information"
           items:
             $ref: "#/components/schemas/MetaContent"
-        restrictions:
-          type: array
-          description: "Restrictions types set for this item"
-          items:
-            $ref: "#/components/schemas/RestrictionType"
       required:
         - name
         - attributes
@@ -3206,38 +3170,6 @@ components:
           type: string
           enum:
             - HTML
-
-    RestrictionType:
-      type: string
-      enum:
-        - OWNERSHIP
-
-    RestrictionCheckForm:
-      type: object
-      oneOf:
-        - $ref: "#/components/schemas/OwnershipRestrictionCheckForm"
-
-    OwnershipRestrictionCheckForm:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - OWNERSHIP
-        user:
-          $ref: "#/components/schemas/UnionAddress"
-      required:
-        - user
-
-    RestrictionCheckResult:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-      required:
-        - success
 
     ################### Common - Union ###################
 
