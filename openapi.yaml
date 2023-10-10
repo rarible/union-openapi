@@ -5310,6 +5310,8 @@ components:
               - MINT_WITH_ADDRESS
               - SECONDARY_SALE_FEES
               - MINT_AND_TRANSFER
+              - PAUSABLE
+              - NOT_FOR_SALE
         minters:
           type: array
           description: "List of addresses that can mint items in this collection"
