@@ -184,6 +184,40 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  ######################## Balance API #######################
+
+  /v0.1/balances/{currencyId}/{owner}:
+    get:
+      tags:
+        - balance-controller
+      description: Return token's balance of specified Owner
+      operationId: getBalance
+      parameters:
+        - name: "currencyId"
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/CurrencyId'
+        - name: "owner"
+          description: "Address of the token's owner"
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UnionAddress'
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balance"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################### Item API #########################
 
   /v0.1/items/{itemId}:
@@ -1304,7 +1338,7 @@ paths:
       description: "Returns order bids by item"
       operationId: getOrderBidsByItem
       parameters:
-        - name: platform
+        - name: "platform"
           in: query
           required: false
           description: "The platform where the order was created"
@@ -1388,6 +1422,41 @@ paths:
                 $ref: "#/components/schemas/Orders"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/amm/{id}/tradeInfo":
+    get:
+      tags:
+        - order-controller
+      description: Get for buy pricing info from AMM
+      operationId: getAmmOrderTradeInfo
+      parameters:
+        - name: "id"
+          description: "Hash of the AMM order"
+          in: "path"
+          required: true
+          schema:
+            $ref: "#/components/schemas/OrderId"
+        - name: "itemCount"
+          description: "The number of NFTs to buy from the AMM order"
+          in: "query"
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AmmTradeInfo"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
         '500':
           $ref: "#/components/responses/ServerError"
 
@@ -2969,6 +3038,25 @@ components:
           type: string
           description: "Digital signature of the signer"
 
+    ################## Balance - Union ###################
+
+    Balance:
+      type: object
+      required:
+        - currencyId
+        - owner
+        - balance
+        - decimal
+      properties:
+        currencyId:
+          $ref: '#/components/schemas/CurrencyId'
+        owner:
+          $ref: '#/components/schemas/UnionAddress'
+        balance:
+          $ref: '#/components/schemas/BigInteger'
+        decimal:
+          $ref: '#/components/schemas/BigDecimal'
+
     ################## Currency - Union ##################
 
     CurrencyId:
@@ -4197,6 +4285,41 @@ components:
             $ref: "#/components/schemas/Order"
       required:
         - orders
+
+    AmmTradeInfo:
+      type: object
+      properties:
+        orderId:
+          "$ref": "#/components/schemas/OrderId"
+      oneOf:
+        - "$ref": "#/components/schemas/SudoSwapTradeInfo"
+
+    SudoSwapTradeInfo:
+      type: object
+      required:
+        - prices
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SUDO_SWAP
+        prices:
+          type: array
+          items:
+            $ref: "#/components/schemas/SudoSwapPriceInfo"
+
+    SudoSwapPriceInfo:
+      type: object
+      required:
+        - price
+        - priceValue
+      properties:
+        price:
+          $ref: "#/components/schemas/BigInteger"
+        priceValue:
+          $ref: "#/components/schemas/BigDecimal"
+        priceUsd:
+          $ref: "#/components/schemas/BigDecimal"
 
     OrderEvent:
       type: object
