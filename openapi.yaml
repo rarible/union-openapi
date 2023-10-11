@@ -925,6 +925,57 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/orders:
+    post:
+      tags:
+        - order-controller
+      description: Create or update order
+      operationId: upsertOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderForm"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/orders/{id}/validate:
+    get:
+      tags:
+        - order-controller
+      description: "Validates and returns order by Id. IMPORTANT - validation is time-consuming operation!"
+      operationId: getValidatedOrderById
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "Order Id, has format '${blockchain}:${id}'"
+          schema:
+            $ref: "#/components/schemas/OrderId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   "/v0.1/orders/byIds":
     post:
       tags:
@@ -2237,6 +2288,37 @@ paths:
                 $ref: "#/components/schemas/Collection"
         '404':
           $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/collections/{collection}/generateTokenId":
+    get:
+      tags:
+        - collection-controller
+      description: "Returns next available tokenId for minter"
+      operationId: generateTokenId
+      parameters:
+        - name: "collection"
+          in: path
+          description: "Address of the NFT collection"
+          required: true
+          schema:
+            $ref: "#/components/schemas/ContractAddress"
+        - name: minter
+          in: query
+          description: "Minter address"
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnionAddress"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionTokenId"
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
@@ -4367,9 +4449,7 @@ components:
       type: object
       oneOf:
         - "$ref": "#/components/schemas/EthOrderDataLegacy"
-        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV1"
-        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Sell"
-        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Buy"
+        - "$ref": "#/components/schemas/EthRaribleV2OrderData"
         - "$ref": "#/components/schemas/EthOrderOpenSeaV1DataV1"
         - "$ref": "#/components/schemas/EthOrderSeaportDataV1"
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
@@ -4382,6 +4462,13 @@ components:
         - "$ref": "#/components/schemas/FlowOrderDataV1"
         - "$ref": "#/components/schemas/SolanaAuctionHouseDataV1"
         - "$ref": "#/components/schemas/ImmutablexOrderDataV1"
+
+    EthRaribleV2OrderData:
+      oneOf:
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV1"
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV2"
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Sell"
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Buy"
 
     Orders:
       type: object
@@ -5560,6 +5647,54 @@ components:
       required:
         - text
 
+    CollectionTokenId:
+      required:
+        - tokenId
+      type: object
+      properties:
+        tokenId:
+          "$ref": "#/components/schemas/BigInteger"
+      oneOf:
+        - "$ref": "#/components/schemas/DefaultCollectionTokenId"
+        - "$ref": "#/components/schemas/EthCollectionTokenId"
+
+    DefaultCollectionTokenId:
+      required:
+        - "@type"
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - DEFAULT
+
+    EthCollectionTokenId:
+      required:
+        - signature
+        - "@type"
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETHEREUM
+        signature:
+          "$ref": "#/components/schemas/EthCollectionTokenIdSignature"
+
+    EthCollectionTokenIdSignature:
+      required:
+        - v
+        - r
+        - s
+      type: object
+      properties:
+        v:
+          type: integer
+        r:
+          type: string
+        s:
+          type: string
+
     ActivityBlockchainInfo:
       type: object
       deprecated: true
@@ -5628,6 +5763,71 @@ components:
           description: "Error message"
 
     #################### Order - Eth ####################
+
+    OrderForm:
+      type: object
+      required:
+        - blockchain
+      properties:
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
+      oneOf:
+        - $ref: "#/components/schemas/EthRaribleOrderForm"
+
+    EthRaribleOrderForm:
+      type: object
+      required:
+        - maker
+        - make
+        - take
+        - signature
+        - salt
+        - endedAt
+      properties:
+        maker:
+          $ref: "#/components/schemas/UnionAddress"
+        taker:
+          $ref: "#/components/schemas/UnionAddress"
+        make:
+          $ref: "#/components/schemas/EthOrderFormAsset"
+        take:
+          $ref: "#/components/schemas/EthOrderFormAsset"
+        startedAt:
+          type: string
+          format: "date-time"
+        endedAt:
+          type: string
+          format: "date-time"
+        salt:
+          $ref: "#/components/schemas/BigInteger"
+        signature:
+          type: string
+      oneOf:
+        - "$ref": "#/components/schemas/EthRaribleV2OrderForm"
+
+    EthRaribleV2OrderForm:
+      type: object
+      required:
+        - type
+        - data
+      properties:
+        "@type":
+          type: string
+          enum:
+            - RARIBLE_V2
+        data:
+          $ref: "#/components/schemas/EthRaribleV2OrderData"
+
+    EthOrderFormAsset:
+      type: object
+      required:
+        - assetType
+        - value
+      properties:
+        assetType:
+          $ref: "#/components/schemas/AssetType"
+        value:
+          $ref: "#/components/schemas/BigInteger"
 
     EthOrderDataLegacy:
       type: object
@@ -5795,6 +5995,32 @@ components:
         - "@type"
         - payouts
         - originFees
+
+    EthOrderDataRaribleV2DataV2:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_RARIBLE_V2_2
+        payouts:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        originFees:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        isMakeFill:
+          type: boolean
+          description: "If true, the 'fill' part of the order applies to the 'make' side, otherwise to the 'take' side"
+      required:
+        - "@type"
+        - payouts
+        - originFees
+        - isMakeFill
 
     EthOrderDataRaribleV2DataV3Sell:
       type: object
