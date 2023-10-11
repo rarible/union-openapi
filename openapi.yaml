@@ -92,6 +92,30 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  "/v0.1/signature/input":
+    post:
+      tags:
+        - signature-controller
+      description: "Generate input string to sign operation"
+      operationId: getInput
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignatureInputForm"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignatureInput"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################### Currency API #########################
 
   "/v0.1/currency/rate/usd":
@@ -3037,6 +3061,94 @@ components:
         signature:
           type: string
           description: "Digital signature of the signer"
+
+    SignatureInputForm:
+      type: object
+      description: "Form contains required data to generate input message for signing.
+                    All fields should be specified in 'native' manner, i.e. without BLOCKCHAIN prefixes"
+      required:
+        - blockchain
+      properties:
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
+      oneOf:
+        - $ref: "#/components/schemas/OpenSeaFillOrderSignatureInputForm"
+        - $ref: "#/components/schemas/X2Y2FillOrderSignatureInputForm"
+        - $ref: "#/components/schemas/X2Y2CancelOrderSignatureInputForm"
+
+    OpenSeaFillOrderSignatureInputForm:
+      type: object
+      required:
+        - orderId
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "OPEN_SEA_ORDER_FILL"
+        signature:
+          description: "SeaPort order hash in 'native' format"
+          example: "0xf3104d38a35c59d2612a6128c9e2bbfabf16f26b2db393801cc20398f10079f2"
+          type: string
+
+    X2Y2FillOrderSignatureInputForm:
+      type: object
+      required:
+        - caller
+        - op
+        - orderId
+        - currency
+        - price
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "X2Y2_ORDER_FILL"
+        caller:
+          type: string
+        op:
+          $ref: "#/components/schemas/BigInteger"
+        orderId:
+          $ref: "#/components/schemas/BigInteger"
+        currency:
+          description: "Currency contract in 'native' format"
+          example: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+          type: string
+        price:
+          $ref: "#/components/schemas/BigInteger"
+        tokenId:
+          $ref: "#/components/schemas/BigInteger"
+
+    X2Y2CancelOrderSignatureInputForm:
+      type: object
+      required:
+        - caller
+        - op
+        - orderId
+        - signMessage
+        - sign
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "X2Y2_ORDER_CANCEL"
+        caller:
+          type: string
+        op:
+          $ref: "#/components/schemas/BigInteger"
+        orderId:
+          $ref: "#/components/schemas/BigInteger"
+        signMessage:
+          type: string
+        sign:
+          type: string
+
+    SignatureInput:
+      type: object
+      required:
+        - input
+      properties:
+        input:
+          type: string
 
     ################## Balance - Union ###################
 
