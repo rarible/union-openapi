@@ -734,6 +734,81 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/items/lazy/{itemId}:
+    get:
+      tags:
+        - item-controller
+      description: "Returns Lazy Item by Id"
+      operationId: getLazyItemById
+      parameters:
+        - name: "itemId"
+          in: path
+          required: true
+          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
+          schema:
+            $ref: "#/components/schemas/ItemId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LazyItem"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/items/lazy/mint:
+    post:
+      tags:
+        - item-controller
+      description: "Lazy mint of NFT"
+      operationId: mintLazyItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LazyItemMintForm"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/items/lazy/burn:
+    post:
+      tags:
+        - item-controller
+      description: "Delete Lazy mint of NFT"
+      operationId: burnLazyItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LazyItemBurnForm"
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ####################### Ownership API #######################
 
   /v0.1/ownerships/{ownershipId}:
@@ -3656,6 +3731,95 @@ components:
             $ref: "#/components/schemas/ItemWithOwnership"
       required:
         - items
+
+    LazyItem:
+      type: object
+      required:
+        - id
+        - uri
+        - creators
+        - royalties
+        - signatures
+      properties:
+        id:
+          "$ref": "#/components/schemas/ItemId"
+        uri:
+          type: string
+        creators:
+          type: array
+          description: "Addresses of the NFT item creators"
+          items:
+            "$ref": "#/components/schemas/Creator"
+        royalties:
+          type: array
+          description: "List of royalties"
+          items:
+            "$ref": "#/components/schemas/Royalty"
+        signatures:
+          type: array
+          description: "Digital signatures"
+          items:
+            type: string
+      description: Type of an Asset
+      oneOf:
+        - "$ref": "#/components/schemas/EthLazyItem"
+
+    EthLazyItem:
+      type: object
+      oneOf:
+        - "$ref": "#/components/schemas/EthLazyItemErc721"
+        - "$ref": "#/components/schemas/EthLazyItemErc1155"
+
+    EthLazyItemErc1155:
+      type: object
+      required:
+        - "@type"
+        - supply
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_ERC1155
+        supply:
+          "$ref": "#/components/schemas/BigInteger"
+
+    EthLazyItemErc721:
+      type: object
+      required:
+        - "@type"
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_ERC721
+
+    LazyItemMintForm:
+      type: object
+      required:
+        - item
+      properties:
+        item:
+          "$ref": "#/components/schemas/LazyItem"
+
+    LazyItemBurnForm:
+      type: object
+      required:
+        - id
+        - creators
+        - signatures
+      properties:
+        id:
+          "$ref": "#/components/schemas/ItemId"
+        creators:
+          type: array
+          description: "Address of the NFT item creators"
+          items:
+            "$ref": "#/components/schemas/UnionAddress"
+        signatures:
+          type: array
+          description: "Digital signatures"
+          items:
+            type: string
 
     CollectionEvent:
       type: object
