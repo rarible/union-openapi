@@ -1610,10 +1610,10 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/orders/settings:
+  /v0.1/orders/settings/fees:
     get:
       tags:
-        - order-controller
+        - order-settings-controller
       description: "Returns orders fee settings"
       operationId: getOrderFees
       parameters:
