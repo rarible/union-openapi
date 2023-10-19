@@ -3349,6 +3349,8 @@ components:
           type: string
           description: "Currency Symbol"
           example: "usdc"
+        abbreviation:
+          type: string
         rate:
           $ref: '#/components/schemas/BigDecimal'
         date:
@@ -3362,6 +3364,8 @@ components:
         currencyId:
           $ref: '#/components/schemas/CurrencyId'
         symbol:
+          type: string
+        abbreviation:
           type: string
         alias:
           type: string
