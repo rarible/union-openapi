@@ -3184,6 +3184,7 @@ components:
 
     OrderFees:
       type: object
+      description: "Base fees"
       required:
         - fees
       properties:
@@ -3191,6 +3192,7 @@ components:
           type: object
           additionalProperties:
             type: integer
+            description: "Basic points from 0 to 10000"
 
     EventTimeMarks:
       type: object
