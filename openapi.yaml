@@ -1613,7 +1613,7 @@ paths:
   /v0.1/orders/settings/fees:
     get:
       tags:
-        - order-settings-controller
+        - order-controller
       description: "Returns orders fee settings"
       operationId: getOrderFees
       parameters:
