@@ -3187,6 +3187,7 @@ components:
         - MANTLE
         - ARBITRUM
         - CHILIZ
+        - LIGHTLINK
         - ZKSYNC
         - ASTAR
         - ZKEVM
@@ -7435,9 +7436,16 @@ components:
         - SOLANA
         - IMMUTABLEX
         - MANTLE
+        - ARBITRUM
+        - CHILIZ
+        - LIGHTLINK
+        - ZKSYNC
+        - ASTAR
+        - ZKEVM
+        - BASE
 
     OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|SOLANA|IMMUTABLEX):.*$"
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTAR|ZKEVM|BASESOLANA|IMMUTABLEX):.*$"
       type: string
 
     OlapPeriod:
@@ -7463,6 +7471,11 @@ components:
         - MATIC
         - SOL
         - MNT
+        - ARB
+        - CHZ
+        - LL
+        - ZKS
+        - ASTAR
 
     OlapCurrencyAmount:
       required:
