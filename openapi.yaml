@@ -36,6 +36,20 @@ security:
   - ApiKeyAuth: [ ]
 
 tags:
+  - name: "NFT Items"
+    x-controller: "ItemController"
+  - name: "NFT Ownerships"
+    x-controller: "OwnershipController"
+  - name: "NFT Sales & Transfer"
+    x-controller: "OrderController"
+  - name: "NFT Auctions"
+    x-controller: "AuctionController"
+  - name: "NFT Activities"
+    x-controller: "ActivityController"
+  - name: "NFT Collections"
+    x-controller: "CollectionController"
+  - name: "NFT Data and Historical Statistics"
+    x-controller: "DataController"
   - name: "Domain lookup"
     x-controller: "DomainController"
   - name: "Signature operations"
@@ -44,23 +58,11 @@ tags:
     x-controller: "CurrencyController"
   - name: "User balances"
     x-controller: "BalanceController"
-  - name: "NFT Items"
-    x-controller: "ItemController"
-  - name: "NFT ownerships"
-    x-controller: "OwnershipController"
-  - name: "Orders"
-    x-controller: "OrderController"
-  - name: "Auctions"
-    x-controller: "AuctionController"
-  - name: "Activities"
-    x-controller: "ActivityController"
-  - name: "NFT Collections"
-    x-controller: "CollectionController"
-  - name: "NFT data and statistics"
-    x-controller: "DataController"
+
 
 paths:
 
+  
   ######################### Domain API #########################
 
   "/v0.1/domains/{domain}/resolution":
@@ -997,7 +999,7 @@ paths:
   /v0.1/orders/{id}:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get Order"
       description: "Returns Order by Id"
       operationId: getOrderById
@@ -1025,7 +1027,7 @@ paths:
   /v0.1/orders:
     post:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Create or update Order"
       description: "Create or update off-chain Order (supported only for some blockchains)"
       operationId: upsertOrder
@@ -1050,7 +1052,7 @@ paths:
   /v0.1/orders/{id}/validate:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get validated Order by Id"
       description: "Validates and returns order by Id. IMPORTANT - validation is time-consuming operation!"
       operationId: getValidatedOrderById
@@ -1078,7 +1080,7 @@ paths:
   "/v0.1/orders/byIds":
     post:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get Orders by Ids"
       description: "Returns Orders by specified list of Ids"
       operationId: getOrdersByIds
@@ -1103,7 +1105,7 @@ paths:
   /v0.1/orders/all:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get all Orders"
       description: "Returns all Orders in accordance with specified filters and sorted by `last updated` date"
       operationId: getOrdersAll
@@ -1164,9 +1166,9 @@ paths:
   /v0.1/orders/sync:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get all Orders (for sync)"
-      description: "Returns all Orders in accordance with specified filters and sorted by `db updated` date.
+      description: "Returns all sales & transfers in accordance with specified filters and sorted by `db updated` date.
       During internal updates (like migrations) Orders can be updated for technical reasons. In such case, `last update`
       date won't be changed. If you want to store Orders in your own storage and keep it synced, use this method."
       operationId: getAllSync
@@ -1210,9 +1212,9 @@ paths:
   /v0.1/orders/sell/byMaker:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer
       summary: "Get user's sell Orders"
-      description: "Returns sell Orders created by specified user and sorted by `last update` date"
+      description: "Returns sell NFT sales & transfer created by specified user and sorted by `last update` date"
       operationId: getSellOrdersByMaker
       parameters:
         - name: "blockchains"
@@ -1288,9 +1290,9 @@ paths:
   /v0.1/orders/sell/byItem:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get sell Orders for NFT"
-      description: "Returns sell Orders created for specified NFT and sorted by price in USD (cheapest first)"
+      description: "Returns sell sales & transfer created for specified NFT and sorted by price in USD (cheapest first)"
       operationId: getSellOrdersByItem
       parameters:
         - name: "platform"
@@ -1360,7 +1362,7 @@ paths:
   /v0.1/orders/sell:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get sell Orders"
       description: "Returns sell Orders satisfying specified filters and sorted by `last update` date"
       operationId: getSellOrders
@@ -1421,7 +1423,7 @@ paths:
   /v0.1/orders/bids/byMaker:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get user's bid Orders"
       description: "Returns bid Orders created by specified user and sorted by `last update` date"
       operationId: getOrderBidsByMaker
@@ -1522,7 +1524,7 @@ paths:
   /v0.1/orders/bids/byItem:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get bid Orders for NFT"
       description: "Returns bid Orders created for specified NFT and sorted by price in USD (expensive first)"
       operationId: getOrderBidsByItem
@@ -1617,7 +1619,7 @@ paths:
   "/v0.1/orders/amm/{id}/tradeInfo":
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get AMM Order trade info"
       description: "Get for buy pricing info from AMM Order"
       operationId: getAmmOrderTradeInfo
@@ -1653,7 +1655,7 @@ paths:
   /v0.1/orders/settings/fees:
     get:
       tags:
-        - "Orders"
+        - "NFT sales & transfer"
       summary: "Get fee settings"
       description: "Returns Protocol fee settings for Orders"
       operationId: getOrderFees
@@ -1681,7 +1683,7 @@ paths:
   "/v0.1/auctions/{id}":
     get:
       tags:
-        - "Auctions"
+        - "NFT Auctions"
       description: Returns the auction by id
       operationId: getAuctionById
       parameters:
@@ -1708,7 +1710,7 @@ paths:
   "/v0.1/auctions/all":
     get:
       tags:
-        - "Auctions"
+        - "NFT Auctions"
       description: Returns all auctions by specified parameters
       operationId: getAuctionsAll
       parameters:
@@ -1775,7 +1777,7 @@ paths:
   "/v0.1/auctions/bySeller":
     get:
       tags:
-        - "Auctions"
+        - "NFT Auctions"
       operationId: getAuctionsBySeller
       description: Returns all auctions by seller
       parameters:
@@ -1841,7 +1843,7 @@ paths:
   "/v0.1/auctions/byItem":
     get:
       tags:
-        - "Auctions"
+        - "NFT Auctions"
       operationId: getAuctionsByItem
       description: Returns all auctions by item
       parameters:
@@ -1912,7 +1914,7 @@ paths:
   "/v0.1/auctions/byCollection":
     get:
       tags:
-        - "Auctions"
+        - "NFT Auctions"
       operationId: getAuctionsByCollection
       description: Returns all auctions by collection
       parameters:
@@ -1977,7 +1979,7 @@ paths:
   "/v0.1/auctions/{id}/bids":
     get:
       tags:
-        - "Auctions"
+        - "NFT Auctions"
       operationId: getAuctionBidsById
       description: Returns all auction bids by auction id
       parameters:
@@ -2018,7 +2020,7 @@ paths:
   /v0.1/activities/byUser:
     get:
       tags:
-        - "Activities"
+        - "NFT activities"
       summary: "Get user Activities"
       description: "Returns user's Activities (like transfers, mints, sells etc) sorted by date.
       This API is deprecated in favor of `Search Activities`"
@@ -2116,7 +2118,7 @@ paths:
   /v0.1/activities/byUsers:
     post:
       tags:
-        - "Activities"
+        - "NFT activities"
       summary: "Get users Activities"
       description: "Returns users Activities (like transfers, mints, sells etc) sorted by date.
       This API is deprecated in favor of `Search Activities`"
@@ -2143,7 +2145,7 @@ paths:
   /v0.1/activities/byItem:
     get:
       tags:
-        - "Activities"
+        - "NFT activities"
       summary: "Get NFT Activities"
       description: "Returns Activities related to specified NFT and sorted by date.
       This API is deprecated in favor of `Search Activities`"
@@ -2218,7 +2220,7 @@ paths:
   /v0.1/activities/byCollection:
     get:
       tags:
-        - "Activities"
+        - "NFT activities"
       summary: "Get NFT Collection Activities"
       description: "Returns Activities related to NFTs from specified Collection and sorted by date.
       This API is deprecated in favor of `Search Activities`"
@@ -2295,7 +2297,7 @@ paths:
   /v0.1/activities/sync:
     get:
       tags:
-        - "Activities"
+        - "NFT activities"
       summary: "Get all Activities (for sync)"
       description: "Returns all Activities in accordance with specified filters and sorted by `db updated` date.
       During internal updates (like migrations) Activities can be updated for technical reasons. In such case, `date`
@@ -2347,7 +2349,7 @@ paths:
   /v0.1/activities/all:
     get:
       tags:
-        - "Activities"
+        - "NFT activities"
       summary: "Get all Activities"
       description: "Returns all Activities in accordance with specified filters and sorted by date. 
       This API is deprecated in favor of `Search Activities`"
@@ -2425,7 +2427,7 @@ paths:
   /v0.1/activities/search:
     post:
       tags:
-        - "Activities"
+        - "NFT activities"
       summary: "Search Activities"
       description: "Advanced search returns Activities satisfying provided filter"
       operationId: searchActivities
@@ -2655,7 +2657,7 @@ paths:
   "/v0.1/data/rankings/{entity}/volume":
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get user volume"
       description: "Users (top buyers/sellers) leaderboard. Calculated as traded worth for the period."
       operationId: getUserRankingByVolume
@@ -2726,7 +2728,7 @@ paths:
   "/v0.1/data/rankings/collections/volume":
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get NFT Collections volume"
       description: "Collections leaderboard by trade activity"
       operationId: getCollectionRankingByVolume
@@ -2833,7 +2835,7 @@ paths:
   "/v0.1/data/collections/{collection}/transactions":
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get NFT Collection tx stats"
       description: "Get historical statistics about Collection transactions"
       operationId: getTransactions
@@ -2889,7 +2891,7 @@ paths:
   "/v0.1/data/collections/{collection}/stats":
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get NFT Collection stats"
       description: "Get general statistics about Collection"
       operationId: getCollectionStats
@@ -2942,7 +2944,7 @@ paths:
   "/v0.1/data/collections/{collection}/sellers":
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get NFT Collection seller stats"
       description: "Get historical statistics about Collection sellers"
       operationId: getSellers
@@ -2998,7 +3000,7 @@ paths:
   /v0.1/data/collections/{collection}/gmv:
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get NFT Collections GVM"
       description: "Get historical statistics about Collection gross merchandise value"
       operationId: getGmv
@@ -3066,7 +3068,7 @@ paths:
   "/v0.1/data/collections/{collection}/floorPrice":
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get NFT Collection floor price"
       description: "Get historical statistics about Collection's NFT floor price"
       operationId: getFloorPrice
@@ -3128,7 +3130,7 @@ paths:
   "/v0.1/data/collections/{collection}/buyers":
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get NFT Collection buyer stats"
       description: "Get historical statistics about Collection buyers"
       operationId: getBuyers
@@ -3184,7 +3186,7 @@ paths:
   "/v0.1/data/collections/{collection}/listed":
     get:
       tags:
-        - "NFT data and statistics"
+        - "NFT Data and Historical Statistics"
       summary: "Get NFT Collection listing stats"
       description: "Get historical statistics of collection listed count"
       operationId: getListed
