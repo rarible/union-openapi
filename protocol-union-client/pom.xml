@@ -28,6 +28,17 @@
             <groupId>com.rarible.protocol.union</groupId>
             <artifactId>protocol-union-model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>5.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.rarible.codegen</groupId>
+            <artifactId>rarible-client-openapi-generator</artifactId>
+            <version>${rarible.codegen.client.version}</version>
+        </dependency>
 
         <!-- =============== Rarible-core ================ -->
         <dependency>

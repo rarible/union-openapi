@@ -40,10 +40,10 @@ tags:
     x-controller: "ItemController"
   - name: "NFT Ownerships"
     x-controller: "OwnershipController"
-  - name: "NFT Sales & Transfer"
+  - name: "NFT Sales"
     x-controller: "OrderController"
-  - name: "NFT Auctions"
-    x-controller: "AuctionController"
+  #  - name: "NFT Auctions"
+  #    x-controller: "AuctionController"
   - name: "NFT Activities"
     x-controller: "ActivityController"
   - name: "NFT Collections"
@@ -59,183 +59,8 @@ tags:
   - name: "User balances"
     x-controller: "BalanceController"
 
-
 paths:
-
   
-  ######################### Domain API #########################
-
-  "/v0.1/domains/{domain}/resolution":
-    post:
-      tags:
-        - "Domain lookup"
-      summary: "Resolve domain"
-      description: "Resolves domain's blockchain address by its name (for example, from ENS domains collection)"
-      operationId: resolve
-      parameters:
-        - name: domain
-          in: path
-          required: true
-          description: "Name of a domain to resolve"
-          example: "nick.eth"
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DomainResolveResult"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '404':
-          $ref: "#/components/responses/EntityNotFound"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  ######################### Sign API #########################
-
-  "/v0.1/signature/validate":
-    post:
-      tags:
-        - "Signature operations"
-      summary: "Check Order's signature"
-      description: "Checks if Order's signature is valid and returns 'true' if it so, 'false' otherwise"
-      operationId: validate
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SignatureValidationForm"
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/signature/input":
-    post:
-      tags:
-        - "Signature operations"
-      summary: "Generate signed input"
-      description: "Generate input string to sign operation"
-      operationId: getInput
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SignatureInputForm"
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SignatureInput"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  ######################### Currency API #########################
-
-  "/v0.1/currencies/{currencyId}/rates/usd":
-    get:
-      tags:
-        - "Currencies and rates"
-      summary: "Get USD rate"
-      description: "Get currency USD rate by currency blockchain's address"
-      operationId: getUsdRate
-      parameters:
-        - name: "currencyId"
-          in: path
-          required: true
-          description: "Currency Id, has format `${blockchain}:${token}` or `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/CurrencyId"
-        - name: at
-          in: query
-          required: true
-          description: "Date and time for getting currency USD rate (if not specified, returns actual rate)"
-          example: "2022-01-01T12:00:00Z"
-          schema:
-            type: string
-            format: date-time
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CurrencyUsdRate"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/currencies/all":
-    get:
-      tags:
-        - "Currencies and rates"
-      summary: "Get supported currencies"
-      description: "List of currencies, supported by Protocol"
-      operationId: getAllCurrencies
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Currencies"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  ######################## Balance API #######################
-
-  /v0.1/balances/{currencyId}/{owner}:
-    get:
-      tags:
-        - "User balances"
-      summary: "Get balance"
-      description: "Return user's balance of specified currency"
-      operationId: getBalance
-      parameters:
-        - name: "currencyId"
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/CurrencyId'
-        - name: "owner"
-          description: "Address of the token's owner"
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/UnionAddress'
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Balance"
-        '404':
-          $ref: "#/components/responses/EntityNotFound"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   ######################### Item API #########################
 
   /v0.1/items/{itemId}:
@@ -319,7 +144,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/items/{itemId}/resetMeta":
+  /v0.1/items/{itemId}/resetMeta:
     delete:
       tags:
         - "NFT Items"
@@ -832,7 +657,7 @@ paths:
   /v0.1/ownerships/{ownershipId}:
     get:
       tags:
-        - "NFT ownerships"
+        - "NFT Ownerships"
       summary: "Get NFT Ownership by Id"
       description: "Returns Ownership by Id"
       operationId: getOwnershipById
@@ -860,7 +685,7 @@ paths:
   /v0.1/ownerships/byIds:
     post:
       tags:
-        - "NFT ownerships"
+        - "NFT Ownerships"
       summary: "Get NFT Ownerships by Ids"
       description: "Returns Ownerships by specified list of Ids"
       operationId: getOwnershipsByIds
@@ -885,7 +710,7 @@ paths:
   /v0.1/ownerships/byCollection:
     get:
       tags:
-        - "NFT ownerships"
+        - "NFT Ownerships"
       summary: "Get NFT Collection's Ownerships"
       description: "Returns list of NFTs Ownerships from specified collection and sorted by `last updated` date"
       operationId: getOwnershipsByCollection
@@ -923,7 +748,7 @@ paths:
   /v0.1/ownerships/byItem:
     get:
       tags:
-        - "NFT ownerships"
+        - "NFT Ownerships"
       summary: "Get NFTs Ownerships"
       description: "Returns list of NFTs Ownerships for specified NFT and sorted by `last updated` date"
       operationId: getOwnershipsByItem
@@ -961,7 +786,7 @@ paths:
   /v0.1/ownerships/search:
     post:
       tags:
-        - "NFT ownerships"
+        - "NFT Ownerships"
       summary: "Search NFT Ownerships"
       description: "Advanced search returns NFT Ownerships satisfying provided filter"
       operationId: searchOwnerships
@@ -999,7 +824,7 @@ paths:
   /v0.1/orders/{id}:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get Order"
       description: "Returns Order by Id"
       operationId: getOrderById
@@ -1027,7 +852,7 @@ paths:
   /v0.1/orders:
     post:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Create or update Order"
       description: "Create or update off-chain Order (supported only for some blockchains)"
       operationId: upsertOrder
@@ -1052,7 +877,7 @@ paths:
   /v0.1/orders/{id}/validate:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get validated Order by Id"
       description: "Validates and returns order by Id. IMPORTANT - validation is time-consuming operation!"
       operationId: getValidatedOrderById
@@ -1080,7 +905,7 @@ paths:
   "/v0.1/orders/byIds":
     post:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get Orders by Ids"
       description: "Returns Orders by specified list of Ids"
       operationId: getOrdersByIds
@@ -1105,7 +930,7 @@ paths:
   /v0.1/orders/all:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get all Orders"
       description: "Returns all Orders in accordance with specified filters and sorted by `last updated` date"
       operationId: getOrdersAll
@@ -1166,7 +991,7 @@ paths:
   /v0.1/orders/sync:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get all Orders (for sync)"
       description: "Returns all sales & transfers in accordance with specified filters and sorted by `db updated` date.
       During internal updates (like migrations) Orders can be updated for technical reasons. In such case, `last update`
@@ -1212,9 +1037,9 @@ paths:
   /v0.1/orders/sell/byMaker:
     get:
       tags:
-        - "NFT sales & transfer
+        - "NFT Sales"
       summary: "Get user's sell Orders"
-      description: "Returns sell NFT sales & transfer created by specified user and sorted by `last update` date"
+      description: "Returns sell NFT Sales created by specified user and sorted by `last update` date"
       operationId: getSellOrdersByMaker
       parameters:
         - name: "blockchains"
@@ -1290,7 +1115,7 @@ paths:
   /v0.1/orders/sell/byItem:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get sell Orders for NFT"
       description: "Returns sell sales & transfer created for specified NFT and sorted by price in USD (cheapest first)"
       operationId: getSellOrdersByItem
@@ -1362,7 +1187,7 @@ paths:
   /v0.1/orders/sell:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get sell Orders"
       description: "Returns sell Orders satisfying specified filters and sorted by `last update` date"
       operationId: getSellOrders
@@ -1423,7 +1248,7 @@ paths:
   /v0.1/orders/bids/byMaker:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get user's bid Orders"
       description: "Returns bid Orders created by specified user and sorted by `last update` date"
       operationId: getOrderBidsByMaker
@@ -1524,7 +1349,7 @@ paths:
   /v0.1/orders/bids/byItem:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get bid Orders for NFT"
       description: "Returns bid Orders created for specified NFT and sorted by price in USD (expensive first)"
       operationId: getOrderBidsByItem
@@ -1616,10 +1441,10 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/orders/amm/{id}/tradeInfo":
+  /v0.1/orders/amm/{id}/tradeInfo:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get AMM Order trade info"
       description: "Get for buy pricing info from AMM Order"
       operationId: getAmmOrderTradeInfo
@@ -1655,7 +1480,7 @@ paths:
   /v0.1/orders/settings/fees:
     get:
       tags:
-        - "NFT sales & transfer"
+        - "NFT Sales"
       summary: "Get fee settings"
       description: "Returns Protocol fee settings for Orders"
       operationId: getOrderFees
@@ -1680,347 +1505,347 @@ paths:
 
   ######################## Auction API ########################
 
-  "/v0.1/auctions/{id}":
-    get:
-      tags:
-        - "NFT Auctions"
-      description: Returns the auction by id
-      operationId: getAuctionById
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          description: "Auction Id, has format `${blockchain}:${id}`"
-          schema:
-            $ref: "#/components/schemas/AuctionId"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auction"
-        '404':
-          $ref: "#/components/responses/EntityNotFound"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/all":
-    get:
-      tags:
-        - "NFT Auctions"
-      description: Returns all auctions by specified parameters
-      operationId: getAuctionsAll
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: sort
-          description: "Sorting by target criteria"
-          in: query
-          required: false
-          schema:
-            "$ref": "#/components/schemas/AuctionSort"
-        - name: status
-          description: "The auction statuses"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/AuctionStatus"
-        - name: origin
-          description: "Address of the consumer to receive the commission for auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: platform
-          description: "The platform where the auction was created"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/Platform"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of auctions to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auctions"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/bySeller":
-    get:
-      tags:
-        - "NFT Auctions"
-      operationId: getAuctionsBySeller
-      description: Returns all auctions by seller
-      parameters:
-        - name: "blockchains"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Blockchain"
-        - name: seller
-          description: "The seller of the auction"
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: status
-          description: "The auction statuses"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/AuctionStatus"
-        - name: origin
-          description: "Address of the consumer to receive the commission for auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: platform
-          description: "The platform where the auction was created"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/Platform"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of items to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auctions"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/byItem":
-    get:
-      tags:
-        - "NFT Auctions"
-      operationId: getAuctionsByItem
-      description: Returns all auctions by item
-      parameters:
-        - name: "itemId"
-          in: query
-          required: true
-          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
-          schema:
-            $ref: "#/components/schemas/ItemId"
-        - name: seller
-          description: "The seller of the auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: sort
-          description: "Sorting by target criteria"
-          in: query
-          required: false
-          schema:
-            "$ref": "#/components/schemas/AuctionSort"
-        - name: origin
-          description: "Address of the consumer to receive the commission for auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: status
-          description: "The auction statuses"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/AuctionStatus"
-        - name: platform
-          description: "The platform where the auction was created"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/Platform"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of items to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auctions"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/byCollection":
-    get:
-      tags:
-        - "NFT Auctions"
-      operationId: getAuctionsByCollection
-      description: Returns all auctions by collection
-      parameters:
-        - name: contract
-          description: "Address of the NFT collection"
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/ContractAddress"
-        - name: seller
-          description: "The seller of the auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: origin
-          description: "Address of the consumer to receive the commission for auction"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/UnionAddress"
-        - name: status
-          description: "The auctions statuses"
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/AuctionStatus"
-        - name: platform
-          description: "The platform where the auction was created"
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/Platform"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of items to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Auctions"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  "/v0.1/auctions/{id}/bids":
-    get:
-      tags:
-        - "NFT Auctions"
-      operationId: getAuctionBidsById
-      description: Returns all auction bids by auction id
-      parameters:
-        - name: "id"
-          in: "path"
-          required: true
-          description: "Auction Id, has format `${blockchain}:${id}`"
-          schema:
-            $ref: "#/components/schemas/AuctionId"
-        - name: continuation
-          description: "Continuation token from the previous response"
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: size
-          description: "The number of bids to return"
-          in: query
-          required: false
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AuctionBids"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
+  #  "/v0.1/auctions/{id}":
+  #    get:
+  #      tags:
+  #        - "NFT Auctions"
+  #      description: Returns the auction by id
+  #      operationId: getAuctionById
+  #      parameters:
+  #        - name: "id"
+  #          in: "path"
+  #          required: true
+  #          description: "Auction Id, has format `${blockchain}:${id}`"
+  #          schema:
+  #            $ref: "#/components/schemas/AuctionId"
+  #      responses:
+  #        '200':
+  #          description: OK
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: "#/components/schemas/Auction"
+  #        '404':
+  #          $ref: "#/components/responses/EntityNotFound"
+  #        '400':
+  #          $ref: "#/components/responses/BadRequest"
+  #        '500':
+  #          $ref: "#/components/responses/ServerError"
+  #
+  #  "/v0.1/auctions/all":
+  #    get:
+  #      tags:
+  #        - "NFT Auctions"
+  #      description: Returns all auctions by specified parameters
+  #      operationId: getAuctionsAll
+  #      parameters:
+  #        - name: "blockchains"
+  #          in: query
+  #          required: false
+  #          description: "Names of the blockchain networks. If no one specified, data from all blockchains will be returned"
+  #          schema:
+  #            type: array
+  #            items:
+  #              $ref: "#/components/schemas/Blockchain"
+  #        - name: sort
+  #          description: "Sorting by target criteria"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            "$ref": "#/components/schemas/AuctionSort"
+  #        - name: status
+  #          description: "The auction statuses"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: array
+  #            items:
+  #              $ref: "#/components/schemas/AuctionStatus"
+  #        - name: origin
+  #          description: "Address of the consumer to receive the commission for auction"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/UnionAddress"
+  #        - name: platform
+  #          description: "The platform where the auction was created"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/Platform"
+  #        - name: continuation
+  #          description: "Continuation token from the previous response"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: string
+  #        - name: size
+  #          description: "The number of auctions to return"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            minimum: 1
+  #            type: integer
+  #            format: int32
+  #      responses:
+  #        "200":
+  #          description: "OK"
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: "#/components/schemas/Auctions"
+  #        '400':
+  #          $ref: "#/components/responses/BadRequest"
+  #        '500':
+  #          $ref: "#/components/responses/ServerError"
+  #
+  #  "/v0.1/auctions/bySeller":
+  #    get:
+  #      tags:
+  #        - "NFT Auctions"
+  #      operationId: getAuctionsBySeller
+  #      description: Returns all auctions by seller
+  #      parameters:
+  #        - name: "blockchains"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: array
+  #            items:
+  #              $ref: "#/components/schemas/Blockchain"
+  #        - name: seller
+  #          description: "The seller of the auction"
+  #          in: query
+  #          required: true
+  #          schema:
+  #            $ref: "#/components/schemas/ContractAddress"
+  #        - name: status
+  #          description: "The auction statuses"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: array
+  #            items:
+  #              $ref: "#/components/schemas/AuctionStatus"
+  #        - name: origin
+  #          description: "Address of the consumer to receive the commission for auction"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/UnionAddress"
+  #        - name: platform
+  #          description: "The platform where the auction was created"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/Platform"
+  #        - name: continuation
+  #          description: "Continuation token from the previous response"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: string
+  #        - name: size
+  #          description: "The number of items to return"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            minimum: 1
+  #            type: integer
+  #            format: int32
+  #      responses:
+  #        "200":
+  #          description: "OK"
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: "#/components/schemas/Auctions"
+  #        '400':
+  #          $ref: "#/components/responses/BadRequest"
+  #        '500':
+  #          $ref: "#/components/responses/ServerError"
+  #
+  #  "/v0.1/auctions/byItem":
+  #    get:
+  #      tags:
+  #        - "NFT Auctions"
+  #      operationId: getAuctionsByItem
+  #      description: Returns all auctions by item
+  #      parameters:
+  #        - name: "itemId"
+  #          in: query
+  #          required: true
+  #          description: "Item Id, has format `${blockchain}:${token}:${tokenId}`"
+  #          schema:
+  #            $ref: "#/components/schemas/ItemId"
+  #        - name: seller
+  #          description: "The seller of the auction"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/UnionAddress"
+  #        - name: sort
+  #          description: "Sorting by target criteria"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            "$ref": "#/components/schemas/AuctionSort"
+  #        - name: origin
+  #          description: "Address of the consumer to receive the commission for auction"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/UnionAddress"
+  #        - name: status
+  #          description: "The auction statuses"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: array
+  #            items:
+  #              $ref: "#/components/schemas/AuctionStatus"
+  #        - name: platform
+  #          description: "The platform where the auction was created"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/Platform"
+  #        - name: continuation
+  #          description: "Continuation token from the previous response"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: string
+  #        - name: size
+  #          description: "The number of items to return"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            minimum: 1
+  #            type: integer
+  #            format: int32
+  #      responses:
+  #        "200":
+  #          description: "OK"
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: "#/components/schemas/Auctions"
+  #        '400':
+  #          $ref: "#/components/responses/BadRequest"
+  #        '500':
+  #          $ref: "#/components/responses/ServerError"
+  #
+  #  "/v0.1/auctions/byCollection":
+  #    get:
+  #      tags:
+  #        - "NFT Auctions"
+  #      operationId: getAuctionsByCollection
+  #      description: Returns all auctions by collection
+  #      parameters:
+  #        - name: contract
+  #          description: "Address of the NFT collection"
+  #          in: query
+  #          required: true
+  #          schema:
+  #            $ref: "#/components/schemas/ContractAddress"
+  #        - name: seller
+  #          description: "The seller of the auction"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/UnionAddress"
+  #        - name: origin
+  #          description: "Address of the consumer to receive the commission for auction"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/UnionAddress"
+  #        - name: status
+  #          description: "The auctions statuses"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: array
+  #            items:
+  #              $ref: "#/components/schemas/AuctionStatus"
+  #        - name: platform
+  #          description: "The platform where the auction was created"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            $ref: "#/components/schemas/Platform"
+  #        - name: continuation
+  #          description: "Continuation token from the previous response"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: string
+  #        - name: size
+  #          description: "The number of items to return"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            minimum: 1
+  #            type: integer
+  #            format: int32
+  #      responses:
+  #        "200":
+  #          description: "OK"
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: "#/components/schemas/Auctions"
+  #        '400':
+  #          $ref: "#/components/responses/BadRequest"
+  #        '500':
+  #          $ref: "#/components/responses/ServerError"
+  #
+  #  "/v0.1/auctions/{id}/bids":
+  #    get:
+  #      tags:
+  #        - "NFT Auctions"
+  #      operationId: getAuctionBidsById
+  #      description: Returns all auction bids by auction id
+  #      parameters:
+  #        - name: "id"
+  #          in: "path"
+  #          required: true
+  #          description: "Auction Id, has format `${blockchain}:${id}`"
+  #          schema:
+  #            $ref: "#/components/schemas/AuctionId"
+  #        - name: continuation
+  #          description: "Continuation token from the previous response"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            type: string
+  #        - name: size
+  #          description: "The number of bids to return"
+  #          in: query
+  #          required: false
+  #          schema:
+  #            minimum: 1
+  #            type: integer
+  #            format: int32
+  #      responses:
+  #        "200":
+  #          description: "OK"
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: "#/components/schemas/AuctionBids"
+  #        '400':
+  #          $ref: "#/components/responses/BadRequest"
+  #        '500':
+  #          $ref: "#/components/responses/ServerError"
 
   ######################## Activity API ########################
 
   /v0.1/activities/byUser:
     get:
       tags:
-        - "NFT activities"
+        - "NFT Activities"
       summary: "Get user Activities"
       description: "Returns user's Activities (like transfers, mints, sells etc) sorted by date.
       This API is deprecated in favor of `Search Activities`"
@@ -2118,7 +1943,7 @@ paths:
   /v0.1/activities/byUsers:
     post:
       tags:
-        - "NFT activities"
+        - "NFT Activities"
       summary: "Get users Activities"
       description: "Returns users Activities (like transfers, mints, sells etc) sorted by date.
       This API is deprecated in favor of `Search Activities`"
@@ -2145,7 +1970,7 @@ paths:
   /v0.1/activities/byItem:
     get:
       tags:
-        - "NFT activities"
+        - "NFT Activities"
       summary: "Get NFT Activities"
       description: "Returns Activities related to specified NFT and sorted by date.
       This API is deprecated in favor of `Search Activities`"
@@ -2220,7 +2045,7 @@ paths:
   /v0.1/activities/byCollection:
     get:
       tags:
-        - "NFT activities"
+        - "NFT Activities"
       summary: "Get NFT Collection Activities"
       description: "Returns Activities related to NFTs from specified Collection and sorted by date.
       This API is deprecated in favor of `Search Activities`"
@@ -2297,7 +2122,7 @@ paths:
   /v0.1/activities/sync:
     get:
       tags:
-        - "NFT activities"
+        - "NFT Activities"
       summary: "Get all Activities (for sync)"
       description: "Returns all Activities in accordance with specified filters and sorted by `db updated` date.
       During internal updates (like migrations) Activities can be updated for technical reasons. In such case, `date`
@@ -2349,7 +2174,7 @@ paths:
   /v0.1/activities/all:
     get:
       tags:
-        - "NFT activities"
+        - "NFT Activities"
       summary: "Get all Activities"
       description: "Returns all Activities in accordance with specified filters and sorted by date. 
       This API is deprecated in favor of `Search Activities`"
@@ -2427,7 +2252,7 @@ paths:
   /v0.1/activities/search:
     post:
       tags:
-        - "NFT activities"
+        - "NFT Activities"
       summary: "Search Activities"
       description: "Advanced search returns Activities satisfying provided filter"
       operationId: searchActivities
@@ -2479,7 +2304,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/collections/{collection}/generateTokenId":
+  /v0.1/collections/{collection}/generateTokenId:
     get:
       tags:
         - "NFT Collections"
@@ -2511,7 +2336,7 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  "/v0.1/collections/{collection}/refreshMeta":
+  /v0.1/collections/{collection}/refreshMeta:
     delete:
       tags:
         - "NFT Collections"
@@ -2654,7 +2479,7 @@ paths:
 
   ####################### Statistics API #######################
 
-  "/v0.1/data/rankings/{entity}/volume":
+  /v0.1/data/rankings/{entity}/volume:
     get:
       tags:
         - "NFT Data and Historical Statistics"
@@ -2725,7 +2550,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  "/v0.1/data/rankings/collections/volume":
+  /v0.1/data/rankings/collections/volume:
     get:
       tags:
         - "NFT Data and Historical Statistics"
@@ -2832,7 +2657,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  "/v0.1/data/collections/{collection}/transactions":
+  /v0.1/data/collections/{collection}/transactions:
     get:
       tags:
         - "NFT Data and Historical Statistics"
@@ -2888,7 +2713,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  "/v0.1/data/collections/{collection}/stats":
+  /v0.1/data/collections/{collection}/stats:
     get:
       tags:
         - "NFT Data and Historical Statistics"
@@ -2941,7 +2766,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  "/v0.1/data/collections/{collection}/sellers":
+  /v0.1/data/collections/{collection}/sellers:
     get:
       tags:
         - "NFT Data and Historical Statistics"
@@ -3065,7 +2890,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  "/v0.1/data/collections/{collection}/floorPrice":
+  /v0.1/data/collections/{collection}/floorPrice:
     get:
       tags:
         - "NFT Data and Historical Statistics"
@@ -3127,7 +2952,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  "/v0.1/data/collections/{collection}/buyers":
+  /v0.1/data/collections/{collection}/buyers:
     get:
       tags:
         - "NFT Data and Historical Statistics"
@@ -3183,7 +3008,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  "/v0.1/data/collections/{collection}/listed":
+  /v0.1/data/collections/{collection}/listed:
     get:
       tags:
         - "NFT Data and Historical Statistics"
@@ -3232,6 +3057,179 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapError"
+
+  ######################### Domain API #########################
+
+  "/v0.1/domains/{domain}/resolution":
+    post:
+      tags:
+        - "Domain lookup"
+      summary: "Resolve domain"
+      description: "Resolves domain's blockchain address by its name (for example, from ENS domains collection)"
+      operationId: resolve
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          description: "Name of a domain to resolve"
+          example: "nick.eth"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DomainResolveResult"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ######################### Sign API #########################
+
+  "/v0.1/signature/validate":
+    post:
+      tags:
+        - "Signature operations"
+      summary: "Check Order's signature"
+      description: "Checks if Order's signature is valid and returns 'true' if it so, 'false' otherwise"
+      operationId: validate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignatureValidationForm"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/signature/input":
+    post:
+      tags:
+        - "Signature operations"
+      summary: "Generate signed input"
+      description: "Generate input string to sign operation"
+      operationId: getInput
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignatureInputForm"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignatureInput"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ######################### Currency API #########################
+
+  "/v0.1/currencies/{currencyId}/rates/usd":
+    get:
+      tags:
+        - "Currencies and rates"
+      summary: "Get USD rate"
+      description: "Get currency USD rate by currency blockchain's address"
+      operationId: getUsdRate
+      parameters:
+        - name: "currencyId"
+          in: path
+          required: true
+          description: "Currency Id, has format `${blockchain}:${token}` or `${blockchain}:${token}:${tokenId}`"
+          schema:
+            $ref: "#/components/schemas/CurrencyId"
+        - name: at
+          in: query
+          required: true
+          description: "Date and time for getting currency USD rate (if not specified, returns actual rate)"
+          example: "2022-01-01T12:00:00Z"
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrencyUsdRate"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/currencies/all":
+    get:
+      tags:
+        - "Currencies and rates"
+      summary: "Get supported currencies"
+      description: "List of currencies, supported by Protocol"
+      operationId: getAllCurrencies
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Currencies"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ######################## Balance API #######################
+
+  /v0.1/balances/{currencyId}/{owner}:
+    get:
+      tags:
+        - "User balances"
+      summary: "Get balance"
+      description: "Return user's balance of specified currency"
+      operationId: getBalance
+      parameters:
+        - name: "currencyId"
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/CurrencyId'
+        - name: "owner"
+          description: "Address of the token's owner"
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UnionAddress'
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balance"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
 
 components:
 
