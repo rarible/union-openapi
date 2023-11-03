@@ -4657,6 +4657,7 @@ components:
     ItemsSearchSort:
       type: string
       enum:
+        - DEFAULT
         - LATEST
         - EARLIEST
         - HIGHEST_SELL
