@@ -4569,12 +4569,6 @@ components:
           items:
             type: string
             example: "${filterName}"
-        descriptions:
-          description: "Deprecated. Please, use fullText instead"
-          type: array
-          items:
-            type: string
-            example: "${filterDescription}"
         fullText:
           $ref: "#/components/schemas/ItemSearchFullText"
         traits:
@@ -4645,6 +4639,7 @@ components:
           type: string
         fields:
           type: array
+          default: [ NAME ]
           items:
             type: string
             enum:
@@ -4657,7 +4652,7 @@ components:
     ItemsSearchSort:
       type: string
       enum:
-        - DEFAULT
+        - RELEVANCE
         - LATEST
         - EARLIEST
         - HIGHEST_SELL
