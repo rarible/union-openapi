@@ -50,6 +50,10 @@ open class UnionApiClientFactory(
         return BalanceControllerApi(createApiClient())
     }
 
+    fun createSearchApiClient(): SearchApiApi {
+        return SearchApiApi(createApiClient())
+    }
+
     private fun createApiClient(): ApiClient {
         val jacksonMapper = ApiClient.createDefaultObjectMapper()
             .registerModule(UnionPrimitivesJacksonModule)
