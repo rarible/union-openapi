@@ -60,7 +60,7 @@ tags:
     x-controller: "BalanceController"
 
 paths:
-  
+
   ######################### Item API #########################
 
   /v0.1/items/{itemId}:
@@ -2821,7 +2821,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapError"
-  
+
   /v0.1/data/collections/{collection}/gmv:
     get:
       tags:
@@ -4563,15 +4563,14 @@ components:
           default: false
           example: "${filterDeleted}"
         names:
+          deprecated: true
+          description: "Deprecated. Please, use fullText instead"
           type: array
           items:
             type: string
             example: "${filterName}"
-        descriptions:
-          type: array
-          items:
-            type: string
-            example: "${filterDescription}"
+        fullText:
+          $ref: "#/components/schemas/ItemSearchFullText"
         traits:
           type: array
           items:
@@ -4633,9 +4632,27 @@ components:
         onSale:
           type: boolean
 
+    ItemSearchFullText:
+      type: object
+      properties:
+        text:
+          type: string
+        fields:
+          type: array
+          default: [ NAME ]
+          items:
+            type: string
+            enum:
+              - NAME
+              - DESCRIPTION
+              - TRAIT_VALUE
+      required:
+        - text
+
     ItemsSearchSort:
       type: string
       enum:
+        - RELEVANCE
         - LATEST
         - EARLIEST
         - HIGHEST_SELL
