@@ -50,8 +50,8 @@ open class UnionApiClientFactory(
         return BalanceControllerApi(createApiClient())
     }
 
-    fun createSearchApiClient(): SearchApiApi {
-        return SearchApiApi(createApiClient())
+    fun createSearchApiClient(): SearchControllerApi {
+        return SearchControllerApi(createApiClient())
     }
 
     private fun createApiClient(): ApiClient {
