@@ -3372,6 +3372,9 @@ components:
         signature:
           type: string
           description: "Digital signature of the signer"
+        algorithm:
+          description: "Algorithm used for signature generation (don't specify if default algo is used)"
+          type: string
 
     SignatureInputForm:
       type: object
