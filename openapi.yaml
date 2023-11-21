@@ -3275,8 +3275,7 @@ components:
         - CHILIZ
         - LIGHTLINK
         - ZKSYNC
-        - ASTAR
-        - ZKEVM
+        - ASTARZKEVM
         - BASE
       example: "${blockchain}"
 
