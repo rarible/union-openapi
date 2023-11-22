@@ -7547,8 +7547,7 @@ components:
         - CHILIZ
         - LIGHTLINK
         - ZKSYNC
-        - ASTAR
-        - ZKEVM
+        - ASTARZKEVM
         - BASE
 
     OlapCollectionPattern:
