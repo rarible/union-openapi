@@ -3374,6 +3374,9 @@ components:
         algorithm:
           description: "Algorithm used for signature generation (don't specify if default algo is used)"
           type: string
+        weight:
+          description: "Weight arg (only for Flow)"
+          type: integer
 
     SignatureInputForm:
       type: object
@@ -7577,11 +7580,7 @@ components:
         - MATIC
         - SOL
         - MNT
-        - ARB
         - CHZ
-        - LL
-        - ZKS
-        - ASTAR
 
     OlapCurrencyAmount:
       required:
