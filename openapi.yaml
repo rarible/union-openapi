@@ -7577,11 +7577,7 @@ components:
         - MATIC
         - SOL
         - MNT
-        - ARB
         - CHZ
-        - LL
-        - ZKS
-        - ASTAR
 
     OlapCurrencyAmount:
       required:
