@@ -851,6 +851,30 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/orders/{id}/report:
+    post:
+      tags:
+        - "NFT Sales"
+      summary: "Report Order"
+      description: "Report Error Order"
+      operationId: reportOrderById
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "Order Id, has format '${blockchain}:${id}'"
+          schema:
+            $ref: "#/components/schemas/OrderId"
+      responses:
+        "200":
+          description: "OK"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/orders:
     post:
       tags:
