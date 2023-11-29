@@ -35,6 +35,13 @@ info:
 security:
   - ApiKeyAuth: [ ]
 
+servers:
+  - url: "https://{environment}.rarible.org"
+    variables:
+      environment:
+        enum: ["api", "testnet-api"]
+        default: api
+
 tags:
   - name: "Explore API"
     x-controller: "SearchController"
