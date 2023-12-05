@@ -3308,6 +3308,7 @@ components:
         - ZKSYNC
         - ASTARZKEVM
         - BASE
+        - RARI
       example: "${blockchain}"
 
     BlockchainGroup:
@@ -7583,9 +7584,10 @@ components:
         - ZKSYNC
         - ASTARZKEVM
         - BASE
+        - RARI
 
     OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTAR|ZKEVM|BASE|SOLANA|IMMUTABLEX):.*$"
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI):.*$"
       type: string
 
     OlapPeriod:

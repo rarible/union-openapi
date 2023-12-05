@@ -15,6 +15,7 @@ private val subchains = mapOf(
         BlockchainDto.ASTARZKEVM,
         BlockchainDto.BASE,
         BlockchainDto.LIGHTLINK,
+        BlockchainDto.RARI,
     ),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
