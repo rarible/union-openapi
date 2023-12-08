@@ -5991,6 +5991,9 @@ components:
         scam:
           type: boolean
           default: false
+        hasTraits:
+          type: boolean
+          default: true
       required:
         - id
         - blockchain
