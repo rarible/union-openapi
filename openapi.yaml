@@ -2368,12 +2368,33 @@ paths:
         - "NFT Collections"
       summary: "Reset NFT metadata"
       description: "Reloads metadata for all NFTs in the Collection (see 'Reset NFT metadata' API)"
-      operationId: refreshCollectionMeta
+      operationId: refreshCollectionItemsMeta
       parameters:
         - name: "collection"
           in: path
           required: true
           description: "Address of the collection"
+          schema:
+            $ref: "#/components/schemas/ContractAddress"
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/collections/{collection}/resetMeta:
+    delete:
+      tags:
+        - "NFT Collections"
+      summary: "Reset Collection metadata"
+      description: "Reloads metadata for Collection (NOT for collection's NFTs)"
+      operationId: resetCollectionMeta
+      parameters:
+        - name: "collection"
+          in: path
+          required: true
           schema:
             $ref: "#/components/schemas/ContractAddress"
       responses:
