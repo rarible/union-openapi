@@ -4707,6 +4707,7 @@ components:
       enum:
         - RELEVANCE
         - LATEST
+        - RECENTLY_LISTED
         - EARLIEST
         - HIGHEST_SELL
         - LOWEST_SELL
