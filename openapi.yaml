@@ -3670,6 +3670,7 @@ components:
           enum:
             - PREVIEW
             - BIG
+            - INITIAL
             - ORIGINAL
             - PORTRAIT
         mimeType:
