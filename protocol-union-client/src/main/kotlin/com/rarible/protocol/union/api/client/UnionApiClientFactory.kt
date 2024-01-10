@@ -30,6 +30,10 @@ open class UnionApiClientFactory(
         return SignatureControllerApi(createApiClient())
     }
 
+    fun createEncodeApiClient(): EncodeControllerApi {
+        return EncodeControllerApi(createApiClient())
+    }
+
     fun createDomainApiClient(): DomainControllerApi {
         return DomainControllerApi(createApiClient())
     }

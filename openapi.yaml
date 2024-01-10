@@ -56,6 +56,8 @@ tags:
     x-controller: "DomainController"
   - name: "Signature operations"
     x-controller: "SignatureController"
+  - name: "Encode operations"
+    x-controller: "EncodeController"
   - name: "Currencies and rates"
     x-controller: "CurrencyController"
   - name: "User balances"
@@ -3188,6 +3190,33 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  ######################### Encode API #########################
+
+  "/v0.1/encode/order":
+    post:
+      tags:
+        - "Encode operations"
+      summary: "Generate order encode data for sign operations"
+      description: "Generate order encode data for sign operations"
+      operationId: encode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderForm"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EncodedOrder"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################### Currency API #########################
 
   "/v0.1/currencies/{currencyId}/rates/usd":
@@ -3511,6 +3540,27 @@ components:
       properties:
         input:
           type: string
+
+    EncodedOrder:
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/EncodedEthOrder"
+
+    EncodedEthOrder:
+        type: object
+        required:
+          - orderHash
+          - signHash
+          - signMessage
+        properties:
+          "@type":
+            type: string
+            enum:
+              - "ETH_ORDER_ENCODE"
+          orderHash:
+            type: string
+          signHash:
+            type: string
 
     ################## Balance - Union ###################
 
