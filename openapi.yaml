@@ -3543,15 +3543,19 @@ components:
 
     EncodedOrder:
       type: object
+      required:
+        - blockchain
       oneOf:
         - $ref: "#/components/schemas/EncodedEthOrder"
+      properties:
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
 
     EncodedEthOrder:
         type: object
         required:
           - orderHash
           - signHash
-          - signMessage
         properties:
           "@type":
             type: string
@@ -3561,6 +3565,8 @@ components:
             type: string
           signHash:
             type: string
+          transferProxy:
+            $ref: '#/components/schemas/UnionAddress'
 
     ################## Balance - Union ###################
 
