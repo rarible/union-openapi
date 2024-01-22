@@ -853,6 +853,68 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/orders/{id}/prepareTx:
+    post:
+      tags:
+        - "NFT Sales"
+      summary: "Prepare order transaction"
+      description: "Prepare all required data to match given order on the blockchain"
+      operationId: prepareOrderTransaction
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "Order Id, has format '${blockchain}:${id}'"
+          schema:
+            $ref: "#/components/schemas/OrderId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrepareOrderTxForm"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrepareOrderTxResponse"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/orders/{id}/prepareCancelTx:
+    post:
+      tags:
+        - "NFT Sales"
+      summary: "Prepare order cancel transaction"
+      description: "Prepare all required data to cancel given order on the blockchain"
+      operationId: prepareOrderCancelTransaction
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "Order Id, has format '${blockchain}:${id}'"
+          schema:
+            $ref: "#/components/schemas/OrderId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreparedOrderTx"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/orders/{id}/report:
     post:
       tags:
@@ -5096,6 +5158,53 @@ components:
       enum:
         - LAST_UPDATE_ASC
         - LAST_UPDATE_DESC
+
+    PrepareOrderTxForm:
+      type: object
+      required:
+        - maker
+        - amount
+        - payouts
+        - originFees
+      properties:
+        maker:
+          "$ref": "#/components/schemas/UnionAddress"
+        amount:
+          "$ref": "#/components/schemas/BigInteger"
+        payouts:
+          type: array
+          description: "Value of the payouts for the order"
+          items:
+            "$ref": "#/components/schemas/Payout"
+        originFees:
+          type: array
+          description: "Value of the origin fees for the order"
+          items:
+            "$ref": "#/components/schemas/Payout"
+
+    PrepareOrderTxResponse:
+      type: object
+      required:
+        - asset
+        - transaction
+      properties:
+        transferProxyAddress:
+          "$ref": "#/components/schemas/ContractAddress"
+        asset:
+          "$ref": "#/components/schemas/Asset"
+        transaction:
+          "$ref": "#/components/schemas/PreparedOrderTx"
+
+    PreparedOrderTx:
+      type: object
+      required:
+        - to
+        - data
+      properties:
+        to:
+          "$ref": "#/components/schemas/ContractAddress"
+        data:
+          type: string
 
     #################### Auction - Union ####################
 
