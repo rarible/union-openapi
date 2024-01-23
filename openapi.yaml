@@ -3757,6 +3757,11 @@ components:
           description: "NFT content information"
           items:
             $ref: "#/components/schemas/MetaContent"
+        extraContent:
+          type: array
+          description: "NFT additional content information"
+          items:
+            $ref: "#/components/schemas/MetaContent"
       required:
         - name
         - attributes
