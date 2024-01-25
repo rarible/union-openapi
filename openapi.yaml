@@ -4890,6 +4890,13 @@ components:
         to:
           type: string
           format: date-time
+        fromBlockInclusive:
+          type: integer
+          format: int64
+        toBlockExclusive:
+          type: integer
+          format: int64
+
 
     ActivityUserFilter:
       type: object
