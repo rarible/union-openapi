@@ -63,7 +63,7 @@ tags:
   - name: "User balances"
     x-controller: "BalanceController"
   - name: "Indexers"
-    x-controller: "BlockController"
+    x-controller: "IndexerController"
 
 paths:
 
