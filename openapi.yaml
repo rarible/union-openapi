@@ -3400,6 +3400,7 @@ components:
     Blockchain:
       type: string
       enum:
+        - APTOS
         - ETHEREUM
         - POLYGON
         - FLOW
@@ -3419,6 +3420,7 @@ components:
     BlockchainGroup:
       type: string
       enum:
+        - APTOS
         - ETHEREUM
         - FLOW
         - TEZOS

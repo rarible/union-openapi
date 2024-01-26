@@ -19,7 +19,8 @@ private val subchains = mapOf(
     ),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
-    BlockchainGroupDto.SOLANA to listOf(BlockchainDto.SOLANA)
+    BlockchainGroupDto.SOLANA to listOf(BlockchainDto.SOLANA),
+    BlockchainGroupDto.APTOS to listOf(BlockchainDto.APTOS),
 )
 
 private val groups = subchains.entries
@@ -63,6 +64,7 @@ private fun BlockchainGroupDto.normalize(contract: String): String {
     return when (this) {
         BlockchainGroupDto.ETHEREUM -> contract.lowercase()
         // These groups have case-sensitive identifiers
+        BlockchainGroupDto.APTOS,
         BlockchainGroupDto.FLOW,
         BlockchainGroupDto.TEZOS,
         BlockchainGroupDto.SOLANA -> contract
