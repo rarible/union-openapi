@@ -6142,6 +6142,7 @@ components:
             - TEZOS_MT
             - SOLANA
             - IMMUTABLEX
+            - APTOS
         status:
           type: string
           enum:
