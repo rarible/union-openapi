@@ -62,8 +62,8 @@ tags:
     x-controller: "CurrencyController"
   - name: "User balances"
     x-controller: "BalanceController"
-  - name: "Indexers"
-    x-controller: "IndexerController"
+  - name: "Indexer Blocks"
+    x-controller: "BlockController"
 
 paths:
 
@@ -3373,10 +3373,10 @@ paths:
 
   ######################### Domain API #########################
 
-  "/v0.1/indexers/blocks/latestIndexed":
+  "/v0.1/blocks/latestIndexed":
     get:
       tags:
-        - "Indexers"
+        - "Indexer blocks"
       summary: "Get latest indexed block"
       description: "Get latest indexed block for blockchain"
       operationId: getLatestIndexedBlock
