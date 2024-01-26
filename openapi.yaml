@@ -62,6 +62,8 @@ tags:
     x-controller: "CurrencyController"
   - name: "User balances"
     x-controller: "BalanceController"
+  - name: "Indexers"
+    x-controller: "BlockController"
 
 paths:
 
@@ -3366,6 +3368,37 @@ paths:
           $ref: "#/components/responses/EntityNotFound"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ######################### Domain API #########################
+
+  "/v0.1/indexers/blocks/latestIndexed":
+    get:
+      tags:
+        - "Indexers"
+      summary: "Get latest indexed block"
+      description: "Get latest indexed block for blockchain"
+      operationId: getLatestIndexedBlock
+      parameters:
+        - name: blockchain
+          in: query
+          required: true
+          description: "Blockchain name"
+          example: "ETHEREUM"
+          schema:
+            $ref: "#/components/schemas/Blockchain"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LatestIndexedBlock"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
         '500':
           $ref: "#/components/responses/ServerError"
 
@@ -7765,6 +7798,15 @@ components:
         - BID
         - SELL
 
+    LatestIndexedBlock:
+      type: object
+      required:
+        - blockNumber
+      properties:
+        blockNumber:
+          type: integer
+          format: int64
+
     #################### Olap Types ####################
 
     OlapBlockchain:
@@ -7965,7 +8007,6 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/OlapCollectionLeaderboardEntry"
-
 
     OlapUserVolumeRankingResponse:
       type: object
