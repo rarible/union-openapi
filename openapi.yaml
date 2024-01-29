@@ -62,7 +62,7 @@ tags:
     x-controller: "CurrencyController"
   - name: "User balances"
     x-controller: "BalanceController"
-  - name: "Indexer Blocks"
+  - name: "Indexer blocks"
     x-controller: "BlockController"
 
 paths:
@@ -7801,8 +7801,11 @@ components:
     LatestIndexedBlock:
       type: object
       required:
+        - blockchain
         - blockNumber
       properties:
+        blockchain:
+          $ref: "#/components/schemas/Blockchain"
         blockNumber:
           type: integer
           format: int64
