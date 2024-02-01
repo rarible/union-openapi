@@ -3680,6 +3680,8 @@ components:
           type: boolean
         suspicious:
           type: boolean
+        itemCollection:
+          $ref: "#/components/schemas/ItemCollection"
       required:
         - id
         - blockchain
@@ -3691,6 +3693,21 @@ components:
         - supply
         - deleted
         - sellers
+
+    ItemCollection:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/CollectionId"
+        name:
+          type: string
+        bestBidOrder:
+          $ref: "#/components/schemas/Order"
+        bestSellOrder:
+          $ref: "#/components/schemas/Order"
+      required:
+        - id
+        - name
 
     ItemLastSale:
       type: object
