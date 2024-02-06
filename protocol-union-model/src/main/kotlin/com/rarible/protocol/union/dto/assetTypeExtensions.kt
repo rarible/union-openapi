@@ -4,6 +4,34 @@ import java.math.BigInteger
 
 val AssetTypeDto.ext: AssetTypeExtension
     get() = when (this) {
+        is NativeCurrencyAssetTypeDto -> AssetTypeExtension(
+            isNft = false,
+            isCurrency = true,
+            isCollectionAsset = false,
+            currencyId = this.blockchain.nativeCurrency()
+        )
+
+        is TokenCurrencyAssetTypeDto -> AssetTypeExtension(
+            isNft = false,
+            isCurrency = true,
+            isCollectionAsset = false,
+            currencyId = this.contract.value
+        )
+
+        is NftAssetTypeDto -> AssetTypeExtension(
+            isNft = true,
+            isCurrency = false,
+            isCollectionAsset = false,
+            collectionId = this.collectionId,
+            itemId = this.itemId
+        )
+
+        is NftOfCollectionAssetTypeDto -> AssetTypeExtension(
+            isNft = true,
+            isCurrency = false,
+            isCollectionAsset = true,
+            collectionId = this.collectionId
+        )
         //---- ETHEREUM - currencies
         is EthEthereumAssetTypeDto -> AssetTypeExtension(
             isNft = false,
@@ -11,6 +39,7 @@ val AssetTypeDto.ext: AssetTypeExtension
             isCollectionAsset = false,
             currencyId = "0x0000000000000000000000000000000000000000"
         )
+
         is EthErc20AssetTypeDto -> AssetTypeExtension(
             isNft = false,
             isCurrency = true,

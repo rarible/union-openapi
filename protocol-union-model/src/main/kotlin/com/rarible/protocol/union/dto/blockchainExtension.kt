@@ -31,6 +31,23 @@ private val groups = subchains.entries
     .flatMap { group -> group.value.map { it to group.key } }
     .associateBy({ it.first }, { it.second })
 
+private val nativeCurrencies = mapOf(
+    BlockchainGroupDto.ETHEREUM to "0x0000000000000000000000000000000000000000",
+    //BlockchainGroupDto.FLOW to "" // there is no 'native' currency for flow, it is bind to contract like Erc20
+    BlockchainGroupDto.SOLANA to "So11111111111111111111111111111111111111112",
+    BlockchainGroupDto.TEZOS to "XTZ",
+    BlockchainGroupDto.APTOS to "0x1::aptos_coin::AptosCoin"
+)
+
+fun BlockchainGroupDto.nativeCurrency(): String {
+    return nativeCurrencies[this]
+        ?: throw IllegalArgumentException("There is no native currency for $this")
+}
+
+fun BlockchainDto.nativeCurrency(): String {
+    return this.group().nativeCurrency()
+}
+
 fun BlockchainDto.group(): BlockchainGroupDto {
     return groups[this]!!
 }
