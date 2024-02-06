@@ -10,5 +10,6 @@
   "OwnershipId": "com.rarible.protocol.union.dto.OwnershipIdDto",
   "EventTimeMark": "com.rarible.protocol.union.dto.EventTimeMarkDto",
   "MetaAttribute": "com.rarible.protocol.union.dto.MetaAttributeDto",
-  "OlapCollectionPattern": "kotlin.String"
+  "OlapCollectionPattern": "kotlin.String",
+  "RawJson": "com.fasterxml.jackson.databind.JsonNode"
 }

@@ -4742,6 +4742,11 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/PendingOrder"
+        feeTakers:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/UnionAddress"
         data:
           $ref: "#/components/schemas/OrderData"
       required:
@@ -4763,9 +4768,8 @@ components:
     OrderData:
       type: object
       oneOf:
-        # Generic order data types
-        - "$ref": "#/components/schemas/DefaultOrderData"
-        - "$ref": "#/components/schemas/EmptyOrderData"
+        # Generic order data - just json
+        - "$ref": "#/components/schemas/RawOrderData"
 
         # TODO potentially we can replace some of these types with generic types
         - "$ref": "#/components/schemas/EthOrderDataLegacy"
@@ -5810,40 +5814,17 @@ components:
       oneOf:
         - "$ref": "#/components/schemas/EthRaribleV2OrderForm"
 
-    EmptyOrderData:
+    RawOrderData:
       type: object
       properties:
         "@type":
           type: string
           enum:
-            - EMPTY
-        stub:
-          type: string
-          default: "EMTPY"
+            - RAW
+        data:
+          $ref: "#/components/schemas/RawJson"
       required:
         - "@type"
-
-    DefaultOrderData:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - DEFAULT
-        payouts:
-          type: array
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/Payout"
-        originFees:
-          type: array
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/Payout"
-      required:
-        - "@type"
-        - payouts
-        - originFees
 
     EthRaribleV2OrderForm:
       type: object
@@ -7189,6 +7170,8 @@ components:
     BigDecimal:
       type: string
       example: 123456.789
+    RawJson:
+      type: object
 
     ContractAddress:
       type: string
