@@ -4897,6 +4897,8 @@ components:
       properties:
         maker:
           "$ref": "#/components/schemas/UnionAddress"
+        taker:
+          "$ref": "#/components/schemas/UnionAddress"
         amount:
           "$ref": "#/components/schemas/BigInteger"
         payouts:
@@ -4915,6 +4917,7 @@ components:
       required:
         - asset
         - transaction
+        - value
       properties:
         transferProxyAddress:
           "$ref": "#/components/schemas/ContractAddress"
@@ -4922,6 +4925,8 @@ components:
           "$ref": "#/components/schemas/Asset"
         transaction:
           "$ref": "#/components/schemas/PreparedOrderTx"
+        value:
+          $ref: "#/components/schemas/BigInteger"
 
     PreparedOrderTx:
       type: object
