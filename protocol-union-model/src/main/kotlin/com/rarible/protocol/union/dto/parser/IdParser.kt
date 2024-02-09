@@ -17,6 +17,10 @@ import com.rarible.protocol.union.dto.normalizeId
 object IdParser {
 
     const val DELIMITER = ":"
+    val SIMPLE_ITEM_ID_CHAINS = setOf(
+        BlockchainDto.SOLANA,
+        BlockchainDto.APTOS,
+    )
 
     fun parseBlockchain(value: String): BlockchainDto {
         try {
@@ -55,7 +59,7 @@ object IdParser {
     fun parseItemId(value: String): ItemIdDto {
         // For ItemId there can be ':' in value (token:tokenId for most of the blockchains)
         val (blockchain, id) = extractBlockchain(value)
-        if (blockchain != BlockchainDto.SOLANA) {
+        if (blockchain !in SIMPLE_ITEM_ID_CHAINS) {
             val parts = id.split(":")
             if (parts.size != 2 || !parts[1].all { it.isDigit() } && parts[1] != "-1") {
                 throw BlockchainIdFormatException("Invalid item id format: $value")
