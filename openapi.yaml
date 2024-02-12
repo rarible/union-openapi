@@ -36,7 +36,7 @@ security:
   - ApiKeyAuth: [ ]
 
 tags:
-  - name: "Explore API"
+  - name: "Search API"
     x-controller: "SearchController"
   - name: "NFT Items"
     x-controller: "ItemController"
@@ -486,7 +486,7 @@ paths:
   /v0.1/items/traits/search:
     get:
       tags:
-        - "Explore API"
+        - "Search API"
       summary: "Search NFT collection traits"
       description: "Returns aggregation of existing traits for specified collections with counter for each trait type/value.  
       This is full-text-search, where you can specify filter for trait keys not precisely 
@@ -545,7 +545,7 @@ paths:
   /v0.1/items/search:
     post:
       tags:
-        - "Explore API"
+        - "Search API"
       summary: "Search NFTs"
       description: "Advanced search returns NFTs satisfying provided filter"
       operationId: searchItems
@@ -790,7 +790,7 @@ paths:
   /v0.1/ownerships/search:
     post:
       tags:
-        - "Explore API"
+        - "Search API"
       summary: "Search NFT Ownerships"
       description: "Advanced search returns NFT Ownerships satisfying provided filter"
       operationId: searchOwnerships
@@ -2005,7 +2005,7 @@ paths:
   /v0.1/activities/search:
     post:
       tags:
-        - "Explore API"
+        - "Search API"
       summary: "Search Activities"
       description: "Advanced search returns Activities satisfying provided filter"
       operationId: searchActivities
@@ -2224,7 +2224,7 @@ paths:
   /v0.1/collections/search:
     post:
       tags:
-        - "Explore API"
+        - "Search API"
       summary: "Search NFT Collections"
       description: "Advanced search returns NFT Collections satisfying provided filter"
       operationId: searchCollection
