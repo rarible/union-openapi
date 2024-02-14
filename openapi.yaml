@@ -1531,6 +1531,86 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/orders/floorBids/byCollection:
+    get:
+      tags:
+        - "NFT Sales"
+      summary: "Get floor bids for Collection"
+      description: "Returns floor bids created for specified NFT Collection and sorted by price in USD (expensive first)"
+      operationId: getOrderFloorBidsByCollection
+      parameters:
+        - name: "platform"
+          in: query
+          required: false
+          description: "The platform where the order was created"
+          schema:
+            "$ref": "#/components/schemas/Platform"
+        - name: "collectionId"
+          in: query
+          required: true
+          description: "Collection Id, has format `${blockchain}:${token}`"
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: "origin"
+          in: query
+          required: false
+          description: "Address of the consumer to receive the commission for the order"
+          schema:
+            "$ref": "#/components/schemas/UnionAddress"
+        - name: "status"
+          in: query
+          required: false
+          description: "Order status"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderStatus"
+        - name: "currencies"
+          in: query
+          required: false
+          description: "Currencies for bids"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/CurrencyId"
+        - name: "start"
+          in: query
+          required: false
+          description: "Lower time border of data (timestamp)"
+          schema:
+            type: integer
+            format: int64
+        - name: "end"
+          in: query
+          required: false
+          description: "Upper time border of data (timestamp)"
+          schema:
+            type: integer
+            format: int64
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/orders/amm/{id}/tradeInfo:
     get:
       tags:
