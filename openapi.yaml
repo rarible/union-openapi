@@ -7223,9 +7223,10 @@ components:
         - FIEF
         - XAI
         - KROMA
+        - APTOS
 
     OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA):.*$"
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS):.*$"
       type: string
 
     OlapPeriod:
@@ -7255,6 +7256,7 @@ components:
         - CELO
         - FIEF
         - XAI
+        - APT
 
     OlapCurrencyAmount:
       required:
