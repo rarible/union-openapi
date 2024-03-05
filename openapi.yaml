@@ -4951,7 +4951,6 @@ components:
       enum:
         - ACTIVE
         - FILLED
-        - HISTORICAL
         - INACTIVE
         - CANCELLED
 
