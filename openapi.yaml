@@ -1754,13 +1754,6 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - name: "searchEngine"
-          in: query
-          required: false
-          deprecated: true
-          description: "Search engine to use for search"
-          schema:
-            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1856,13 +1849,6 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - name: "searchEngine"
-          in: query
-          required: false
-          deprecated: true
-          description: "Search engine to use for search"
-          schema:
-            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -1933,13 +1919,6 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - name: "searchEngine"
-          in: query
-          required: false
-          deprecated: true
-          description: "Search engine to use for search"
-          schema:
-            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -2063,13 +2042,6 @@ paths:
           description: "Sorting by data update time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
-        - name: "searchEngine"
-          in: query
-          required: false
-          deprecated: true
-          description: "Search engine to use for search"
-          schema:
-            $ref: "#/components/schemas/SearchEngine"
       responses:
         "200":
           description: "OK"
@@ -5530,8 +5502,6 @@ components:
           type: integer
         sort:
           $ref: "#/components/schemas/ActivitySort"
-        searchEngine:
-          $ref: "#/components/schemas/SearchEngine"
 
     CollectionId:
       type: string
