@@ -5186,8 +5186,6 @@ components:
           $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
-        purchase:
-          type: boolean
         transactionHash:
           type: string
         blockchainInfo:
@@ -5221,8 +5219,6 @@ components:
           $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
-        purchase:
-          type: boolean
         transactionHash:
           type: string
         blockchainInfo:
