@@ -3165,6 +3165,9 @@ components:
         - FIEF
         - XAI
         - KROMA
+        - ZKLINK
+        - OASYS
+        - QUAI
       example: "${blockchain}"
 
     BlockchainGroup:
@@ -7193,9 +7196,12 @@ components:
         - XAI
         - KROMA
         - APTOS
+        - ZKLINK
+        - OASYS
+        - QUAI
 
     OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS):.*$"
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS|ZKLINK|OASYS|QUAI):.*$"
       type: string
 
     OlapPeriod:
@@ -7226,6 +7232,8 @@ components:
         - FIEF
         - XAI
         - APT
+        - OAS
+        - QUAI
 
     OlapCurrencyAmount:
       required:
