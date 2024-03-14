@@ -5023,6 +5023,8 @@ components:
         - SELL
         - CANCEL_LIST
         - CANCEL_BID
+        - BRIDGE_TO
+        - BRIDGE_FROM
 
     UserActivityType:
       type: string
@@ -5195,7 +5197,6 @@ components:
         - from
         - owner
         - value
-        - collection
         - transactionHash
 
     ReceiveFromChainActivity:
@@ -5228,7 +5229,6 @@ components:
         - from
         - owner
         - value
-        - collection
         - transactionHash
 
     OrderActivitySource:
