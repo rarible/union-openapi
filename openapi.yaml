@@ -5023,6 +5023,8 @@ components:
         - SELL
         - CANCEL_LIST
         - CANCEL_BID
+        - BRIDGE_TO
+        - BRIDGE_FROM
 
     UserActivityType:
       type: string
@@ -5058,6 +5060,8 @@ components:
         - $ref: "#/components/schemas/MintActivity"
         - $ref: "#/components/schemas/BurnActivity"
         - $ref: "#/components/schemas/TransferActivity"
+        - $ref: "#/components/schemas/SendToChainActivity"
+        - $ref: "#/components/schemas/ReceiveFromChainActivity"
         - $ref: "#/components/schemas/OrderMatchActivity"
         - $ref: "#/components/schemas/OrderBidActivity"
         - $ref: "#/components/schemas/OrderListActivity"
@@ -5152,6 +5156,70 @@ components:
           $ref: "#/components/schemas/BigInteger"
         purchase:
           type: boolean
+        transactionHash:
+          type: string
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - from
+        - owner
+        - value
+        - transactionHash
+
+    SendToChainActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SEND_TO_CHAIN
+        owner:
+          $ref: "#/components/schemas/UnionAddress"
+        to:
+          type: string
+        chainId:
+          $ref: "#/components/schemas/BigInteger"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        transactionHash:
+          type: string
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - from
+        - owner
+        - value
+        - transactionHash
+
+    ReceiveFromChainActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - RECEIVE_FROM_CHAIN
+        owner:
+          $ref: "#/components/schemas/UnionAddress"
+        from:
+          type: string
+        chainId:
+          $ref: "#/components/schemas/BigInteger"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
+        collection:
+          $ref: "#/components/schemas/CollectionId"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        value:
+          $ref: "#/components/schemas/BigInteger"
         transactionHash:
           type: string
         blockchainInfo:
