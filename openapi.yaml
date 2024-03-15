@@ -5040,6 +5040,8 @@ components:
         - SELL
         - CANCEL_LIST
         - CANCEL_BID
+        - BRIDGE_TO
+        - BRIDGE_FROM
 
     Activity:
       type: object
@@ -5194,10 +5196,12 @@ components:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
         - "@type"
-        - from
+        - to
+        - itemId
         - owner
         - value
         - transactionHash
+        - chainId
 
     ReceiveFromChainActivity:
       type: object
@@ -5227,9 +5231,11 @@ components:
       required:
         - "@type"
         - from
+        - itemId
         - owner
         - value
         - transactionHash
+        - chainId
 
     OrderActivitySource:
       type: string
