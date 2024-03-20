@@ -19,6 +19,7 @@ object IdParser {
     const val DELIMITER = ":"
     val SIMPLE_ITEM_ID_CHAINS = setOf(
         BlockchainDto.SOLANA,
+        BlockchainDto.ECLIPSE,
         BlockchainDto.APTOS,
     )
 
