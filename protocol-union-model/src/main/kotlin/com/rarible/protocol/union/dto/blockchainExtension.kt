@@ -26,7 +26,10 @@ private val subchains = mapOf(
     ),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
-    BlockchainGroupDto.SOLANA to listOf(BlockchainDto.SOLANA),
+    BlockchainGroupDto.SOLANA to listOf(
+        BlockchainDto.SOLANA,
+        BlockchainDto.ECLIPSE,
+    ),
     BlockchainGroupDto.APTOS to listOf(BlockchainDto.APTOS),
 )
 

@@ -3168,6 +3168,7 @@ components:
         - ZKLINK
         - OASYS
         - QUAI
+        - ECLIPSE
       example: "${blockchain}"
 
     BlockchainGroup:
@@ -7273,9 +7274,10 @@ components:
         - ZKLINK
         - OASYS
         - QUAI
+        - ECLIPSE
 
     OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS|ZKLINK|OASYS|QUAI):.*$"
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS|ZKLINK|OASYS|QUAI|ECLIPSE):.*$"
       type: string
 
     OlapPeriod:
