@@ -832,12 +832,14 @@ paths:
       description: "Returns list of collection with owned items by specified owner"
       operationId: getCollectionsWithOwnedItems
       parameters:
-        - name: "owner"
+        - name: "owners"
           in: query
           required: true
-          description: "Address of the items owner"
+          description: "Addresses of the owner"
           schema:
-            $ref: "#/components/schemas/UnionAddress"
+            type: array
+            items:
+              $ref: "#/components/schemas/UnionAddress"
         - name: "blockchains"
           description: "Since user's address can be present in several blockchains (for example, ETHEREUM and POLYGON), 
           you can use this filter to get Orders only for specific blockchains. 
