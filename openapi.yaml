@@ -824,7 +824,7 @@ paths:
           $ref: "#/components/responses/ServerError"
 
 
-  /v0.1/ownerships/byCollectionsWithOwnedItems:
+  /v0.1/ownerships/collections:
     get:
       tags:
         - "NFT Ownerships"
