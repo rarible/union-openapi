@@ -823,6 +823,58 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+
+  /v0.1/ownerships/collections:
+    get:
+      tags:
+        - "NFT Ownerships"
+      summary: "Get collections owned items by owner"
+      description: "Returns list of collection with owned items by specified owner"
+      operationId: getCollectionsWithOwnedItems
+      parameters:
+        - name: "owners"
+          in: query
+          required: true
+          description: "Addresses of the owner"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/UnionAddress"
+        - name: "blockchains"
+          description: "Since user's address can be present in several blockchains (for example, ETHEREUM and POLYGON), 
+          you can use this filter to get Orders only for specific blockchains. 
+          Or keep it empty to get Order from all blockchains"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Blockchain"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CollectionsWithOwnedItems"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+
   ######################## Order API ########################
 
   /v0.1/orders/{id}:
@@ -4461,6 +4513,31 @@ components:
         - EARLIEST
         - HIGHEST_SELL
         - LOWEST_SELL
+
+    CollectionsWithOwnedItems:
+      type: object
+      properties:
+        collections:
+          type: array
+          items:
+            $ref: "#/components/schemas/CollectionWithOwnedItems"
+        continuation:
+          type: string
+          description: "Continuation token to paginate result"
+      required:
+        - collections
+
+    CollectionWithOwnedItems:
+      type: object
+      properties:
+        collection:
+          $ref: "#/components/schemas/Collection"
+        ownedItems:
+          type: integer
+          format: int64
+      required:
+        - collection
+        - ownedItems
 
     ItemsSearchRequest:
       type: object
