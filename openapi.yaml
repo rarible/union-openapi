@@ -3222,6 +3222,10 @@ components:
         - QUAI
         - ECLIPSE
         - SAAKURU
+        - OASIS
+        - PALM
+        - MATCH
+        - FIVIRE
       example: "${blockchain}"
 
     BlockchainGroup:
@@ -7354,9 +7358,13 @@ components:
         - QUAI
         - ECLIPSE
         - SAAKURU
+        - OASIS
+        - PALM
+        - MATCH
+        - FIVIRE
 
     OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS|ZKLINK|OASYS|QUAI|ECLIPSE|SAAKURU):.*$"
+      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS|ZKLINK|OASYS|QUAI|ECLIPSE|SAAKURU|OASIS|PALM|MATCH|FIVIRE):.*$"
       type: string
 
     OlapPeriod:
@@ -7389,6 +7397,10 @@ components:
         - APT
         - OAS
         - QUAI
+        - ROSE
+        - MAT
+        - PALM
+        - FIVIRE
 
     OlapCurrencyAmount:
       required:
