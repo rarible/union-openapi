@@ -4140,6 +4140,24 @@ components:
           type: number
           format: float
 
+    ItemTraitProperty:
+      title: ItemTraitProperty
+      type: object
+      description: Item trait property
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          example: "${filterTraitKey}"
+        value:
+          type: string
+          example: "${filterTraitsValue}"
+        values:
+          type: array
+          items:
+            type: string
+
     TraitProperty:
       title: TraitProperty
       type: object
@@ -4596,7 +4614,7 @@ components:
         traits:
           type: array
           items:
-            $ref: "#/components/schemas/TraitProperty"
+            $ref: "#/components/schemas/ItemTraitProperty"
         traitRanges:
           type: array
           items:
