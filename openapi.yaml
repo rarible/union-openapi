@@ -5354,6 +5354,7 @@ components:
         - VERSUM
         - FXHASH
         - BLUR
+        - TOPAZ
 
     OrderActivityMatchSide:
       type: object
