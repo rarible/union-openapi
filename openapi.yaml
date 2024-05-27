@@ -5198,8 +5198,10 @@ components:
           $ref: "#/components/schemas/ItemId"
         value:
           $ref: "#/components/schemas/BigInteger"
-        mintPrice:
+        mintPrice: # deprecated, use mintPayment
           $ref: "#/components/schemas/BigDecimal"
+        mintPayment:
+          $ref: "#/components/schemas/Asset"
         transactionHash:
           type: string
         blockchainInfo:
