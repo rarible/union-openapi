@@ -7433,6 +7433,7 @@ components:
         - PALM
         - FIVIRE
         - SEI
+        - GLMR
 
     OlapCurrencyAmount:
       required:
