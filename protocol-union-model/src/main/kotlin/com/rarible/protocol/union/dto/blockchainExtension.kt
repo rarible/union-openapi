@@ -31,6 +31,8 @@ private val subchains = mapOf(
         BlockchainDto.SEI,
         BlockchainDto.CAMP,
         BlockchainDto.LISK,
+        BlockchainDto.ETHERLINK,
+        BlockchainDto.MOONBEAM,
     ),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
