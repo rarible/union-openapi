@@ -5779,6 +5779,10 @@ components:
         hasTraits:
           type: boolean
           default: true
+        extra:
+          type: object
+          additionalProperties:
+            type: string
       required:
         - id
         - blockchain
