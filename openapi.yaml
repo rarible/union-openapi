@@ -5779,6 +5779,9 @@ components:
         hasTraits:
           type: boolean
           default: true
+        shared:
+          type: boolean
+          default: false
         extra:
           type: object
           additionalProperties:
