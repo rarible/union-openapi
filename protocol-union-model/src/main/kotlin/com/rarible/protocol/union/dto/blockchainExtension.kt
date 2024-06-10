@@ -52,8 +52,7 @@ private val nativeCurrencies = mapOf(
     //BlockchainGroupDto.FLOW to "" // there is no 'native' currency for flow, it is bind to contract like Erc20
     BlockchainGroupDto.SOLANA to "So11111111111111111111111111111111111111112",
     BlockchainGroupDto.TEZOS to "XTZ",
-    // SHA256 from coin_type "0x1::aptos_coin::AptosCoin"
-    BlockchainGroupDto.APTOS to "91ceb1308a98389691e05158b07ed5f079ab78461a6bb8d5a4054b1bb5cb8bb6"
+    BlockchainGroupDto.APTOS to "0x1::aptos_coin::AptosCoin"
 )
 
 fun BlockchainGroupDto.nativeCurrency(): String {
