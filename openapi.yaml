@@ -4682,6 +4682,7 @@ components:
       properties:
         text:
           type: string
+          example: "a"
         fields:
           type: array
           default: [ NAME ]
@@ -4822,6 +4823,7 @@ components:
         key:
           type: string
           description: Trait key
+          example: "hat"
         order:
           $ref: '#/components/schemas/SortOrder'
         type:
