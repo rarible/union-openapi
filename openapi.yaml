@@ -4948,8 +4948,7 @@ components:
       oneOf:
         - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV2"
-        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Sell"
-        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Buy"
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3"
 
     Orders:
       type: object
@@ -6286,44 +6285,31 @@ components:
         - originFees
         - isMakeFill
 
-    EthOrderDataRaribleV2DataV3Sell:
+    EthOrderDataRaribleV2DataV3:
       type: object
       properties:
         "@type":
           type: string
           enum:
-            - ETH_RARIBLE_V2_DATA_V3_SELL
-        payout:
-          $ref: "#/components/schemas/Payout"
-        originFeeFirst:
-          $ref: "#/components/schemas/Payout"
-        originFeeSecond:
-          $ref: "#/components/schemas/Payout"
-        maxFeesBasePoint:
-          type: integer
-        marketplaceMarker:
-          type: string
+            - ETH_RARIBLE_V2_3
+        payouts:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        originFees:
+          type: array
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Payout"
+        isMakeFill:
+          type: boolean
+          description: "If true, the 'fill' part of the order applies to the 'make' side, otherwise to the 'take' side"
       required:
         - "@type"
-        - maxFeesBasePoint
-
-    EthOrderDataRaribleV2DataV3Buy:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ETH_RARIBLE_V2_DATA_V3_BUY
-        payout:
-          $ref: "#/components/schemas/Payout"
-        originFeeFirst:
-          $ref: "#/components/schemas/Payout"
-        originFeeSecond:
-          $ref: "#/components/schemas/Payout"
-        marketplaceMarker:
-          type: string
-      required:
-        - "@type"
+        - payouts
+        - originFees
+        - isMakeFill
 
     EthOrderOpenSeaV1DataV1:
       type: object
