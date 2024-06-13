@@ -4682,7 +4682,6 @@ components:
       properties:
         text:
           type: string
-          example: "a"
         fields:
           type: array
           default: [ NAME ]
