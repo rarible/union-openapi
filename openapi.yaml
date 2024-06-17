@@ -4948,6 +4948,8 @@ components:
         - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV1"
         - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV2"
         - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3"
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Sell"
+        - "$ref": "#/components/schemas/EthOrderDataRaribleV2DataV3Buy"
 
     Orders:
       type: object
@@ -6309,6 +6311,45 @@ components:
         - payouts
         - originFees
         - isMakeFill
+
+    EthOrderDataRaribleV2DataV3Sell:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_RARIBLE_V2_DATA_V3_SELL
+        payout:
+          $ref: "#/components/schemas/Payout"
+        originFeeFirst:
+          $ref: "#/components/schemas/Payout"
+        originFeeSecond:
+          $ref: "#/components/schemas/Payout"
+        maxFeesBasePoint:
+          type: integer
+        marketplaceMarker:
+          type: string
+      required:
+        - "@type"
+        - maxFeesBasePoint
+
+    EthOrderDataRaribleV2DataV3Buy:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ETH_RARIBLE_V2_DATA_V3_BUY
+        payout:
+          $ref: "#/components/schemas/Payout"
+        originFeeFirst:
+          $ref: "#/components/schemas/Payout"
+        originFeeSecond:
+          $ref: "#/components/schemas/Payout"
+        marketplaceMarker:
+          type: string
+      required:
+        - "@type"
 
     EthOrderOpenSeaV1DataV1:
       type: object
