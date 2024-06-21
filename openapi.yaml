@@ -3800,6 +3800,14 @@ components:
           type: boolean
         itemCollection:
           $ref: "#/components/schemas/ItemCollection"
+        features:
+          type: array
+          default: [ ]
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+              - NOT_FOR_SALE
       required:
         - id
         - blockchain
