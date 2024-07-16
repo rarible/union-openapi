@@ -4882,6 +4882,7 @@ components:
           type: "boolean"
         optionalRoyalties:
           type: "boolean"
+          description: "True if the execution of this order does not guarantee that the royalties will be paid. In this case, it is up to the buyer to pay the royalties."
           default: false
         createdAt:
           type: string
