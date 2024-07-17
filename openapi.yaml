@@ -3809,6 +3809,11 @@ components:
             type: string
             enum:
               - NOT_FOR_SALE
+        extra:
+          type: object
+          description: Blockchain-specific information about this NFT item particular to that blockchain's data model
+          additionalProperties:
+            type: string
       required:
         - id
         - blockchain
@@ -4877,6 +4882,7 @@ components:
           type: "boolean"
         optionalRoyalties:
           type: "boolean"
+          description: "True if the execution of this order does not guarantee that the royalties will be paid. In this case, it is up to the buyer to pay the royalties."
           default: false
         createdAt:
           type: string
@@ -5795,6 +5801,7 @@ components:
           default: false
         extra:
           type: object
+          description: Blockchain-specific information about this NFT collection particular to that blockchain's data model
           additionalProperties:
             type: string
       required:
