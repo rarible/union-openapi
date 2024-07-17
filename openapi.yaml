@@ -3809,6 +3809,11 @@ components:
             type: string
             enum:
               - NOT_FOR_SALE
+        extra:
+          type: object
+          description: Blockchain-specific information about this NFT item particular to that blockchain's data model
+          additionalProperties:
+            type: string
       required:
         - id
         - blockchain
@@ -5795,6 +5800,7 @@ components:
           default: false
         extra:
           type: object
+          description: Blockchain-specific information about this NFT collection particular to that blockchain's data model
           additionalProperties:
             type: string
       required:
