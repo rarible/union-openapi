@@ -1208,6 +1208,14 @@ paths:
             type: array
             items:
               $ref: "#/components/schemas/UnionAddress"
+        - name: "collection"
+          in: query
+          required: false
+          description: "The nft collection of order"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/CollectionId"
         - name: "origin"
           in: query
           required: false
@@ -1419,6 +1427,14 @@ paths:
           description: "The platform where the order was created"
           schema:
             "$ref": "#/components/schemas/Platform"
+        - name: "collection"
+          in: query
+          required: false
+          description: "The nft collection of order"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/CollectionId"
         - name: "origin"
           in: query
           required: false
