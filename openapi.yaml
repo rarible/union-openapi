@@ -2614,6 +2614,7 @@ paths:
       summary: "Get NFT Collection stats"
       description: "Get general statistics about Collection"
       operationId: getCollectionStats
+      deprecated: true
       parameters:
         - name: collection
           in: path
@@ -2660,6 +2661,61 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
+  /v0.1/data/collections/{collection}/statistics:
+    get:
+      tags:
+        - "NFT Data and Historical Statistics"
+      summary: "Get NFT Collection statistics"
+      description: "Get general statistics about collection"
+      operationId: getCollectionStatistics
+      parameters:
+        - name: collection
+          in: path
+          description: Identifier of collection
+          required: true
+          schema:
+            "$ref": "#/components/schemas/OlapCollectionPattern"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapCollectionStatisticsResponse"
+              example:
+                listed: 5
+                items: 10020
+                owners: 6472
+                highestSale:
+                  USD: 37.66
+                  ETH: 0.009
+                floorPrice:
+                  USD: 2635
+                  ETH: 1
+                marketCap:
+                  USD: 12195397
+                  ETH: 4627
+                volume:
+                  USD: 37.6612758599
+                  ETH: 0.009
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
   /v0.1/data/collections/{collection}/sellers:
     get:
       tags:
@@ -7783,6 +7839,54 @@ components:
           type: number
           description: Total worth of all transactions were made with nfts in this collection
           format: bigdecimal
+
+    OlapCollectionStatisticsResponse:
+      required:
+        - highestSale
+        - items
+        - listed
+        - owners
+        - volume
+        - marketCap
+        - floorPrice
+      type: object
+      properties:
+        highestSale:
+          type: object
+          description: Highest worth transaction in collection
+          additionalProperties:
+            type: number
+            format: bigdecimal
+        floorPrice:
+          type: object
+          description: Minimal price of nft in this collection available on rarible
+          additionalProperties:
+            type: number
+            format: bigdecimal
+        marketCap:
+          type: object
+          description: Market cap of collection (floor price * total item supply)
+          additionalProperties:
+            type: number
+            format: bigdecimal
+        volume:
+          type: object
+          description: Total worth of all transactions were made with nfts in this collection
+          additionalProperties:
+            type: number
+            format: bigdecimal
+        listed:
+          type: integer
+          description: Amount of currently listed items
+          format: int32
+        items:
+          type: integer
+          description: Total item supply of all nfts in the collection
+          format: int32
+        owners:
+          type: integer
+          description: Current amount of unique owners who hold nfts of this collection
+          format: int32
 
     OlapPricesResponse:
       required:
