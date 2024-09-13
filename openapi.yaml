@@ -3597,6 +3597,9 @@ components:
           description: "Alias to real coin, 'usd' means 1:1 to USD"
         rate:
           $ref: '#/components/schemas/BigDecimal'
+        decimals:
+          type: integer
+          description: "Number of decimals"
       required:
         - currencyId
         - symbol
@@ -3610,6 +3613,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Currency"
+
+    CurrencyMetadata:
+      type: object
+      required:
+        - decimals
+      properties:
+        decimals:
+          type: integer
 
     #################### Meta - Union ####################
 
