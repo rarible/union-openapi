@@ -3175,7 +3175,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Currencies"
+                $ref: "#/components/schemas/CurrenciesWithMetadata"
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
@@ -3597,14 +3597,31 @@ components:
           description: "Alias to real coin, 'usd' means 1:1 to USD"
         rate:
           $ref: '#/components/schemas/BigDecimal'
-        decimals:
-          type: integer
-          description: "Number of decimals"
       required:
         - currencyId
         - symbol
 
-    Currencies:
+    CurrencyWithMetadata:
+      type: object
+      properties:
+        currencyId:
+          $ref: '#/components/schemas/CurrencyId'
+        symbol:
+          type: string
+        abbreviation:
+          type: string
+        alias:
+          type: string
+          description: "Alias to real coin, 'usd' means 1:1 to USD"
+        decimals:
+          type: integer
+        rate:
+          $ref: '#/components/schemas/BigDecimal'
+      required:
+        - currencyId
+        - symbol
+
+    CurrenciesWithMetadata:
       type: object
       required:
         - currencies
@@ -3612,7 +3629,7 @@ components:
         currencies:
           type: array
           items:
-            $ref: "#/components/schemas/Currency"
+            $ref: "#/components/schemas/CurrencyWithMetadata"
 
     CurrencyMetadata:
       type: object
