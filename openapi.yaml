@@ -2564,7 +2564,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: filters
           in: query
           description: Filters of statistics
@@ -2621,7 +2621,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: currency
           in: query
           description: Currency of statistics
@@ -2674,7 +2674,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
       responses:
         '200':
           description: OK
@@ -2737,7 +2737,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: filters
           in: query
           description: Filters of statistics
@@ -2793,7 +2793,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: currency
           in: query
           description: Currency of statistics
@@ -2861,7 +2861,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: currency
           in: query
           description: Currency of statistics
@@ -2923,7 +2923,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: filters
           in: query
           description: Filters of statistics
@@ -2979,7 +2979,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
       responses:
         '200':
           description: OK
@@ -7542,10 +7542,6 @@ components:
         - ALEPHZERO
         - BERACHAIN
         - ABSTRACT
-
-    OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS|ZKLINK|OASYS|QUAI|ECLIPSE|SAAKURU|OASIS|PALM|MATCH|FIVIRE|SEI|CAMP|LISK|MOONBEAM|ETHERLINK|ZKCANDY|ALEPHZERO|BERACHAIN|ABSTRACT):.*$"
-      type: string
 
     OlapPeriod:
       type: string
