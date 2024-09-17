@@ -5879,8 +5879,14 @@ components:
         self:
           type: boolean
         scam:
+          deprecated: true
+          description: "Deprecated, use spamScore instead"
           type: boolean
           default: false
+        spamScore:
+          description: "Spam score of the collection, 0 - not spam, 100 - spam"
+          type: integer
+          format: int32
         hasTraits:
           type: boolean
           default: true
