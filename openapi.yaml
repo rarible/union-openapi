@@ -3597,6 +3597,10 @@ components:
           description: "Alias to real coin, 'usd' means 1:1 to USD"
         rate:
           $ref: '#/components/schemas/BigDecimal'
+        decimals:
+          type: integer
+          format: int32
+          description: "Number of decimals"
       required:
         - currencyId
         - symbol
