@@ -3604,6 +3604,7 @@ components:
       required:
         - currencyId
         - symbol
+        - decimals
 
     Currencies:
       type: object
