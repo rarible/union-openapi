@@ -44,6 +44,8 @@
         <codegen.package>com.rarible.protocol.union.dto</codegen.package>
 
         <rarible.core.version>2.7.1</rarible.core.version>
+
+        <dir.src.generated.kotlin>${project.basedir}/target/generated-sources/rarible/src/main/kotlin</dir.src.generated.kotlin>
     </properties>
 
     <dependencyManagement>
@@ -132,6 +134,26 @@
                             <version>${rarible.codegen.client.version}</version>
                         </dependency>
                     </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>add-model-generated-sources</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>add-source</goal>
+                            </goals>
+                            <configuration>
+                                <sources>
+                                    <source>${dir.src.generated.kotlin}</source>
+                                </sources>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
