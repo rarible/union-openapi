@@ -187,8 +187,8 @@ paths:
       parameters:
         - name: "blockchains"
           description: "Since user's address can be present in several blockchains (for example, ETHEREUM and POLYGON), 
-          you can use this filter to get Orders only for specific blockchains. 
-          Or keep it empty to get Order from all blockchains"
+            \ you can use this filter to get Orders only for specific blockchains. 
+            \ Or keep it empty to get Order from all blockchains"
           in: query
           required: false
           schema:
@@ -242,8 +242,8 @@ paths:
       parameters:
         - name: "blockchains"
           description: "Since user's address can be present in several blockchains (for example, ETHEREUM and POLYGON), 
-          you can use this filter to get Orders only for specific blockchains. 
-          Or keep it empty to get Order from all blockchains"
+            \ you can use this filter to get Orders only for specific blockchains. 
+            \ Or keep it empty to get Order from all blockchains"
           in: query
           required: false
           schema:
@@ -488,9 +488,9 @@ paths:
       tags:
         - "Search API"
       summary: "Search NFT collection traits"
-      description: "Returns aggregation of existing traits for specified collections with counter for each trait type/value.  
-      This is full-text-search, where you can specify filter for trait keys not precisely 
-      (for example, results `back` filter include `Background` trait)"
+      description: "Returns aggregation of existing traits for specified collections with counter for each trait type/value.\\
+        \ This is full-text-search, where you can specify filter for trait keys not precisely\\
+        \ (for example, results `back` filter include `Background` trait)"
       operationId: searchTraits
       parameters:
         - name: filter
@@ -842,8 +842,8 @@ paths:
               $ref: "#/components/schemas/UnionAddress"
         - name: "blockchains"
           description: "Since user's address can be present in several blockchains (for example, ETHEREUM and POLYGON), 
-          you can use this filter to get Orders only for specific blockchains. 
-          Or keep it empty to get Order from all blockchains"
+            \ you can use this filter to get Orders only for specific blockchains. 
+            \ Or keep it empty to get Order from all blockchains"
           in: query
           required: false
           schema:
@@ -1135,9 +1135,9 @@ paths:
       tags:
         - "NFT Sales"
       summary: "Get all Orders (for sync)"
-      description: "Returns all sales & transfers in accordance with specified filters and sorted by `db updated` date.
-      During internal updates (like migrations) Orders can be updated for technical reasons. In such case, `last update`
-      date won't be changed. If you want to store Orders in your own storage and keep it synced, use this method."
+      description: "Returns all sales & transfers in accordance with specified filters and sorted by `db updated` date.\
+        \ During internal updates (like migrations) Orders can be updated for technical reasons. In such case, `last update`\
+        \ date won't be changed. If you want to store Orders in your own storage and keep it synced, use this method."
       operationId: getAllSync
       parameters:
         - name: "blockchain"
@@ -1188,8 +1188,8 @@ paths:
           in: query
           required: false
           description: "Since user's address can be present in several blockchains (for example, ETHEREUM and POLYGON), 
-          you can use this filter to get Orders only for specific blockchains. 
-          Or keep it empty to get Order from all blockchains"
+            \ you can use this filter to get Orders only for specific blockchains. 
+            \ Or keep it empty to get Order from all blockchains"
           schema:
             type: array
             items:
@@ -1407,8 +1407,8 @@ paths:
           in: query
           required: true
           description: "Since user's address can be present in several blockchains (for example, ETHEREUM and POLYGON), 
-          you can use this filter to get Orders only for specific blockchains. 
-          Or keep it empty to get Order from all blockchains"
+            \ you can use this filter to get Orders only for specific blockchains. 
+            \ Or keep it empty to get Order from all blockchains"
           schema:
             type: array
             items:
@@ -1748,8 +1748,8 @@ paths:
       tags:
         - "NFT Activities"
       summary: "Get user Activities"
-      description: "Returns user's Activities (like transfers, mints, sells etc) sorted by date.
-      This API is deprecated in favor of `Search Activities`"
+      description: "Returns user's Activities (like transfers, mints, sells etc) sorted by date.\
+        \ This API is deprecated in favor of `Search Activities`"
       deprecated: true
       operationId: getActivitiesByUser
       parameters:
@@ -1839,8 +1839,8 @@ paths:
       tags:
         - "NFT Activities"
       summary: "Get users Activities"
-      description: "Returns users Activities (like transfers, mints, sells etc) sorted by date.
-      This API is deprecated in favor of `Search Activities`"
+      description: "Returns users Activities (like transfers, mints, sells etc) sorted by date.\
+        \ This API is deprecated in favor of `Search Activities`"
       deprecated: true
       operationId: getActivitiesByUsers
       requestBody:
@@ -1866,8 +1866,8 @@ paths:
       tags:
         - "NFT Activities"
       summary: "Get NFT Activities"
-      description: "Returns Activities related to specified NFT and sorted by date.
-      This API is deprecated in favor of `Search Activities`"
+      description: "Returns Activities related to specified NFT and sorted by date.\
+        \ This API is deprecated in favor of `Search Activities`"
       deprecated: true
       operationId: getActivitiesByItem
       parameters:
@@ -1934,8 +1934,8 @@ paths:
       tags:
         - "NFT Activities"
       summary: "Get NFT Collection Activities"
-      description: "Returns Activities related to NFTs from specified Collection and sorted by date.
-      This API is deprecated in favor of `Search Activities`"
+      description: "Returns Activities related to NFTs from specified Collection and sorted by date.\
+        \ This API is deprecated in favor of `Search Activities`"
       deprecated: true
       operationId: getActivitiesByCollection
       parameters:
@@ -2004,9 +2004,9 @@ paths:
       tags:
         - "NFT Activities"
       summary: "Get all Activities (for sync)"
-      description: "Returns all Activities in accordance with specified filters and sorted by `db updated` date.
-      During internal updates (like migrations) Activities can be updated for technical reasons. In such case, `date`
-      field won't be changed. If you want to store Activities in your own storage and keep it synced, use this method."
+      description: "Returns all Activities in accordance with specified filters and sorted by `db updated` date.\
+        \ During internal updates (like migrations) Activities can be updated for technical reasons. In such case, `date`\
+        \ field won't be changed. If you want to store Activities in your own storage and keep it synced, use this method."
       operationId: getAllActivitiesSync
       parameters:
         - name: "blockchain"
@@ -2056,8 +2056,8 @@ paths:
       tags:
         - "NFT Activities"
       summary: "Get all Activities"
-      description: "Returns all Activities in accordance with specified filters and sorted by date. 
-      This API is deprecated in favor of `Search Activities`"
+      description: "Returns all Activities in accordance with specified filters and sorted by date.\
+        \ This API is deprecated in favor of `Search Activities`"
       deprecated: true
       operationId: getAllActivities
       parameters:
@@ -2262,8 +2262,8 @@ paths:
       parameters:
         - name: "blockchains"
           description: "Since user's address can be present in several blockchains (for example, ETHEREUM and POLYGON), 
-          you can use this filter to get Orders only for specific blockchains. 
-          Or keep it empty to get Order from all blockchains"
+            \ you can use this filter to get Orders only for specific blockchains. 
+            \ Or keep it empty to get Order from all blockchains"
           in: query
           required: false
           schema:
@@ -2564,7 +2564,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: filters
           in: query
           description: Filters of statistics
@@ -2621,7 +2621,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: currency
           in: query
           description: Currency of statistics
@@ -2674,7 +2674,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
       responses:
         '200':
           description: OK
@@ -2737,7 +2737,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: filters
           in: query
           description: Filters of statistics
@@ -2793,7 +2793,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: currency
           in: query
           description: Currency of statistics
@@ -2861,7 +2861,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: currency
           in: query
           description: Currency of statistics
@@ -2923,7 +2923,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
         - name: filters
           in: query
           description: Filters of statistics
@@ -2979,7 +2979,7 @@ paths:
           description: Identifier of collection
           required: true
           schema:
-            "$ref": "#/components/schemas/OlapCollectionPattern"
+            type: string
       responses:
         '200':
           description: OK
@@ -7542,10 +7542,6 @@ components:
         - ALEPHZERO
         - BERACHAIN
         - ABSTRACT
-
-    OlapCollectionPattern:
-      pattern: "^(ETHEREUM|FLOW|TEZOS|POLYGON|MANTLE|ARBITRUM|CHILIZ|LIGHTLINK|ZKSYNC|ASTARZKEVM|BASE|SOLANA|IMMUTABLEX|RARI|CELO|FIEF|XAI|KROMA|APTOS|ZKLINK|OASYS|QUAI|ECLIPSE|SAAKURU|OASIS|PALM|MATCH|FIVIRE|SEI|CAMP|LISK|MOONBEAM|ETHERLINK|ZKCANDY|ALEPHZERO|BERACHAIN|ABSTRACT):.*$"
-      type: string
 
     OlapPeriod:
       type: string
