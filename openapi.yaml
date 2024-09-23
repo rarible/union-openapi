@@ -62,6 +62,8 @@ tags:
     x-controller: "BalanceController"
   - name: "Indexer blocks"
     x-controller: "BlockController"
+  - name: "Reconciliation"
+    x-controller: "ReconciliationController"
 
 paths:
 
