@@ -3216,6 +3216,57 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+
+  ######################### Reconciliation API ####################
+
+  /v0.1/reconciliation/items:
+    get:
+      tags:
+        - "Reconciliation API"
+      summary: "Get IDs of items updated after a specific datetime."
+      description: "Return user's balance of specified currency"
+      operationId: getReconciliationItems
+      parameters:
+        - name: "updatedAfterInclusive"
+          in: query
+          required: true
+          allowEmptyValue: true
+          description: "Only items with lastUpdatedAt after (inclusive) will be returned"
+          schema:
+            type: string
+            format: date-time
+        - name: "updatedBeforeExclusive"
+          in: query
+          required: true
+          allowEmptyValue: true
+          description: "Only items with lastUpdatedAt before (exclusive) will be returned"
+          schema:
+            type: string
+            format: date-time
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Paging cursor"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The maximum number of results to be returned. If not specified, a predefined number is used."
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReconciliationEntities"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################### Domain API #########################
 
   "/v0.1/blocks/latestIndexed":
@@ -8029,6 +8080,37 @@ components:
       oneOf:
         - $ref: "#/components/schemas/OlapCollectionVolumeChangeEvent"
         - $ref: "#/components/schemas/OlapCollectionFloorPriceByCurrencyChangeEvent"
+
+
+  #======================== Reconciliation responses ==========================#
+
+    ReconciliationEntities:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReconciliationEntity"
+        continuation:
+          type: string
+      required:
+        - entities
+
+    ReconciliationEntity:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: integer
+          format: int64
+        lastUpdatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - version
+        - lastUpdatedAt
 
   #======================== Responses ============================#
 
