@@ -3227,6 +3227,13 @@ paths:
       description: "Return user's balance of specified currency"
       operationId: getReconciliationItems
       parameters:
+        - name: "blockchain"
+          in: query
+          required: true
+          allowEmptyValue: true
+          description: "Blockchain name"
+          schema:
+            $ref: "#/components/schemas/Blockchain"
         - name: "updatedAfterInclusive"
           in: query
           required: true
