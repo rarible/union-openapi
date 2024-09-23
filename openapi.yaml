@@ -3222,7 +3222,7 @@ paths:
   /v0.1/reconciliation/items:
     get:
       tags:
-        - "Reconciliation API"
+        - "Reconciliation"
       summary: "Get IDs of items updated after a specific datetime."
       description: "Return user's balance of specified currency"
       operationId: getReconciliationItems
