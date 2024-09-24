@@ -3962,6 +3962,9 @@ components:
           description: Blockchain-specific information about this NFT item particular to that blockchain's data model
           additionalProperties:
             type: string
+        version:
+          type: integer
+          format: int64
       required:
         - id
         - blockchain
