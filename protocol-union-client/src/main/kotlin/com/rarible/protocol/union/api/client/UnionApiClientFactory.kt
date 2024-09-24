@@ -62,6 +62,10 @@ open class UnionApiClientFactory(
         return DataControllerApi(createApiClient())
     }
 
+    fun createReconciliationApiClient(): ReconciliationControllerApi {
+        return ReconciliationControllerApi(createApiClient())
+    }
+
     private fun createApiClient(): ApiClient {
         val jacksonMapper = ApiClient.createDefaultObjectMapper()
             .registerModule(UnionPrimitivesJacksonModule)
