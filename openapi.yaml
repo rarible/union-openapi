@@ -3226,7 +3226,7 @@ paths:
       tags:
         - "Reconciliation"
       summary: "Get IDs of items updated after a specific datetime."
-      description: "Return user's balance of specified currency"
+      description: "Return short view of items updated after a specific datetime."
       operationId: getReconciliationItems
       parameters:
         - name: "blockchain"
