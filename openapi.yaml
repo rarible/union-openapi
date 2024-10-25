@@ -8120,6 +8120,9 @@ components:
         lastUpdatedAt:
           type: string
           format: date-time
+        deleted:
+          type: boolean
+          default: false
       required:
         - id
         - version
