@@ -3375,6 +3375,7 @@ components:
         - ALEPHZERO
         - BERACHAIN
         - ABSTRACT
+        - SHAPE
       example: "${blockchain}"
 
     BlockchainGroup:
@@ -7605,6 +7606,7 @@ components:
         - ALEPHZERO
         - BERACHAIN
         - ABSTRACT
+        - SHAPE
 
     OlapPeriod:
       type: string
