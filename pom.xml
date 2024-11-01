@@ -34,7 +34,7 @@
     <version>${revision}</version>
 
     <properties>
-        <revision>1.110.101</revision>
+        <revision>1.111.0</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
         <rarible.codegen.server.version>1.4.0</rarible.codegen.server.version>
