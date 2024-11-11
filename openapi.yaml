@@ -4443,6 +4443,9 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/OriginOrders"
+        version:
+          type: integer
+          format: int64
       required:
         - id
         - blockchain
