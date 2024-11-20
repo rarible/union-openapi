@@ -4486,6 +4486,9 @@ components:
             $ref: "#/components/schemas/Creator"
         lazyValue:
           $ref: "#/components/schemas/BigInteger"
+        version:
+          type: integer
+          format: int64
       required:
         - id
         - blockchain
@@ -5075,6 +5078,9 @@ components:
             $ref: "#/components/schemas/UnionAddress"
         data:
           $ref: "#/components/schemas/OrderData"
+        version:
+          type: integer
+          format: int64
       required:
         - id
         - platform
@@ -5336,6 +5342,9 @@ components:
           type: string
         reverted:
           type: boolean
+        version:
+          type: integer
+          format: int64
       oneOf:
         - $ref: "#/components/schemas/MintActivity"
         - $ref: "#/components/schemas/BurnActivity"
@@ -5965,6 +5974,9 @@ components:
           description: Blockchain-specific information about this NFT collection particular to that blockchain's data model
           additionalProperties:
             type: string
+        version:
+          type: integer
+          format: int64
       required:
         - id
         - blockchain
