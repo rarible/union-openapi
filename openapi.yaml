@@ -2553,6 +2553,72 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
+  /v0.1/data/rankings/collections:
+    get:
+      tags:
+        - "NFT Data and Historical Statistics"
+      summary: "Get NFT Collections leaderboard"
+      description: "Collections leaderboard"
+      operationId: getCollectionsRanking
+      parameters:
+        - name: blockchain
+          in: query
+          description: Blockchain
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapBlockchain"
+        - name: period
+          in: query
+          description: Time period for aggregation
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: sort
+          in: query
+          description: Collections sorting
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapRankingLeaderboardSort"
+        - name: direction
+          in: query
+          description: Collections sorting direction
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapRankingLeaderboardSortDirection"
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: continuation
+          in: query
+          description: Page reference. Taken from previous response
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapCollectionsRankingResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
   /v0.1/data/collections/{collection}/transactions:
     get:
       tags:
@@ -7676,6 +7742,23 @@ components:
           description: Amount of currency
           format: bigdecimal
 
+    OlapPriceWithUsd:
+      required:
+        - currency
+        - value
+      type: object
+      properties:
+        currency:
+          type: string
+        value:
+          type: number
+          description: Amount of currency
+          format: bigdecimal
+        valueUsd:
+          type: number
+          description: Amount in USD
+          format: bigdecimal
+
     OlapCurrencyAmountWithChange:
       required:
         - currency
@@ -7795,6 +7878,26 @@ components:
           * `COLLECTION_ASC` - sort by collection id, ascending order
           * `COLLECTION_DESC` - sort by collection id, descending order
 
+    OlapRankingLeaderboardSort:
+      type: string
+      default: VOLUME
+      enum:
+        - VOLUME
+        - VOLUME_CHANGE
+        - FLOOR
+        - FLOOR_CHANGE
+        - SALES
+        - SALES_CHANGE
+        - LISTED
+        - OWNERS
+
+    OlapRankingLeaderboardSortDirection:
+      type: string
+      default: DESC
+      enum:
+        - ASC
+        - DESC
+
     OlapTradesLeaderboardSourceGroup:
       type: string
       enum:
@@ -7814,6 +7917,16 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/OlapCollectionLeaderboardEntry"
+
+    OlapCollectionsRankingResponse:
+      type: object
+      properties:
+        continuation:
+          type: string
+        result:
+          type: array
+          items:
+            "$ref": "#/components/schemas/OlapCollectionLeaderboardItem"
 
     OlapUserVolumeRankingResponse:
       type: object
@@ -7855,6 +7968,36 @@ components:
         ownersCount:
           type: integer
           format: int32
+
+    OlapCollectionLeaderboardItem:
+      required:
+        - id
+        - ownersCount
+        - totalSupply
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier of collection
+        owners:
+          type: integer
+          format: int32
+        listed:
+          type: integer
+          format: int32
+        sales:
+          type: integer
+          format: int32
+        supply:
+          type: integer
+          format: int32
+        volume:
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+        floor:
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+        floorChange:
+          type: number
+          format: bigdecimal
 
     OlapLeaderboardPeriod:
       type: string
