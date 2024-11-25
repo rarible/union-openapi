@@ -2563,12 +2563,14 @@ paths:
       description: "Collections leaderboard"
       operationId: getCollectionLeaderboard
       parameters:
-        - name: blockchain
+        - name: blockchains
           in: query
-          description: Blockchain
+          description: Blockchain networks
           required: false
           schema:
-            "$ref": "#/components/schemas/OlapBlockchain"
+            type: array
+            items:
+              $ref: "#/components/schemas/OlapBlockchain"
         - name: period
           in: query
           description: Time period for aggregation
