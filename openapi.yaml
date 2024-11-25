@@ -2593,12 +2593,14 @@ paths:
             type: integer
             format: int32
             default: 10
-        - name: continuation
+        - name: offset
           in: query
-          description: Page reference. Taken from previous response
+          description: Offset reference
           required: false
           schema:
-            type: string
+            type: integer
+            format: int32
+            default: 0
       responses:
         '200':
           description: OK
@@ -7921,8 +7923,6 @@ components:
     OlapCollectionsRankingResponse:
       type: object
       properties:
-        continuation:
-          type: string
         result:
           type: array
           items:
@@ -7972,14 +7972,17 @@ components:
     OlapCollectionLeaderboardItem:
       required:
         - id
-        - ownersCount
-        - totalSupply
+        - owners
+        - items
       type: object
       properties:
         id:
           type: string
           description: Identifier of collection
         owners:
+          type: integer
+          format: int32
+        items:
           type: integer
           format: int32
         listed:
