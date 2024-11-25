@@ -2449,7 +2449,7 @@ paths:
   /v0.1/data/rankings/collections/volume:
     get:
       tags:
-        - "NFT Data and Historical Statistics"
+        - "v2.0"
       summary: "Get NFT Collections volume"
       description: "Collections leaderboard by trade activity"
       operationId: getCollectionRankingByVolume
