@@ -7999,6 +7999,7 @@ components:
         - id
         - owners
         - items
+        - floorHistory
       type: object
       properties:
         id:
@@ -8006,19 +8007,16 @@ components:
           description: Identifier of collection
         owners:
           type: integer
-          format: int32
+          format: int64
         items:
           type: integer
-          format: int32
+          format: int64
         listed:
           type: integer
-          format: int32
+          format: int64
         sales:
           type: integer
-          format: int32
-        supply:
-          type: integer
-          format: int32
+          format: int64
         volume:
           "$ref": "#/components/schemas/OlapPriceWithUsd"
         floor:
