@@ -7999,6 +7999,9 @@ components:
         - id
         - owners
         - items
+        - listed
+        - sales
+        - volume
         - floorHistory
       type: object
       properties:
