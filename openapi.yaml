@@ -8023,7 +8023,7 @@ components:
           "$ref": "#/components/schemas/OlapPriceWithUsd"
         floor:
           "$ref": "#/components/schemas/OlapPriceWithUsd"
-        floorChange:
+        floorChangePercent:
           type: number
           format: bigdecimal
         floorHistory:
