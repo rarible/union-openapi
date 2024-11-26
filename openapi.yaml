@@ -7765,6 +7765,26 @@ components:
           description: Amount in USD
           format: bigdecimal
 
+    OlapHistoryValuesByTimestamps:
+      required:
+        - timestamps
+        - values
+      type: object
+      properties:
+        timestamps:
+          type: array
+          description: Timestamps of historical statistics
+          items:
+            type: int64
+            description: Unix epoch of historical statistics
+        values:
+          type: array
+          description: Values of historical statistics
+          items:
+            type: number
+            description: Value of historical statistics
+            format: bigdecimal
+
     OlapCurrencyAmountWithChange:
       required:
         - currency
@@ -8005,6 +8025,8 @@ components:
         floorChange:
           type: number
           format: bigdecimal
+        floorHistory:
+          "$ref": "#/components/schemas/OlapHistoryValuesByTimestamps"
 
     OlapLeaderboardPeriod:
       type: string
