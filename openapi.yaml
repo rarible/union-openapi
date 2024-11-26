@@ -7775,7 +7775,8 @@ components:
           type: array
           description: Timestamps of historical statistics
           items:
-            type: int64
+            type: integer
+            format: int64
             description: Unix epoch of historical statistics
         values:
           type: array
