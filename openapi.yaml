@@ -5976,7 +5976,7 @@ components:
             - TEZOS_NFT
             - TEZOS_MT
             - SOLANA
-            - ECLIPSE
+            - TOKEN_GROUP_2022
             - IMMUTABLEX
             - APTOS
         status:
