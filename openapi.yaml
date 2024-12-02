@@ -7738,6 +7738,7 @@ components:
         - GLMR
         - AZERO
         - BERA
+        - TLOS
 
     OlapCurrencyAmount:
       required:
