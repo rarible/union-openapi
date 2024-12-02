@@ -8286,6 +8286,64 @@ components:
         - $ref: "#/components/schemas/OlapCollectionVolumeChangeEvent"
         - $ref: "#/components/schemas/OlapCollectionFloorPriceByCurrencyChangeEvent"
 
+    #======================== Olap events for leaderboard 2.0 ==========================#
+
+    OlapCollectionStatsEvent:
+      type: object
+      required:
+        - collectionId
+        - eventId
+        - data
+      properties:
+        eventId:
+          type: string
+        collectionId:
+          $ref: "#/components/schemas/CollectionId"
+        eventTimeMarks:
+          $ref: "#/components/schemas/EventTimeMarks"
+      oneOf:
+        - $ref: "#/components/schemas/OlapCollectionStatsVolumeChangeEvent"
+
+    OlapCollectionStatsVolumeChangeEvent:
+      type: object
+      required:
+        - "@type"
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/OlapCollectionStatsVolumeChangeData"
+        "@type":
+          type: string
+          enum:
+            - VOLUME_CHANGE
+
+    OlapCollectionStatsVolumeChangeData:
+      type: object
+      required:
+        - period
+        - currencyId
+        - volumeNative
+        - volumeUsd
+        - updatedAt
+      properties:
+        period:
+          $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        currencyId:
+          $ref: '#/components/schemas/CurrencyId'
+        volumeNative:
+          type: number
+          format: bigdecimal
+          description: volume in native currency for the given period, if period is null it is total volume
+        volumeUsd:
+          type: number
+          format: bigdecimal
+          description: volume in usd for the given period, if period is null it is total volume
+        updatedAt:
+          type: string
+          format: date-time
+          description: when the value was updated
 
   #======================== Reconciliation responses ==========================#
 
