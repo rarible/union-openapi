@@ -8288,7 +8288,7 @@ components:
 
     #======================== Olap events for leaderboard 2.0 ==========================#
 
-    OlapCollectionLeaderboardEvent:
+    OlapCollectionStatsEvent:
       type: object
       required:
         - collectionId
@@ -8302,9 +8302,9 @@ components:
         eventTimeMarks:
           $ref: "#/components/schemas/EventTimeMarks"
       oneOf:
-        - $ref: "#/components/schemas/OlapCollectionLeaderboardVolumeChangeEvent"
+        - $ref: "#/components/schemas/OlapCollectionStatsVolumeChangeEvent"
 
-    OlapCollectionLeaderboardVolumeChangeEvent:
+    OlapCollectionStatsVolumeChangeEvent:
       type: object
       required:
         - "@type"
@@ -8313,22 +8313,25 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schemas/OlapCollectionLeaderboardVolumeForPeriodData"
+            $ref: "#/components/schemas/OlapCollectionStatsVolumeChangeData"
         "@type":
           type: string
           enum:
             - VOLUME_CHANGE
 
-    OlapCollectionLeaderboardVolumeForPeriodData:
+    OlapCollectionStatsVolumeChangeData:
       type: object
       required:
         - period
+        - currencyId
         - volumeNative
         - volumeUsd
         - updatedAt
       properties:
         period:
           $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        currencyId:
+          $ref: '#/components/schemas/CurrencyId'
         volumeNative:
           type: number
           format: bigdecimal

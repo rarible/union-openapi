@@ -30,8 +30,8 @@ class UnionEventTopicProvider {
             return "protocol.$environment.olap.collection"
         }
 
-        fun getOlapCollectionLeaderboardTopic(environment: String): String {
-            return "protocol.$environment.olap.collection.leaderboard"
+        fun getOlapCollectionStatsTopic(environment: String): String {
+            return "protocol.$environment.olap.collection.stats"
         }
     }
 }
