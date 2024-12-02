@@ -8002,24 +8002,17 @@ components:
     OlapCollectionLeaderboardItem:
       required:
         - id
-        - owners
         - items
-        - listed
         - sales
         - volume
         - floorHistory
+        - globalStats
       type: object
       properties:
         id:
           type: string
           description: Identifier of collection
-        owners:
-          type: integer
-          format: int64
         items:
-          type: integer
-          format: int64
-        listed:
           type: integer
           format: int64
         sales:
@@ -8027,13 +8020,27 @@ components:
           format: int64
         volume:
           "$ref": "#/components/schemas/OlapPriceWithUsd"
-        floor:
-          "$ref": "#/components/schemas/OlapPriceWithUsd"
         floorChangePercent:
           type: number
           format: bigdecimal
         floorHistory:
           "$ref": "#/components/schemas/OlapHistoryValuesByTimestamps"
+        globalStats:
+          "$ref": "#/components/schemas/OlapGlobalStats"
+
+    OlapGlobalStats:
+      type: object
+      properties:
+        listed:
+          type: integer
+          format: int64
+        owners:
+          type: integer
+          format: int64
+        floor:
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+        topOffer:
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
 
     OlapLeaderboardPeriod:
       type: string
@@ -8347,7 +8354,7 @@ components:
           format: date-time
           description: when the value was updated
 
-  #======================== Reconciliation responses ==========================#
+    #======================== Reconciliation responses ==========================#
 
     ReconciliationEntities:
       type: object
