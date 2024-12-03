@@ -3448,6 +3448,8 @@ components:
         - BERACHAIN
         - ABSTRACT
         - SHAPE
+        - TELOS
+
       example: "${blockchain}"
 
     BlockchainGroup:
@@ -7695,6 +7697,7 @@ components:
         - BERACHAIN
         - ABSTRACT
         - SHAPE
+        - TELOS
 
     OlapPeriod:
       type: string
@@ -7735,6 +7738,7 @@ components:
         - GLMR
         - AZERO
         - BERA
+        - TLOS
 
     OlapCurrencyAmount:
       required:
