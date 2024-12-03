@@ -8354,7 +8354,7 @@ components:
           format: date-time
           description: when the value was updated
 
-    #======================== Reconciliation responses ==========================#
+  #======================== Reconciliation responses ==========================#
 
     ReconciliationEntities:
       type: object
