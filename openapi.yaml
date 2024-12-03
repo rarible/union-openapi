@@ -8315,9 +8315,7 @@ components:
         - data
       properties:
         data:
-          type: array
-          items:
-            $ref: "#/components/schemas/OlapCollectionStatsVolumeChangeData"
+          $ref: "#/components/schemas/OlapCollectionStatsVolumeChangeData"
         "@type":
           type: string
           enum:
