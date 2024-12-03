@@ -8026,6 +8026,10 @@ components:
 
     OlapGlobalStats:
       type: object
+      required:
+        - listed
+        - items
+        - owners
       properties:
         listed:
           type: integer
