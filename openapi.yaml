@@ -8002,7 +8002,6 @@ components:
     OlapCollectionLeaderboardItem:
       required:
         - id
-        - items
         - sales
         - volume
         - floorHistory
@@ -8012,9 +8011,6 @@ components:
         id:
           type: string
           description: Identifier of collection
-        items:
-          type: integer
-          format: int64
         sales:
           type: integer
           format: int64
@@ -8032,6 +8028,9 @@ components:
       type: object
       properties:
         listed:
+          type: integer
+          format: int64
+        items:
           type: integer
           format: int64
         owners:
