@@ -2627,7 +2627,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  /v2.0/data/collections/{id}:
+  /v2.0/data/collections/{id}/statistics:
     get:
       tags:
         - "Collection Statistics"
@@ -8220,34 +8220,19 @@ components:
     OlapCollectionStatisticsWithPeriodResponse:
       type: object
       required:
-        - items
-        - listed
-        - owners
-        - volume
+        - totalVolume
         - periodVolume
-        - floorPrice
+        - globalStats
       properties:
-        items:
-          type: integer
-          description: Total item supply of all nfts in the collection
-          format: int64
-        listed:
-          type: integer
-          description: Amount of currently listed items
-          format: int64
-        owners:
-          type: integer
-          description: Current amount of unique owners who hold nfts of this collection
-          format: int64
-        volume:
+        totalVolume:
           description: Total worth of all transactions were made with nfts in this collection
           "$ref": "#/components/schemas/OlapPriceWithUsd"
         periodVolume:
           description: Period (e.g., 1-day) worth of all transactions were made with nfts in this collection
           "$ref": "#/components/schemas/OlapPriceWithUsd"
-        floorPrice:
-          description: Minimal price of nft in this collection available on rarible
-          "$ref": "#/components/schemas/OlapPriceWithUsd"
+        globalStats:
+          description: Global (not period-specific) stats for this collection
+          "$ref": "#/components/schemas/OlapGlobalStats"
 
     OlapPricesResponse:
       required:
