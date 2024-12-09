@@ -50,6 +50,8 @@ tags:
     x-controller: "CollectionController"
   - name: "Collection Leader Board"
     x-controller: "CollectionLeaderboardController"
+  - name: "Collection Statistics"
+    x-controller: "CollectionStatisticsController"
   - name: "NFT Data and Historical Statistics"
     x-controller: "DataController"
   - name: "Domain lookup"
@@ -2624,6 +2626,47 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapError"
+
+  /v2.0/data/collections/{id}/statistics:
+    get:
+      tags:
+        - "Collection Statistics"
+      summary: "Get statistics with volume by period by collection ID"
+      description: "Collection statistics by ID"
+      operationId: getCollectionStatisticsWithPeriod
+      parameters:
+        - name: id
+          in: path
+          description: Collection ID
+          required: true
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: period
+          in: query
+          description: Time period for aggregation
+          required: true
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapCollectionStatisticsWithPeriodResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
 
   /v0.1/data/collections/{collection}/transactions:
     get:
@@ -8173,6 +8216,23 @@ components:
           type: integer
           description: Current amount of unique owners who hold nfts of this collection
           format: int32
+
+    OlapCollectionStatisticsWithPeriodResponse:
+      type: object
+      required:
+        - totalVolume
+        - periodVolume
+        - globalStats
+      properties:
+        totalVolume:
+          description: Total worth of all transactions were made with nfts in this collection
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+        periodVolume:
+          description: Period (e.g., 1-day) worth of all transactions were made with nfts in this collection
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+        globalStats:
+          description: Global (not period-specific) stats for this collection
+          "$ref": "#/components/schemas/OlapGlobalStats"
 
     OlapPricesResponse:
       required:
