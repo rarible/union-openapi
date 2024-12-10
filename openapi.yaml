@@ -2627,13 +2627,46 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
-  /v2.0/data/collections/{id}/statistics:
+  /v2.0/data/collections/{id}/statistics/global:
     get:
       tags:
         - "Collection Statistics"
-      summary: "Get statistics with volume by period by collection ID"
-      description: "Collection statistics by ID"
-      operationId: getCollectionStatisticsWithPeriod
+      summary: "Get global (period-independent) statistics by collection ID"
+      description: "Global collection statistics by ID"
+      operationId: getGlobalCollectionStatistics
+      parameters:
+        - name: id
+          in: path
+          description: Collection ID
+          required: true
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapGlobalCollectionStatisticsResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  /v2.0/data/collections/{id}/statistics/period:
+    get:
+      tags:
+        - "Collection Statistics"
+      summary: "Get period-based statistics by collection ID"
+      description: "Period-based collection statistics by ID"
+      operationId: getPeriodCollectionStatistics
       parameters:
         - name: id
           in: path
@@ -2653,7 +2686,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/OlapCollectionStatisticsWithPeriodResponse"
+                "$ref": "#/components/schemas/OlapPeriodCollectionStatisticsResponse"
         '400':
           description: Bad Request
           content:
@@ -8065,9 +8098,9 @@ components:
         floorHistory:
           "$ref": "#/components/schemas/OlapHistoryValuesByTimestamps"
         globalStats:
-          "$ref": "#/components/schemas/OlapGlobalStats"
+          "$ref": "#/components/schemas/OlapCollectionLeaderboardStatistics"
 
-    OlapGlobalStats:
+    OlapCollectionLeaderboardStatistics:
       type: object
       required:
         - listed
@@ -8217,22 +8250,40 @@ components:
           description: Current amount of unique owners who hold nfts of this collection
           format: int32
 
-    OlapCollectionStatisticsWithPeriodResponse:
+    OlapGlobalCollectionStatisticsResponse:
       type: object
-      required:
-        - totalVolume
-        - periodVolume
-        - globalStats
       properties:
-        totalVolume:
-          description: Total worth of all transactions were made with nfts in this collection
+        listed:
+          type: integer
+          format: int64
+        items:
+          type: integer
+          format: int64
+        owners:
+          type: integer
+          format: int64
+        floor:
           "$ref": "#/components/schemas/OlapPriceWithUsd"
-        periodVolume:
-          description: Period (e.g., 1-day) worth of all transactions were made with nfts in this collection
+        volume:
+          description: Total worth of all transactions with items in this collection
           "$ref": "#/components/schemas/OlapPriceWithUsd"
-        globalStats:
-          description: Global (not period-specific) stats for this collection
-          "$ref": "#/components/schemas/OlapGlobalStats"
+      required:
+        - listed
+        - items
+        - owners
+        - volume
+
+    OlapPeriodCollectionStatisticsResponse:
+      type: object
+      properties:
+        period:
+          "$ref": "#/components/schemas/OlapLeaderboardPeriod"
+        volume:
+          description: Period (e.g., 1-day) worth of all transactions with items in this collection
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+      required:
+        - period
+        - volume
 
     OlapPricesResponse:
       required:
