@@ -50,6 +50,8 @@ tags:
     x-controller: "CollectionController"
   - name: "Collection Leader Board"
     x-controller: "CollectionLeaderboardController"
+  - name: "Collection Statistics"
+    x-controller: "CollectionStatisticsController"
   - name: "NFT Data and Historical Statistics"
     x-controller: "DataController"
   - name: "Domain lookup"
@@ -2624,6 +2626,80 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapError"
+
+  /v2.0/data/collections/{id}/statistics/global:
+    get:
+      tags:
+        - "Collection Statistics"
+      summary: "Get global (period-independent) statistics by collection ID"
+      description: "Global collection statistics by ID"
+      operationId: getGlobalCollectionStatistics
+      parameters:
+        - name: id
+          in: path
+          description: Collection ID
+          required: true
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapGlobalCollectionStatisticsResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  /v2.0/data/collections/{id}/statistics/period:
+    get:
+      tags:
+        - "Collection Statistics"
+      summary: "Get period-based statistics by collection ID"
+      description: "Period-based collection statistics by ID"
+      operationId: getPeriodCollectionStatistics
+      parameters:
+        - name: id
+          in: path
+          description: Collection ID
+          required: true
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: period
+          in: query
+          description: Time period for aggregation
+          required: true
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapPeriodCollectionStatisticsResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
 
   /v0.1/data/collections/{collection}/transactions:
     get:
@@ -8022,9 +8098,9 @@ components:
         floorHistory:
           "$ref": "#/components/schemas/OlapHistoryValuesByTimestamps"
         globalStats:
-          "$ref": "#/components/schemas/OlapGlobalStats"
+          "$ref": "#/components/schemas/OlapCollectionLeaderboardStatistics"
 
-    OlapGlobalStats:
+    OlapCollectionLeaderboardStatistics:
       type: object
       required:
         - listed
@@ -8173,6 +8249,41 @@ components:
           type: integer
           description: Current amount of unique owners who hold nfts of this collection
           format: int32
+
+    OlapGlobalCollectionStatisticsResponse:
+      type: object
+      properties:
+        listed:
+          type: integer
+          format: int64
+        items:
+          type: integer
+          format: int64
+        owners:
+          type: integer
+          format: int64
+        floor:
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+        volume:
+          description: Total worth of all transactions with items in this collection
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+      required:
+        - listed
+        - items
+        - owners
+        - volume
+
+    OlapPeriodCollectionStatisticsResponse:
+      type: object
+      properties:
+        period:
+          "$ref": "#/components/schemas/OlapLeaderboardPeriod"
+        volume:
+          description: Period (e.g., 1-day) worth of all transactions with items in this collection
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+      required:
+        - period
+        - volume
 
     OlapPricesResponse:
       required:
