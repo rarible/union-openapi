@@ -8505,6 +8505,9 @@ components:
           type: string
           format: date-time
           description: when the value was updated
+        floorHistory:
+          description: historical floor prices for the given period
+          "$ref": "#/components/schemas/OlapHistoryValuesByTimestamps"
 
       #======================== Reconciliation responses ==========================#
 
