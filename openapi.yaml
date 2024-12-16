@@ -8428,6 +8428,7 @@ components:
           $ref: "#/components/schemas/EventTimeMarks"
       oneOf:
         - $ref: "#/components/schemas/OlapCollectionStatsVolumeChangeEvent"
+        - $ref: "#/components/schemas/OlapCollectionStatsFloorChangeEvent"
 
     OlapCollectionStatsVolumeChangeEvent:
       type: object
@@ -8441,6 +8442,19 @@ components:
           type: string
           enum:
             - VOLUME_CHANGE
+
+    OlapCollectionStatsFloorChangeEvent:
+      type: object
+      required:
+        - "@type"
+        - data
+      properties:
+        data:
+          $ref: "#/components/schemas/OlapCollectionStatsFloorChangeData"
+        "@type":
+          type: string
+          enum:
+            - FLOOR_CHANGE
 
     OlapCollectionStatsVolumeChangeData:
       type: object
@@ -8468,7 +8482,34 @@ components:
           format: date-time
           description: when the value was updated
 
-  #======================== Reconciliation responses ==========================#
+    OlapCollectionStatsFloorChangeData:
+      type: object
+      required:
+        - period
+        - currencyId
+        - updatedAt
+      properties:
+        period:
+          $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        currencyId:
+          $ref: '#/components/schemas/CurrencyId'
+        floorNative:
+          type: number
+          format: bigdecimal
+          description: floor price in native currency for the given period, if period is null it is global floor price
+        floorUsd:
+          type: number
+          format: bigdecimal
+          description: floor price in usd for the given period, if period is null it is global floor price
+        updatedAt:
+          type: string
+          format: date-time
+          description: when the value was updated
+        floorHistory:
+          description: historical floor prices for the given period
+          "$ref": "#/components/schemas/OlapHistoryValuesByTimestamps"
+
+      #======================== Reconciliation responses ==========================#
 
     ReconciliationEntities:
       type: object
