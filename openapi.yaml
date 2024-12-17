@@ -8429,6 +8429,7 @@ components:
       oneOf:
         - $ref: "#/components/schemas/OlapCollectionStatsVolumeChangeEvent"
         - $ref: "#/components/schemas/OlapCollectionStatsFloorChangeEvent"
+        - $ref: "#/components/schemas/OlapCollectionStatsTopOfferChangeEvent"
 
     OlapCollectionStatsVolumeChangeEvent:
       type: object
@@ -8455,6 +8456,19 @@ components:
           type: string
           enum:
             - FLOOR_CHANGE
+
+    OlapCollectionStatsTopOfferChangeEvent:
+      type: object
+      required:
+        - "@type"
+        - data
+      properties:
+        data:
+          $ref: "#/components/schemas/OlapCollectionStatsTopOfferChangeData"
+        "@type":
+          type: string
+          enum:
+            - TOP_OFFER_CHANGE
 
     OlapCollectionStatsVolumeChangeData:
       type: object
@@ -8508,6 +8522,27 @@ components:
         floorHistory:
           description: historical floor prices for the given period
           "$ref": "#/components/schemas/OlapHistoryValuesByTimestamps"
+
+    OlapCollectionStatsTopOfferChangeData:
+      type: object
+      required:
+        - currencyId
+        - updatedAt
+      properties:
+        currencyId:
+          $ref: '#/components/schemas/CurrencyId'
+        topOfferNative:
+          type: number
+          format: bigdecimal
+          description: top offer price in native currency for the given period, if period is null it is global top offer price
+        topOfferUsd:
+          type: number
+          format: bigdecimal
+          description: top offer price in usd for the given period, if period is null it is global top offer price
+        updatedAt:
+          type: string
+          format: date-time
+          description: when the value was updated
 
       #======================== Reconciliation responses ==========================#
 
