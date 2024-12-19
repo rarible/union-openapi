@@ -7072,6 +7072,8 @@ components:
       properties:
         blockchain:
           $ref: "#/components/schemas/Blockchain"
+        contract:
+          $ref: "#/components/schemas/ContractAddress"
         "@type":
           type: string
           enum:
