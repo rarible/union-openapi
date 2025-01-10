@@ -880,6 +880,44 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/ownerships/owners:
+    get:
+      tags:
+        - "NFT Ownerships"
+      summary: "Get distribution of the number of owned items by owner"
+      description: "Returns list of owners of items along with the total number of instances held by them (supply)"
+      operationId: getOwners
+      parameters:
+        - name: "collection"
+          in: query
+          required: true
+          description: "Collection ID"
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of results to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OwnerStatistics"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
 
   ######################## Order API ########################
 
@@ -4887,6 +4925,31 @@ components:
           format: int64
       required:
         - collection
+        - ownedItems
+
+    OwnerStatistics:
+      type: object
+      properties:
+        owners:
+          type: array
+          items:
+            $ref: "#/components/schemas/OwnerStatistic"
+        continuation:
+          type: string
+          description: "Continuation token to paginate result"
+      required:
+        - owners
+
+    OwnerStatistic:
+      type: object
+      properties:
+        owner:
+          $ref: "#/components/schemas/UnionAddress"
+        ownedItems:
+          type: integer
+          format: int64
+      required:
+        - owner
         - ownedItems
 
     ItemsSearchRequest:
