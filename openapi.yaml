@@ -3563,6 +3563,7 @@ components:
         - ABSTRACT
         - SHAPE
         - TELOS
+        - HEDERA
 
       example: "${blockchain}"
 
@@ -7839,6 +7840,7 @@ components:
         - ABSTRACT
         - SHAPE
         - TELOS
+        - HEDERA
 
     OlapPeriod:
       type: string
@@ -7880,6 +7882,7 @@ components:
         - AZERO
         - BERA
         - TLOS
+        - HBAR
 
     OlapCurrencyAmount:
       required:

@@ -1,5 +1,7 @@
 package com.rarible.protocol.union.dto
 
+import jdk.nashorn.internal.ir.Block
+
 private val subchains = mapOf(
     // First Blockchain specified in the list considered as PRIMARY -
     // it means, there should not be situation like "Polygon is enabled, Ethereum is disabled"
@@ -39,6 +41,7 @@ private val subchains = mapOf(
         BlockchainDto.ABSTRACT,
         BlockchainDto.SHAPE,
         BlockchainDto.TELOS,
+        BlockchainDto.HEDERA
     ),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
