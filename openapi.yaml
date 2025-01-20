@@ -5014,6 +5014,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/UnionAddress"
+        owners:
+          type: array
+          description: owner of single item
+          items:
+            $ref: "#/components/schemas/UnionAddress"
         mintedAtFrom:
           type: string
           format: date-time
