@@ -50,6 +50,8 @@ tags:
     x-controller: "CollectionController"
   - name: "Collection Leader Board"
     x-controller: "CollectionLeaderboardController"
+  - name: "Collection Leader Board by Owner"
+    x-controller: "CollectionLeaderboardByOwnerController"
   - name: "Collection Statistics"
     x-controller: "CollectionStatisticsController"
   - name: "NFT Data and Historical Statistics"
@@ -2603,6 +2605,84 @@ paths:
       description: "Collections leaderboard"
       operationId: getCollectionLeaderboard
       parameters:
+        - name: blockchains
+          in: query
+          description: Blockchain networks
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/OlapBlockchain"
+        - name: period
+          in: query
+          description: Time period for aggregation
+          required: false
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: sort
+          in: query
+          description: Collections sorting
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapLeaderboardSort"
+        - name: direction
+          in: query
+          description: Collections sorting direction
+          required: false
+          schema:
+            "$ref": "#/components/schemas/OlapLeaderboardSortDirection"
+        - name: limit
+          in: query
+          description: Limit of records in leaderboard
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: offset
+          in: query
+          description: Offset reference
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapCollectionLeaderboardResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
+  /v2.0/data/leaderboard/collections/byOwner:
+    get:
+      tags:
+        - "Collection Leader Board by Owner"
+      summary: "Get NFT Collections leaderboard for a specific owner adresses"
+      description: "User collections leaderboard"
+      operationId: getCollectionLeaderboardByOwner
+      parameters:
+        - name: "owners"
+          in: query
+          required: true
+          description: "Addresses of the owner"
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/UnionAddress"
         - name: blockchains
           in: query
           description: Blockchain networks
@@ -7772,6 +7852,7 @@ components:
       type: string
       description: "Blockchain contract address in Union format `${blockchain}:${token}`"
       example: "ETHEREUM:0xd07dc4262bcdbf85190c01c996b4c06a461d2430"
+
     UnionAddress:
       type: string
       description: "Blockchain address in Union format `${blockchainGroup}:${token}`"
