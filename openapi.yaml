@@ -4082,6 +4082,8 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/Creator"
+        ownerIfSingle:
+          $ref: "#/components/schemas/UnionAddress"
         lazySupply:
           $ref: "#/components/schemas/BigInteger"
         pending:
