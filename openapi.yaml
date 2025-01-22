@@ -50,8 +50,6 @@ tags:
     x-controller: "CollectionController"
   - name: "Collection Leader Board"
     x-controller: "CollectionLeaderboardController"
-  - name: "Collection Leader Board by Owner"
-    x-controller: "CollectionLeaderboardByOwnerController"
   - name: "Collection Statistics"
     x-controller: "CollectionStatisticsController"
   - name: "NFT Data and Historical Statistics"
@@ -2670,7 +2668,7 @@ paths:
   /v2.0/data/leaderboard/collections/byOwner:
     get:
       tags:
-        - "Collection Leader Board by Owner"
+        - "Collection Leader Board"
       summary: "Get NFT Collections leaderboard for a specific owner adresses"
       description: "User collections leaderboard"
       operationId: getCollectionLeaderboardByOwner
