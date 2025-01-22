@@ -3641,7 +3641,7 @@ components:
         - ABSTRACT
         - SHAPE
         - TELOS
-        - HEDERA
+        - HEDERAEVM
 
       example: "${blockchain}"
 
@@ -4160,6 +4160,8 @@ components:
           default: [ ]
           items:
             $ref: "#/components/schemas/Creator"
+        ownerIfSingle:
+          $ref: "#/components/schemas/UnionAddress"
         lazySupply:
           $ref: "#/components/schemas/BigInteger"
         pending:
@@ -7924,7 +7926,7 @@ components:
         - ABSTRACT
         - SHAPE
         - TELOS
-        - HEDERA
+        - HEDERAEVM
 
     OlapPeriod:
       type: string
