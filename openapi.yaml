@@ -880,45 +880,6 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/ownerships/owners:
-    get:
-      tags:
-        - "NFT Ownerships"
-      summary: "Get distribution of the number of owned items by owner"
-      description: "Returns list of owners of items along with the total number of instances held by them (supply)"
-      operationId: getOwners
-      parameters:
-        - name: "collection"
-          in: query
-          required: true
-          description: "Collection ID"
-          schema:
-            $ref: "#/components/schemas/CollectionId"
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of results to return"
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OwnerStatistics"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-
   ######################## Order API ########################
 
   /v0.1/orders/{id}:
@@ -2776,6 +2737,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapError"
+
   /v2.0/data/collections/{id}/statistics/period:
     get:
       tags:
@@ -2816,6 +2778,57 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
+  /v2.0/data/collections/{id}/owners:
+    get:
+      tags:
+        - "Collection Statistics"
+      summary: "Get distribution of the number of owned items by owner"
+      description: "Returns list of owners of items in the collection along with the number of owned items"
+      operationId: getOwners
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          description: "Collection ID"
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of results to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OlapOwnerStatistics"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
 
   /v0.1/data/collections/{collection}/transactions:
     get:
@@ -5006,31 +5019,6 @@ components:
           format: int64
       required:
         - collection
-        - ownedItems
-
-    OwnerStatistics:
-      type: object
-      properties:
-        owners:
-          type: array
-          items:
-            $ref: "#/components/schemas/OwnerStatistic"
-        continuation:
-          type: string
-          description: "Continuation token to paginate result"
-      required:
-        - owners
-
-    OwnerStatistic:
-      type: object
-      properties:
-        owner:
-          $ref: "#/components/schemas/UnionAddress"
-        ownedItems:
-          type: integer
-          format: int64
-      required:
-        - owner
         - ownedItems
 
     ItemsSearchRequest:
@@ -8485,6 +8473,30 @@ components:
             description: Collection volume for specific date
             format: bigdecimal
 
+    OlapOwnerStatistics:
+      type: object
+      properties:
+        owners:
+          type: array
+          items:
+            $ref: "#/components/schemas/OlapOwnerStatistic"
+        continuation:
+          type: string
+          description: "Continuation token to paginate result"
+      required:
+        - owners
+
+    OlapOwnerStatistic:
+      type: object
+      properties:
+        owner:
+          $ref: "#/components/schemas/UnionAddress"
+        ownedItems:
+          type: integer
+          format: int64
+      required:
+        - owner
+        - ownedItems
     #======================== Olap Events ==========================#
 
     OlapVolumeForPeriodData:
