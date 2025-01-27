@@ -5675,6 +5675,8 @@ components:
           $ref: "#/components/schemas/BigDecimal"
         mintPayment:
           $ref: "#/components/schemas/Asset"
+        mintPriceUsd:
+          $ref: "#/components/schemas/BigDecimal"
         transactionHash:
           type: string
         blockchainInfo:
