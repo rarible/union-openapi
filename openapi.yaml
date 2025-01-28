@@ -2676,14 +2676,12 @@ paths:
             type: integer
             format: int32
             default: 10
-        - name: offset
+        - name: continuation
           in: query
-          description: Offset reference
+          description: Page reference. Taken from previous response
           required: false
           schema:
-            type: integer
-            format: int32
-            default: 0
+            type: string
       responses:
         '200':
           description: OK
