@@ -8520,7 +8520,7 @@ components:
         collectionIds:
           type: array
           items:
-              $ref: "#/components/schemas/CollectionId"
+            type: string
         period:
           "$ref": "#/components/schemas/OlapLeaderboardPeriod"
       required:
