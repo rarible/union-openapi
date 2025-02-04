@@ -2738,6 +2738,44 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
+  /v2.0/data/collections/statistics/global:
+    post:
+      tags:
+        - "Collection Statistics"
+      summary: "Get global (period-independent) statistics by collection IDs"
+      description: "Global collection statistics by IDs"
+      operationId: getGlobalCollectionStatisticsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                example: "${filterCollections}"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/OlapGlobalCollectionStatisticsResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
   /v2.0/data/collections/{id}/statistics/period:
     get:
       tags:
