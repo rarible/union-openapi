@@ -5296,6 +5296,8 @@ components:
         - HIGHEST_BID
         - LOWEST_BID
         - TRAIT
+        - NAME_ASC
+        - NAME_DESC
 
     ActivitySearchRequest:
       type: object
