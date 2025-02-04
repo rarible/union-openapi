@@ -8562,7 +8562,6 @@ components:
         - volume
         - id
 
-
     OlapPricesResponse:
       required:
         - avgPrices
