@@ -8425,6 +8425,10 @@ components:
         volume:
           description: Period (e.g., 1-day) worth of all transactions with items in this collection
           "$ref": "#/components/schemas/OlapPriceWithUsd"
+        floorChangePercent:
+          description: Change in floor price in percent during the period.
+          type: number
+          format: bigdecimal
       required:
         - period
         - volume
