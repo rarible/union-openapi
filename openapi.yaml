@@ -2751,8 +2751,7 @@ paths:
             schema:
               type: array
               items:
-                type: string
-                example: "${filterCollections}"
+                $ref: "#/components/schemas/CollectionId"
         required: true
       responses:
         '200':
@@ -2762,7 +2761,7 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/OlapGlobalCollectionStatisticsResponse"
+                  "$ref": "#/components/schemas/OlapGlobalCollectionStatisticsWithIdResponse"
         '400':
           description: Bad Request
           content:
@@ -2803,6 +2802,40 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapPeriodCollectionStatisticsResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  /v2.0/data/collections/statistics/period:
+    post:
+      tags:
+        - "Collection Statistics"
+      summary: "Get period-based statistics by collection IDs"
+      description: "Period-based collection statistics by IDs"
+      operationId: getPeriodCollectionStatisticsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OlapPeriodCollectionsByIdsStatisticsRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/OlapPeriodCollectionStatisticsWithIdResponse"
         '400':
           description: Bad Request
           content:
@@ -8455,6 +8488,45 @@ components:
         - owners
         - volume
 
+    OlapGlobalCollectionStatisticsWithIdResponse:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/CollectionId"
+        listed:
+          type: integer
+          format: int64
+        items:
+          type: integer
+          format: int64
+        owners:
+          type: integer
+          format: int64
+        floor:
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+        volume:
+          description: Total worth of all transactions with items in this collection
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+      required:
+        - id
+        - listed
+        - items
+        - owners
+        - volume
+
+    OlapPeriodCollectionsByIdsStatisticsRequest:
+      type: object
+      properties:
+        collectionIds:
+          type: array
+          items:
+              $ref: "#/components/schemas/CollectionId"
+        period:
+          "$ref": "#/components/schemas/OlapLeaderboardPeriod"
+      required:
+        - collectionIds
+        - period
+
     OlapPeriodCollectionStatisticsResponse:
       type: object
       properties:
@@ -8466,6 +8538,22 @@ components:
       required:
         - period
         - volume
+
+    OlapPeriodCollectionStatisticsWithIdResponse:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/CollectionId"
+        period:
+          "$ref": "#/components/schemas/OlapLeaderboardPeriod"
+        volume:
+          description: Period (e.g., 1-day) worth of all transactions with items in this collection
+          "$ref": "#/components/schemas/OlapPriceWithUsd"
+      required:
+        - period
+        - volume
+        - id
+
 
     OlapPricesResponse:
       required:
