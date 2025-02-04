@@ -8432,7 +8432,6 @@ components:
       required:
         - period
         - volume
-        - floorChangePercent
 
     OlapPricesResponse:
       required:
