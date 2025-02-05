@@ -2750,6 +2750,8 @@ paths:
           application/json:
             schema:
               type: array
+              minItems: 1
+              maxItems: 100
               items:
                 $ref: "#/components/schemas/CollectionId"
         required: true
@@ -2761,7 +2763,7 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/OlapGlobalCollectionStatisticsWithIdResponse"
+                  "$ref": "#/components/schemas/OlapGlobalCollectionStatisticsResponse"
         '400':
           description: Bad Request
           content:
@@ -2835,7 +2837,7 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/OlapPeriodCollectionStatisticsWithIdResponse"
+                  "$ref": "#/components/schemas/OlapPeriodCollectionStatisticsResponse"
         '400':
           description: Bad Request
           content:
@@ -8488,35 +8490,11 @@ components:
         - owners
         - volume
 
-    OlapGlobalCollectionStatisticsWithIdResponse:
+    OlapPeriodCollectionsByIdsStatisticsRequest:
       type: object
       properties:
         id:
           $ref: "#/components/schemas/CollectionId"
-        listed:
-          type: integer
-          format: int64
-        items:
-          type: integer
-          format: int64
-        owners:
-          type: integer
-          format: int64
-        floor:
-          "$ref": "#/components/schemas/OlapPriceWithUsd"
-        volume:
-          description: Total worth of all transactions with items in this collection
-          "$ref": "#/components/schemas/OlapPriceWithUsd"
-      required:
-        - id
-        - listed
-        - items
-        - owners
-        - volume
-
-    OlapPeriodCollectionsByIdsStatisticsRequest:
-      type: object
-      properties:
         collectionIds:
           type: array
           items:
@@ -8530,22 +8508,6 @@ components:
     OlapPeriodCollectionStatisticsResponse:
       type: object
       properties:
-        period:
-          "$ref": "#/components/schemas/OlapLeaderboardPeriod"
-        volume:
-          description: Period (e.g., 1-day) worth of all transactions with items in this collection
-          "$ref": "#/components/schemas/OlapPriceWithUsd"
-        floorChangePercent:
-          description: Change in floor price in percent during the period.
-          type: number
-          format: bigdecimal
-      required:
-        - period
-        - volume
-
-    OlapPeriodCollectionStatisticsWithIdResponse:
-      type: object
-      properties:
         id:
           $ref: "#/components/schemas/CollectionId"
         period:
@@ -8560,7 +8522,6 @@ components:
       required:
         - period
         - volume
-        - id
 
     OlapPricesResponse:
       required:
