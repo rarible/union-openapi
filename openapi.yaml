@@ -2738,6 +2738,45 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
+  /v2.0/data/collections/statistics/global/byIds:
+    post:
+      tags:
+        - "Collection Statistics"
+      summary: "Get global (period-independent) statistics by collection IDs"
+      description: "Global collection statistics by IDs"
+      operationId: getGlobalCollectionStatisticsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              maxItems: 100
+              items:
+                $ref: "#/components/schemas/CollectionId"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/OlapGlobalCollectionStatisticsResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
   /v2.0/data/collections/{id}/statistics/period:
     get:
       tags:
@@ -2765,6 +2804,40 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OlapPeriodCollectionStatisticsResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  /v2.0/data/collections/statistics/period/byIds:
+    post:
+      tags:
+        - "Collection Statistics"
+      summary: "Get period-based statistics by collection IDs"
+      description: "Period-based collection statistics by IDs"
+      operationId: getPeriodCollectionStatisticsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OlapPeriodCollectionsByIdsStatisticsRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/OlapPeriodCollectionStatisticsResponse"
         '400':
           description: Bad Request
           content:
@@ -8397,6 +8470,8 @@ components:
     OlapGlobalCollectionStatisticsResponse:
       type: object
       properties:
+        id:
+          $ref: "#/components/schemas/CollectionId"
         listed:
           type: integer
           format: int64
@@ -8417,9 +8492,26 @@ components:
         - owners
         - volume
 
+    OlapPeriodCollectionsByIdsStatisticsRequest:
+      type: object
+      properties:
+        collectionIds:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            type: string
+        period:
+          "$ref": "#/components/schemas/OlapLeaderboardPeriod"
+      required:
+        - collectionIds
+        - period
+
     OlapPeriodCollectionStatisticsResponse:
       type: object
       properties:
+        id:
+          $ref: "#/components/schemas/CollectionId"
         period:
           "$ref": "#/components/schemas/OlapLeaderboardPeriod"
         volume:
