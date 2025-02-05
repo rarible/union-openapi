@@ -8470,6 +8470,8 @@ components:
     OlapGlobalCollectionStatisticsResponse:
       type: object
       properties:
+        id:
+          $ref: "#/components/schemas/CollectionId"
         listed:
           type: integer
           format: int64
@@ -8493,8 +8495,6 @@ components:
     OlapPeriodCollectionsByIdsStatisticsRequest:
       type: object
       properties:
-        id:
-          $ref: "#/components/schemas/CollectionId"
         collectionIds:
           type: array
           items:
