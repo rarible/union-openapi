@@ -2903,6 +2903,64 @@ paths:
               schema:
                 "$ref": "#/components/schemas/OlapError"
 
+  /v2.0/data/collections/{id}/bidsByPrice:
+    get:
+      tags:
+        - "Collection Statistics"
+      summary: "Get distribution of the number of bids by price"
+      description: "Returns list of bid prices with number of bids and bidders"
+      operationId: getBidsByPrice
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          description: "Collection ID"
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of results to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Result sorting"
+          schema:
+            $ref: "#/components/schemas/OlapBidsByPriceSort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OlapBidsByPriceStatistics"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
   /v0.1/data/collections/{collection}/transactions:
     get:
       tags:
@@ -8593,6 +8651,54 @@ components:
       required:
         - owner
         - ownedItems
+
+    OlapBidsByPriceSort:
+      type: string
+      default: PRICE
+      enum:
+        - PRICE
+        - VOLUME_NATIVE
+
+    OlapBidsByPriceStatistics:
+      type: object
+      properties:
+        maxVolumeNative:
+          type: number
+          format: bigdecimal
+        prices:
+          type: array
+          items:
+            $ref: "#/components/schemas/OlapBidsByPrice"
+        continuation:
+          type: string
+          description: "Continuation token to paginate result"
+      required:
+        - prices
+        - maxVolumeNative
+
+    OlapBidsByPrice:
+      type: object
+      properties:
+        price:
+          type: number
+          format: bigdecimal
+        bidsCount:
+          type: integer
+          format: int64
+        volumeNative:
+          type: number
+          format: bigdecimal
+        buyersCount:
+          type: integer
+          format: int64
+        buyer:
+          $ref: "#/components/schemas/UnionAddress"
+      required:
+        - price
+        - bidsCount
+        - volumeNative
+        - volumeRatio
+        - buyersCount
     #======================== Olap Events ==========================#
 
     OlapVolumeForPeriodData:
