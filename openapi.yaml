@@ -8751,6 +8751,9 @@ components:
         - currencyId
         - updatedAt
       properties:
+        orderId:
+          type: string
+          description: ID of the floor order or null if there is no order
         price:
           type: number
           format: bigdecimal
