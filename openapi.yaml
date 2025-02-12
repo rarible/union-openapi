@@ -2684,6 +2684,12 @@ paths:
             type: integer
             format: int32
             default: 0
+        - name: continuation
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -8309,6 +8315,8 @@ components:
     OlapCollectionLeaderboardResponse:
       type: object
       properties:
+        continuation:
+          type: string
         result:
           type: array
           items:
