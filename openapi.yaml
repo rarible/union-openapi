@@ -3786,6 +3786,7 @@ components:
         - SHAPE
         - TELOS
         - HEDERAEVM
+        - VICTION
 
       example: "${blockchain}"
 
@@ -8050,6 +8051,7 @@ components:
         - SHAPE
         - TELOS
         - HEDERAEVM
+        - VICTION
 
     OlapPeriod:
       type: string
@@ -8092,6 +8094,7 @@ components:
         - BERA
         - TLOS
         - HBAR
+        - VIC
 
     OlapCurrencyAmount:
       required:
