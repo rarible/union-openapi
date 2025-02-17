@@ -3785,6 +3785,8 @@ components:
         - TELOS
         - HEDERAEVM
         - VICTION
+        - SETTLUS
+        - GOAT
 
       example: "${blockchain}"
 
@@ -8050,6 +8052,8 @@ components:
         - TELOS
         - HEDERAEVM
         - VICTION
+        - SETTLUS
+        - GOAT
 
     OlapPeriod:
       type: string
