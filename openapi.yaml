@@ -7825,6 +7825,7 @@ components:
       oneOf:
         - $ref: "#/components/schemas/ItemSubscriptionRequest"
         - $ref: "#/components/schemas/OwnershipSubscriptionRequest"
+        - $ref: "#/components/schemas/ItemOwnershipSubscriptionRequest"
         - $ref: "#/components/schemas/OrdersSubscriptionRequest"
         - $ref: "#/components/schemas/OrdersByItemSubscriptionRequest"
         - $ref: "#/components/schemas/OrdersByCollectionSubscriptionRequest"
@@ -7904,11 +7905,25 @@ components:
         - "@type"
         - id
 
+    ItemOwnershipSubscriptionRequest:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ITEM_OWNERSHIP
+        id:
+          $ref: "#/components/schemas/ItemId"
+      required:
+        - "@type"
+        - id
+
     SubscriptionEvent:
       type: object
       oneOf:
         - $ref: "#/components/schemas/FakeSubscriptionEvent"
         - $ref: "#/components/schemas/ItemSubscriptionEvent"
+        - $ref: "#/components/schemas/ItemOwnershipSubscriptionEvent"
         - $ref: "#/components/schemas/OwnershipSubscriptionEvent"
         - $ref: "#/components/schemas/OrderSubscriptionEvent"
 
@@ -7931,6 +7946,19 @@ components:
             - ITEM
         value:
           $ref: "#/components/schemas/ItemEvent"
+      required:
+        - "@type"
+        - value
+
+    ItemOwnershipSubscriptionEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+              - ITEM_OWNERSHIP
+        value:
+          $ref: "#/components/schemas/OwnershipEvent"
       required:
         - "@type"
         - value
