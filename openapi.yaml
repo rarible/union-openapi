@@ -2579,7 +2579,7 @@ paths:
           description: Time period for aggregation
           required: false
           schema:
-            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+            $ref: '#/components/schemas/OlapPeriod'
         - name: sort
           in: query
           description: Collections sorting
@@ -2657,7 +2657,7 @@ paths:
           description: Time period for aggregation
           required: false
           schema:
-            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+            $ref: '#/components/schemas/OlapPeriod'
         - name: sort
           in: query
           description: Collections sorting
@@ -2796,7 +2796,7 @@ paths:
           description: Time period for aggregation
           required: true
           schema:
-            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+            $ref: '#/components/schemas/OlapPeriod'
       responses:
         '200':
           description: OK
@@ -2980,7 +2980,7 @@ paths:
           required: true
           description: Time period for aggregation
           schema:
-            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+            $ref: '#/components/schemas/OlapPeriod'
         - name: "size"
           in: query
           required: true
@@ -8175,14 +8175,28 @@ components:
     OlapPeriod:
       type: string
       enum:
+        - MIN5
+        - MIN30
+        - H1
+        - H6
         - D1
         - D7
         - D30
+        - D180
+        - D365
+        - ALL
       description: >
         Period:
+          * `MIN5` - Last 5 minutes
+          * `MIN30` - Last 30 minutes
+          * `H1` - Last 1 hour
+          * `H6` - Last 6 hours
           * `D1` - Last 1 day
           * `D7` - Last 7 days
           * `D30` - Last 30 days
+          * `D180` - Last 180 days (roughly 6 months)
+          * `D365` - Last 365 days (roughly 1 year)
+          * `ALL` - For all time
 
     OlapCurrencyType:
       type: string
@@ -8534,8 +8548,6 @@ components:
         - D1
         - D7
         - D30
-        - D180
-        - D365
         - ALL
       description: >
         Period:
@@ -8546,8 +8558,6 @@ components:
           * `D1` - Last 1 day
           * `D7` - Last 7 days
           * `D30` - Last 30 days
-          * `D180` - Last 180 days (roughly 6 months)
-          * `D365` - Last 365 days (roughly 1 year)
           * `ALL` - For all time
 
 
@@ -8692,7 +8702,7 @@ components:
           items:
             type: string
         period:
-          "$ref": "#/components/schemas/OlapLeaderboardPeriod"
+          "$ref": "#/components/schemas/OlapPeriod"
       required:
         - collectionIds
         - period
@@ -8703,7 +8713,7 @@ components:
         id:
           $ref: "#/components/schemas/CollectionId"
         period:
-          "$ref": "#/components/schemas/OlapLeaderboardPeriod"
+          "$ref": "#/components/schemas/OlapPeriod"
         volume:
           description: Period (e.g., 1-day) worth of all transactions with items in this collection
           "$ref": "#/components/schemas/OlapPriceWithUsd"
@@ -9018,7 +9028,7 @@ components:
         - updatedAt
       properties:
         period:
-          $ref: '#/components/schemas/OlapLeaderboardPeriod'
+          $ref: '#/components/schemas/OlapPeriod'
         currencyId:
           $ref: '#/components/schemas/CurrencyId'
         volumeNative:
@@ -9042,7 +9052,7 @@ components:
         - updatedAt
       properties:
         period:
-          $ref: '#/components/schemas/OlapLeaderboardPeriod'
+          $ref: '#/components/schemas/OlapPeriod'
         currencyId:
           $ref: '#/components/schemas/CurrencyId'
         floorNative:
