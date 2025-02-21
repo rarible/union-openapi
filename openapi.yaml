@@ -7829,6 +7829,7 @@ components:
         - $ref: "#/components/schemas/OrdersSubscriptionRequest"
         - $ref: "#/components/schemas/OrdersByItemSubscriptionRequest"
         - $ref: "#/components/schemas/OrdersByCollectionSubscriptionRequest"
+        - $ref: "#/components/schemas/ActivitySubscriptionRequest"
 
 
     OrdersSubscriptionRequest:
@@ -7918,6 +7919,24 @@ components:
         - "@type"
         - id
 
+    ActivitySubscriptionRequest:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ACTIVITY
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+        collectionId:
+          $ref: "#/components/schemas/CollectionId"
+        wallet:
+          $ref: "#/components/schemas/UnionAddress"
+        type:
+          $ref: "#/components/schemas/ActivityType"
+      required:
+        - "@type"
+
     SubscriptionEvent:
       type: object
       oneOf:
@@ -7926,6 +7945,7 @@ components:
         - $ref: "#/components/schemas/ItemOwnershipSubscriptionEvent"
         - $ref: "#/components/schemas/OwnershipSubscriptionEvent"
         - $ref: "#/components/schemas/OrderSubscriptionEvent"
+        - $ref: "#/components/schemas/ActivitySubscriptionEvent"
 
     FakeSubscriptionEvent:
       type: object
@@ -7985,6 +8005,19 @@ components:
             - OWNERSHIP
         value:
           $ref: "#/components/schemas/OwnershipEvent"
+      required:
+        - "@type"
+        - value
+
+    ActivitySubscriptionEvent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - ACTIVITY
+        value:
+          $ref: "#/components/schemas/Activity"
       required:
         - "@type"
         - value
