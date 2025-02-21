@@ -3787,6 +3787,7 @@ components:
         - VICTION
         - SETTLUS
         - GOAT
+        - HYPEREVM
 
       example: "${blockchain}"
 
@@ -8082,6 +8083,7 @@ components:
         - VICTION
         - SETTLUS
         - GOAT
+        - HYPEREVM
 
     OlapPeriod:
       type: string
@@ -8126,6 +8128,7 @@ components:
         - HBAR
         - VIC
         - BTC
+        - HYPE
 
     OlapCurrencyAmount:
       required:
