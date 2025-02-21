@@ -43,6 +43,7 @@ private val subchains = mapOf(
         BlockchainDto.VICTION,
         BlockchainDto.SETTLUS,
         BlockchainDto.GOAT,
+        BlockchainDto.HYPEREVM,
     ),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),
