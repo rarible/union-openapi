@@ -52,6 +52,8 @@ tags:
     x-controller: "CollectionLeaderboardController"
   - name: "Collection Statistics"
     x-controller: "CollectionStatisticsController"
+  - name: "Charts"
+    x-controller: "ChartController"
   - name: "NFT Data and Historical Statistics"
     x-controller: "DataController"
   - name: "Domain lookup"
@@ -2940,6 +2942,58 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OlapBidsByPriceStatistics"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+
+  /v2.0/data/collections/{id}/charts/floorPrice:
+    get:
+      tags:
+        - "Charts"
+      summary: "Get historical data of floor price for collection for charting purposes"
+      description: "Returns list of historical floor prices aggregated at even intervals in the specified time period - last day, last month etc."
+      operationId: getFloorPriceChart
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          description: "Collection ID"
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: "period"
+          in: query
+          required: true
+          description: Time period for aggregation
+          schema:
+            $ref: '#/components/schemas/OlapLeaderboardPeriod'
+        - name: "size"
+          in: query
+          required: true
+          description: Number of data points to return
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OlapChartResponse"
         '400':
           description: Bad Request
           content:
@@ -8473,23 +8527,27 @@ components:
     OlapLeaderboardPeriod:
       type: string
       enum:
+        - MIN5
+        - MIN30
+        - H1
+        - H6
         - D1
         - D7
         - D30
-        - H6
-        - H1
-        - MIN30
-        - MIN5
+        - D180
+        - D365
         - ALL
       description: >
         Period:
+          * `MIN5` - Last 5 minutes
+          * `MIN30` - Last 30 minutes
+          * `H1` - Last 1 hour
+          * `H6` - Last 6 hours
           * `D1` - Last 1 day
           * `D7` - Last 7 days
           * `D30` - Last 30 days
-          * `H6` - Last 6 hours
-          * `H1` - Last 1 hour
-          * `MIN30` - Last 30 minutes
-          * `MIN5` - Last 5 minutes
+          * `D180` - Last 180 days (roughly 6 months)
+          * `D365` - Last 365 days (roughly 1 year)
           * `ALL` - For all time
 
 
@@ -8773,6 +8831,15 @@ components:
         - volumeNative
         - volumeRatio
         - buyersCount
+
+    OlapChartResponse:
+      type: object
+      properties:
+        dataPoints:
+          $ref: '#/components/schemas/OlapHistoryValuesByTimestamps'
+      required:
+        - dataPoints
+
     #======================== Olap Events ==========================#
 
     OlapVolumeForPeriodData:
