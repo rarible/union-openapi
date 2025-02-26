@@ -52,6 +52,7 @@ private val subchains = mapOf(
         BlockchainDto.ECLIPSE,
     ),
     BlockchainGroupDto.APTOS to listOf(BlockchainDto.APTOS),
+    BlockchainGroupDto.HEDERA to listOf(BlockchainDto.HEDERA),
 )
 
 private val groups = subchains.entries
@@ -65,6 +66,7 @@ private val nativeCurrencies = mapOf(
     BlockchainGroupDto.TEZOS to "XTZ",
     // Base64 (Basic) encoding of UT8-encoding of the string "0x1::aptos_coin::AptosCoin"
     BlockchainGroupDto.APTOS to "MHgxOjphcHRvc19jb2luOjpBcHRvc0NvaW4=",
+    BlockchainGroupDto.HEDERA to "0.0.0",
 )
 
 fun BlockchainGroupDto.nativeCurrency(): String {
@@ -116,6 +118,7 @@ private fun BlockchainGroupDto.normalize(contract: String): String {
         BlockchainGroupDto.APTOS,
         BlockchainGroupDto.FLOW,
         BlockchainGroupDto.TEZOS,
+        BlockchainGroupDto.HEDERA,
         BlockchainGroupDto.SOLANA -> contract
     }
 }
