@@ -2966,7 +2966,9 @@ paths:
       tags:
         - "Charts"
       summary: "Get historical data of floor price for collection for charting purposes"
-      description: "Returns list of historical floor prices aggregated at even intervals in the specified time period - last day, last month etc."
+      description: "Returns list of historical floor prices aggregated at even intervals in the specified time period - last day, last month etc.
+        \ Each points represents the aggregated value of the interval after it. 
+        \ The last point represents the current floor price."
       operationId: getFloorPriceChart
       parameters:
         - name: "id"
@@ -2987,6 +2989,72 @@ paths:
           description: Number of data points to return
           schema:
             type: integer
+        - name: "endTime"
+          in: query
+          required: false
+          description: Optionally, the date-time of the last point of the graph. Defaults to current time.
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OlapChartResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OlapError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OlapError"
+  /v2.0/data/collections/{id}/charts/volume:
+    get:
+      tags:
+        - "Charts"
+      summary: "Get historical data of collection volume (total sales worth) for charting purposes"
+      description: "Given a time period and the desired number of points, returns points which represent total worth of collection sales in the interval after that point.
+        \ The last point always has no value."
+      operationId: getVolumeChart
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          description: "Collection ID"
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: "period"
+          in: query
+          required: true
+          description: Time period for aggregation
+          schema:
+            $ref: '#/components/schemas/OlapPeriod'
+        - name: "size"
+          in: query
+          required: true
+          description: Number of data points to return
+          schema:
+            type: integer
+        - name: "endTime"
+          in: query
+          required: false
+          description: Optionally, the date-time of the last point of the graph. Defaults to current time.
+          schema:
+            type: string
+            format: date-time
       responses:
         "200":
           description: "OK"
