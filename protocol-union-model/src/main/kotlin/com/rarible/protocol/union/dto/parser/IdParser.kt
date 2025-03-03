@@ -21,6 +21,7 @@ object IdParser {
         BlockchainDto.SOLANA,
         BlockchainDto.ECLIPSE,
         BlockchainDto.APTOS,
+        BlockchainDto.HEDERA,
     )
 
     fun parseBlockchain(value: String): BlockchainDto {
