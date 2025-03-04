@@ -479,6 +479,15 @@ paths:
             items:
               type: string
               example: "${filterCollections}"
+        - name: owners
+          description: "Return traits only for items owned by user"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: "${filterOwners}"
       responses:
         '200':
           description: OK
@@ -517,6 +526,15 @@ paths:
             items:
               type: string
               example: "${filterCollections}"
+        - name: owners
+          description: "Return traits only for items owned by user"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: "${filterOwners}"
       responses:
         '200':
           description: OK
