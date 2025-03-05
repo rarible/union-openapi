@@ -3911,6 +3911,7 @@ components:
         - GOAT
         - HYPEREVM
         - HEDERA
+        - CROSSFI
 
       example: "${blockchain}"
 
@@ -8243,6 +8244,7 @@ components:
         - GOAT
         - HYPEREVM
         - HEDERA
+        - CROSSFI
 
     OlapPeriod:
       type: string
@@ -8302,6 +8304,7 @@ components:
         - VIC
         - BTC
         - HYPE
+        - XFI
 
     OlapCurrencyAmount:
       required:
