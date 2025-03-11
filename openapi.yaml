@@ -2398,6 +2398,58 @@ paths:
 
   ####################### Statistics API #######################
 
+  /v0.1/collections/{id}/charts/sales:
+    get:
+      tags:
+        - "NFT Activities"
+      summary: "Get sales chart"
+      description: "Returns list of sales by collection"
+      operationId: getSalesChart
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          description: "Collection ID"
+          schema:
+            $ref: "#/components/schemas/CollectionId"
+        - name: "from"
+          in: query
+          required: false
+          description: Time period from
+          schema:
+            type: string
+            format: date-time
+        - name: "to"
+          in: query
+          required: false
+          description: Time period to
+          schema:
+            type: string
+            format: date-time
+        - name: "size"
+          in: query
+          required: false
+          description: Number of data points to return
+          schema:
+            type: integer
+        - name: "cursor"
+          in: query
+          required: false
+          description: "Cursor from previous response"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SalesChart"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/data/rankings/{entity}/volume:
     get:
       tags:
@@ -6372,6 +6424,36 @@ components:
           $ref: "#/components/schemas/CollectionId"
         value:
           $ref: "#/components/schemas/BigInteger"
+
+    SaleChartPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: "date-time"
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+        itemId:
+          $ref: "#/components/schemas/ItemId"
+      required:
+        - date
+        - price
+        - itemId
+
+    SalesChart:
+      type: object
+      properties:
+        cursor:
+          type: string
+          description: "Combined continuation token to paginate search result"
+        points:
+          type: array
+          default: [ ]
+          description: "List of found activities"
+          items:
+            $ref: "#/components/schemas/SaleChartPoint"
+      required:
+        - points
 
     Activities:
       type: object
