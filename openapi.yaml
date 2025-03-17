@@ -611,6 +611,7 @@ paths:
       summary: "Get Lazy NFT"
       description: "Returns Lazy NFT Item by Id"
       operationId: getLazyItemById
+      deprecated: true
       parameters:
         - name: "itemId"
           in: path
@@ -639,6 +640,7 @@ paths:
       summary: "Mint Lazy NFT"
       description: "Create Lazy NFT (supported only for some blockchains)"
       operationId: mintLazyItem
+      deprecated: true
       requestBody:
         content:
           application/json:
@@ -666,6 +668,7 @@ paths:
       summary: "Burn Lazy NFT"
       description: "Deletes Lazy NFT (supported only for some blockchains)"
       operationId: burnLazyItem
+      deprecated: true
       requestBody:
         content:
           application/json:
