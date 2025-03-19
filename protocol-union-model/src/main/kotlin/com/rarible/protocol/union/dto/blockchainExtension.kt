@@ -45,6 +45,7 @@ private val subchains = mapOf(
         BlockchainDto.GOAT,
         BlockchainDto.HYPEREVM,
         BlockchainDto.CROSSFI,
+        BlockchainDto.MEGAETH,
     ),
     BlockchainGroupDto.FLOW to listOf(BlockchainDto.FLOW),
     BlockchainGroupDto.TEZOS to listOf(BlockchainDto.TEZOS),

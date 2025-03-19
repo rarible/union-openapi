@@ -3985,6 +3985,7 @@ components:
         - HYPEREVM
         - HEDERA
         - CROSSFI
+        - MEGAETH
 
       example: "${blockchain}"
 
@@ -8342,6 +8343,7 @@ components:
         - HYPEREVM
         - HEDERA
         - CROSSFI
+        - MEGAETH
 
     OlapPeriod:
       type: string
