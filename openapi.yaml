@@ -3983,7 +3983,6 @@ components:
         - SETTLUS
         - GOAT
         - HYPEREVM
-        - HEDERA
         - CROSSFI
         - MEGAETH
 
@@ -3997,7 +3996,6 @@ components:
         - FLOW
         - TEZOS
         - SOLANA
-        - HEDERA
 
     Payout:
       type: object
@@ -6554,7 +6552,6 @@ components:
             - TOKEN_GROUP_2022
             - IMMUTABLEX
             - APTOS
-            - HEDERA
         status:
           type: string
           enum:
@@ -8341,7 +8338,6 @@ components:
         - SETTLUS
         - GOAT
         - HYPEREVM
-        - HEDERA
         - CROSSFI
         - MEGAETH
 
