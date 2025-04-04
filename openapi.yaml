@@ -4505,6 +4505,9 @@ components:
             $ref: "#/components/schemas/Creator"
         ownerIfSingle:
           $ref: "#/components/schemas/UnionAddress"
+        ownerChangeDate:
+          type: string
+          format: date-time
         lazySupply:
           $ref: "#/components/schemas/BigInteger"
         pending:
@@ -5497,6 +5500,7 @@ components:
         - TRAIT
         - NAME_ASC
         - NAME_DESC
+        - OWNER_CHANGE_DATE
 
     ActivitySearchRequest:
       type: object
