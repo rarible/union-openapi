@@ -1707,42 +1707,6 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/orders/amm/{id}/tradeInfo:
-    get:
-      tags:
-        - "NFT Sales"
-      summary: "Get AMM Order trade info"
-      description: "Get for buy pricing info from AMM Order"
-      operationId: getAmmOrderTradeInfo
-      parameters:
-        - name: "id"
-          description: "Id of the AMM order"
-          in: "path"
-          required: true
-          schema:
-            $ref: "#/components/schemas/OrderId"
-        - name: "itemCount"
-          description: "The number of NFTs to buy from the AMM order"
-          in: "query"
-          required: true
-          schema:
-            minimum: 1
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AmmTradeInfo"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '404':
-          $ref: "#/components/responses/EntityNotFound"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
   /v0.1/orders/settings/fees:
     get:
       tags:
@@ -3931,9 +3895,6 @@ components:
         - VERSUM
         - TEIA
         - OTHER
-        - X2Y2
-        - LOOKSRARE
-        - SUDOSWAP
         - FXHASH
 
     Blockchain:
@@ -4099,8 +4060,6 @@ components:
           $ref: "#/components/schemas/Blockchain"
       oneOf:
         - $ref: "#/components/schemas/OpenSeaFillOrderSignatureInputForm"
-        - $ref: "#/components/schemas/X2Y2FillOrderSignatureInputForm"
-        - $ref: "#/components/schemas/X2Y2CancelOrderSignatureInputForm"
 
     OpenSeaFillOrderSignatureInputForm:
       type: object
@@ -4114,58 +4073,6 @@ components:
         signature:
           description: "SeaPort order hash in 'native' format"
           example: "0xf3104d38a35c59d2612a6128c9e2bbfabf16f26b2db393801cc20398f10079f2"
-          type: string
-
-    X2Y2FillOrderSignatureInputForm:
-      type: object
-      required:
-        - caller
-        - op
-        - orderId
-        - currency
-        - price
-      properties:
-        "@type":
-          type: string
-          enum:
-            - "X2Y2_ORDER_FILL"
-        caller:
-          type: string
-        op:
-          $ref: "#/components/schemas/BigInteger"
-        orderId:
-          $ref: "#/components/schemas/BigInteger"
-        currency:
-          description: "Currency contract in 'native' format"
-          example: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-          type: string
-        price:
-          $ref: "#/components/schemas/BigInteger"
-        tokenId:
-          $ref: "#/components/schemas/BigInteger"
-
-    X2Y2CancelOrderSignatureInputForm:
-      type: object
-      required:
-        - caller
-        - op
-        - orderId
-        - signMessage
-        - sign
-      properties:
-        "@type":
-          type: string
-          enum:
-            - "X2Y2_ORDER_CANCEL"
-        caller:
-          type: string
-        op:
-          $ref: "#/components/schemas/BigInteger"
-        orderId:
-          $ref: "#/components/schemas/BigInteger"
-        signMessage:
-          type: string
-        sign:
           type: string
 
     SignatureInput:
@@ -4455,17 +4362,6 @@ components:
       required:
         - origin
 
-    AmmOrders:
-      type: object
-      properties:
-        ids:
-          type: array
-          description: "List of the automated market maker order id"
-          items:
-            $ref: "#/components/schemas/OrderId"
-      required:
-        - ids
-
     #################### Item - Union ####################
 
     ItemId:
@@ -4544,14 +4440,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/OriginOrders"
-        ammOrders:
-          $ref: "#/components/schemas/AmmOrders"
-        auctions:
-          deprecated: true
-          type: array
-          default: [ ]
-          items:
-            type: string
         totalStock:
           $ref: "#/components/schemas/BigInteger"
         sellers:
@@ -5732,10 +5620,6 @@ components:
         - "$ref": "#/components/schemas/EthOrderOpenSeaV1DataV1"
         - "$ref": "#/components/schemas/EthOrderSeaportDataV1"
         - "$ref": "#/components/schemas/EthOrderCryptoPunksData"
-        - "$ref": "#/components/schemas/EthX2Y2OrderDataV1"
-        - "$ref": "#/components/schemas/EthLooksRareOrderDataV1"
-        - "$ref": "#/components/schemas/EthLooksRareOrderDataV2"
-        - "$ref": "#/components/schemas/EthSudoSwapAmmDataV1"
         - "$ref": "#/components/schemas/TezosOrderDataLegacy"
         - "$ref": "#/components/schemas/TezosOrderDataV2"
         - "$ref": "#/components/schemas/FlowOrderDataV1"
@@ -5764,41 +5648,6 @@ components:
             $ref: "#/components/schemas/Order"
       required:
         - orders
-
-    AmmTradeInfo:
-      type: object
-      properties:
-        orderId:
-          "$ref": "#/components/schemas/OrderId"
-      oneOf:
-        - "$ref": "#/components/schemas/SudoSwapTradeInfo"
-
-    SudoSwapTradeInfo:
-      type: object
-      required:
-        - prices
-      properties:
-        "@type":
-          type: string
-          enum:
-            - SUDO_SWAP
-        prices:
-          type: array
-          items:
-            $ref: "#/components/schemas/SudoSwapPriceInfo"
-
-    SudoSwapPriceInfo:
-      type: object
-      required:
-        - price
-        - priceValue
-      properties:
-        price:
-          $ref: "#/components/schemas/BigInteger"
-        priceValue:
-          $ref: "#/components/schemas/BigDecimal"
-        priceUsd:
-          $ref: "#/components/schemas/BigDecimal"
 
     OrderEvent:
       type: object
@@ -7381,150 +7230,6 @@ components:
       required:
         - "@type"
 
-    EthX2Y2OrderDataV1:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ETH_X2Y2_ORDER_DATA_V1
-        itemHash:
-          type: string
-        isCollectionOffer:
-          type: boolean
-        isBundle:
-          type: boolean
-        side:
-          type: integer
-        orderId:
-          $ref: "#/components/schemas/BigInteger"
-      required:
-        - "@type"
-        - itemHash
-        - isCollectionOffer
-        - isBundle
-        - side
-        - orderId
-
-    EthLooksRareOrderDataV1:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ETH_LOOKSRARE_ORDER_DATA_V1
-        minPercentageToAsk:
-          type: integer
-        strategy:
-          $ref: "#/components/schemas/UnionAddress"
-        nonce:
-          type: integer
-          format: int64
-        params:
-          type: string
-      required:
-        - "@type"
-        - minPercentageToAsk
-        - strategy
-        - nonce
-
-    EthLooksRareOrderDataV2:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ETH_LOOKSRARE_ORDER_DATA_V2
-        quoteType:
-          type: string
-          enum:
-            - ASK
-            - BID
-        globalNonce:
-          $ref: "#/components/schemas/BigInteger"
-        orderNonce:
-          $ref: "#/components/schemas/BigInteger"
-        subsetNonce:
-          $ref: "#/components/schemas/BigInteger"
-        strategyId:
-          $ref: "#/components/schemas/BigInteger"
-        additionalParameters:
-          type: string
-        merkleRoot:
-          type: string
-        merkleProof:
-          type: array
-          items:
-            $ref: "#/components/schemas/EthLooksRareMerkleProof"
-      required:
-        - "@type"
-        - quoteType
-        - globalNonce
-        - orderNonce
-        - subsetNonce
-        - strategyId
-        - additionalParameters
-
-    EthLooksRareMerkleProof:
-      type: object
-      required:
-        - position
-        - value
-      properties:
-        position:
-          type: integer
-          format: int64
-        value:
-          type: string
-
-    SudoSwapPoolType:
-      type: string
-      enum:
-        - TOKEN
-        - NFT
-        - TRADE
-
-    SudoSwapCurveType:
-      type: string
-      enum:
-        - LINEAR
-        - EXPONENTIAL
-        - UNKNOWN
-
-    EthSudoSwapAmmDataV1:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - ETH_SUDOSWAP_AMM_DATA_V1
-        poolAddress:
-          $ref: "#/components/schemas/UnionAddress"
-        bondingCurve:
-          $ref: "#/components/schemas/UnionAddress"
-        curveType:
-          $ref: "#/components/schemas/SudoSwapCurveType"
-        assetRecipient:
-          $ref: "#/components/schemas/UnionAddress"
-        poolType:
-          $ref: "#/components/schemas/SudoSwapPoolType"
-        delta:
-          $ref: "#/components/schemas/BigInteger"
-        fee:
-          $ref: "#/components/schemas/BigInteger"
-        feeDecimal:
-          type: integer
-      required:
-        - "@type"
-        - poolAddress
-        - bondingCurve
-        - curveType
-        - assetRecipient
-        - poolType
-        - delta
-        - fee
-        - feeDecimal
-
     Asset:
       type: object
       properties:
@@ -7561,7 +7266,6 @@ components:
         - $ref: "#/components/schemas/EthCryptoPunksAssetType"
         - $ref: "#/components/schemas/EthGenerativeArtAssetType"
         - $ref: "#/components/schemas/EthCollectionAssetType"
-        - $ref: "#/components/schemas/EthAmmNftAssetType"
         - $ref: "#/components/schemas/SolanaNftAssetType"
         - $ref: "#/components/schemas/SolanaFtAssetType"
         - $ref: "#/components/schemas/SolanaSolAssetType"
@@ -7904,21 +7608,6 @@ components:
           type: string
           enum:
             - "COLLECTION"
-        contract:
-          $ref: "#/components/schemas/ContractAddress"
-        collection: # TODO make it required
-          $ref: "#/components/schemas/CollectionId"
-      required:
-        - "@type"
-        - contract
-
-    EthAmmNftAssetType:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - "AMM_NFT"
         contract:
           $ref: "#/components/schemas/ContractAddress"
         collection: # TODO make it required
