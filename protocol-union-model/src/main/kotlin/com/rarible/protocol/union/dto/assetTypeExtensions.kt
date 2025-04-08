@@ -97,13 +97,6 @@ val AssetTypeDto.ext: AssetTypeExtension
             // TODO only for back compatibility
             collectionId = this.collection ?: toCollectionId(contract, contract.value)
         )
-        is EthAmmNftAssetTypeDto -> AssetTypeExtension(
-            isNft = true,
-            isCurrency = false,
-            isCollectionAsset = true,
-            // TODO only for back compatibility
-            collectionId = this.collection ?: toCollectionId(contract, contract.value)
-        )
 
         //---- FLOW
         is FlowAssetTypeFtDto -> AssetTypeExtension(
